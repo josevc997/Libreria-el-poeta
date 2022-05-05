@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <h1 class="text-center">Autores</h1>
+    <table class="table text-center">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Accion</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for autor in autores %}
+            <tr>
+                <td>{{autor.nombre}}</td>
+                <td>{{autor.apellido}}</td>
+                <td>{{autor.correo}}</td>
+                <td>
+                    <button class="btn btn-primary">ver</button>
+                    <button class="btn btn-warning">editar</button>
+                    <button class="btn btn-danger">borrar</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock contenido %}
