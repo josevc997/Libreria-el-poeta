@@ -1,12 +1,59 @@
-<nav class="navbar bg-primary navbar-dark">
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-          Dropdown button
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
+<nav class="navbar navbar-expand bg-primary navbar-dark mb-5">
+    <div class="container-fluid">
+        <div class="navbar-brand">Inventario</div>
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="AutoresDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
+                    <i class="fa-solid fa-user-pen"></i> 
+                    Autores
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="AutoresDropdown">
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            Registro
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'autores' %}">
+                            Historial
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="ProductosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
+                    <i class="fa-solid fa-book"></i> Productos
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="ProductosDropdown">
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            Registro
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            Historial
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="BodegasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
+                    <i class="fa-solid fa-warehouse"></i> Bodegas
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="BodegasDropdown">
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            Registro
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            Historial
+                        </a>
+                    </li>
+                </ul>
+            </li>
         </ul>
-      </div>
+    </div>
 </nav>
