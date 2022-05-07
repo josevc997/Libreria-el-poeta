@@ -18,3 +18,15 @@ def autores(request):
     autores.append({'nombre': "Javiera", 'apellido': "Simpson", 'correo': "javiera.Simpson@gmail.com"})
     data['autores'] = autores
     return render(request, template, data)
+
+def registroAutores(request):
+    template = "autores/registro.html"
+    data = dict()
+    data['titulo'] = "Registro Autores"
+    print("saludos")
+
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        apellido = request.POST['apellido']
+
+    return render(request, template, data)
