@@ -21,7 +21,7 @@
                         <td>{{bodega.comuna}}</td>
                         <td>{{bodega.direccion}}</td>
                         <td>
-                            <button class="btn btn-primary">ver</button>
+                            <a href="{% url 'detalleBodegas' bodega.id %}" class="btn btn-primary">ver</a>
                             <button class="btn btn-warning">editar</button>
                             <button class="btn btn-danger">borrar</button>
                         </td>

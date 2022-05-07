@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card mb-3 shadow">
+        <h3 class="card-header text-center">
+            Bodega {{bodega.id}}
+        </h3>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <p>Nombre: {{bodega.nombre}}</p>
+                </div>
+                <div class="col-12 col-md-6">
+                    <p>Comuna: {{bodega.comuna}}</p>
+                </div>
+                <div class="col-12 col-md-6">
+                    <p>Dirección: {{bodega.direccion}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-3 shadow">
+        <h3 class="card-header text-center">Inventario</h3>
+        <div class="card-body" style="padding: 0px;">
+            <table class="table table-striped table-hover text-center table-bordered" style="margin: 0px;">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            Producto
+                        </th>
+                        <th scope="col">
+                            Tipo
+                        </th>
+                        <th scope="col">
+                            Año
+                        </th>
+                        <th scope="col">
+                            Edición
+                        </th>
+                        <th scope="col">
+                            Cantidad
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos %}
+                        <tr>
+                            <td>{{producto.nombre}}</td>
+                            <td>{{producto.tipo}}</td>
+                            <td>{{producto.annio}}</td>
+                            <td>{{producto.edicion}}</td>
+                            <td>{{producto.cantidad}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}

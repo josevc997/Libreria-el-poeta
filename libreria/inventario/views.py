@@ -35,12 +35,7 @@ def productos(request):
     template = "productos/lista.html"
     data = dict()
     data['titulo'] = "productos Registrados"
-    info = dict()
-    productos = []
-    productos.append({'nombre': "primer libro", 'tipo': "Revista", 'annio': 2015, 'edicion': 'Primera Edición', 'resumen': "Mejor libro de todos"})
-    productos.append({'nombre': "segundo libro", 'tipo': "libro", 'annio': 1997, 'edicion': 'Segunda Edición', 'resumen': "Segundo mejor libro de todos"})
-    productos.append({'nombre': "tercer libro", 'tipo': "enciclopedia", 'annio': 2022, 'edicion': 'Ultima Edición', 'resumen': "Peor libro de todos"})
-    data['productos'] = productos
+    data['productos'] = [{'nombre': "primer libro", 'tipo': "Revista", 'annio': 2015, 'edicion': 'Primera Edición', 'resumen': "Mejor libro de todos"}, {'nombre': "segundo libro", 'tipo': "libro", 'annio': 1997, 'edicion': 'Segunda Edición', 'resumen': "Segundo mejor libro de todos"}, {'nombre': "tercer libro", 'tipo': "enciclopedia", 'annio': 2022, 'edicion': 'Ultima Edición', 'resumen': "Peor libro de todos"}]
     return render(request, template, data)
 
 def registroProductos(request):
@@ -66,7 +61,15 @@ def bodegas(request):
     template = "bodegas/lista.html"
     data = dict()
     data['titulo'] = "Bodegas Registrados"
-    data['bodegas'] = [{'nombre': 'Santiago','comuna': 'Santiago Centro','direccion': 'Almirante Barroso #333'},{'nombre': 'Concepción','comuna': 'Concepción','direccion': 'Paseo Costero #1125'},{'nombre': 'Valparaiso','comuna': 'Con Con','direccion': 'Ambrosio Ohiggins #2201'}]
+    data['bodegas'] = [{'id': 1, 'nombre': 'Santiago','comuna': 'Santiago Centro','direccion': 'Almirante Barroso #333'},{'id': 2, 'nombre': 'Concepción','comuna': 'Concepción','direccion': 'Paseo Costero #1125'},{'id': 3, 'nombre': 'Valparaiso','comuna': 'Con Con','direccion': 'Ambrosio Ohiggins #2201'}]
+    return render(request, template, data)
+
+def detalleBodegas(request, bodega_id): 
+    template = "bodegas/detalle.html"
+    data = dict()
+    data['titulo'] = "Bodega XXXXX"
+    data['bodega'] = {'id': 3, 'nombre': 'Valparaiso','comuna': 'Con Con','direccion': 'Ambrosio Ohiggins #2201'}
+    data['productos'] = [{'nombre': "primer libro", 'tipo': "Revista", 'annio': 2015, 'edicion': 'Primera Edición', 'resumen': "Mejor libro de todos", 'cantidad': 15}, {'nombre': "segundo libro", 'tipo': "libro", 'annio': 1997, 'edicion': 'Segunda Edición', 'resumen': "Segundo mejor libro de todos", 'cantidad': 23}, {'nombre': "tercer libro", 'tipo': "enciclopedia", 'annio': 2022, 'edicion': 'Ultima Edición', 'resumen': "Peor libro de todos", 'cantidad': 30}]
     return render(request, template, data)
 
 def registroBodegas(request):
