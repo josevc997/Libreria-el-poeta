@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card">
+        <h1 class="card-header text-center">Bodegas</h1>
+        <div class="card-body">
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Comuna</th>
+                        <th>Dirección</th>
+                        <th>Accion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bodega in bodegas %}
+                    <tr>
+                        <td>{{bodega.nombre}}</td>
+                        <td>{{bodega.comuna}}</td>
+                        <td>{{bodega.direccion}}</td>
+                        <td>
+                            <button class="btn btn-primary">ver</button>
+                            <button class="btn btn-warning">editar</button>
+                            <button class="btn btn-danger">borrar</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock contenido %}

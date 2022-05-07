@@ -61,3 +61,22 @@ def registroProductos(request):
         print(autor)
 
     return render(request, template, data)
+
+def bodegas(request): 
+    template = "bodegas/lista.html"
+    data = dict()
+    data['titulo'] = "Bodegas Registrados"
+    data['bodegas'] = [{'nombre': 'Santiago','comuna': 'Santiago Centro','direccion': 'Almirante Barroso #333'},{'nombre': 'Concepción','comuna': 'Concepción','direccion': 'Paseo Costero #1125'},{'nombre': 'Valparaiso','comuna': 'Con Con','direccion': 'Ambrosio Ohiggins #2201'}]
+    return render(request, template, data)
+
+def registroBodegas(request):
+    template = "bodegas/registro.html"
+    data = dict()
+    data['titulo'] = "Registro bodegas"
+
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        tipo = request.POST['comuna']
+        annio = request.POST['direccion']
+
+    return render(request, template, data)
