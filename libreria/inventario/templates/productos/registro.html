@@ -1,0 +1,68 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+        <div class="card">
+            <div class="card-header">
+                Registro Producto
+            </div>
+            <div class="card-body">
+                <form action="{% url 'registroProductos' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" name="nombre" id="nombre">
+                    </div>
+                    <div class="mb-3">
+                        <label for="autor" class="form-label">Autor:</label>
+                        <select name="autor" id="autor" class="form-select" aria-label="Select autor">
+                            <option selected>Seleccione un autor</option>
+                            {% for autor in autores  %}
+                            <option value="{{autor.id}}">{{autor.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de producto:</label>
+                        <div class="form-check">
+                            <input type="radio" name="tipo" id="libro" class="form-check-input" checked>
+                            <label for="libro" class="form-check-label">Libro</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" name="tipo" id="revista" class="form-check-input">
+                            <label for="revista" class="form-check-label">Revista</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" name="tipo" id="enciclopedia" class="form-check-input">
+                            <label for="enciclopedia" class="form-check-label">Enciclopedia</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editorial" class="form-label">Editorial:</label>
+                        <select name="editorial" id="editorial" class="form-select" aria-label="Select editorial">
+                            <option selected>Seleccione un editorial</option>
+                            {% for editorial in editoriales  %}
+                            <option value="{{editorial.id}}">{{editorial.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edicion" class="form-label">Edicion:</label>
+                        <input type="text" class="form-control" name="edicion" id="edicion">
+                    </div>
+                    <div class="mb-3">
+                        <label for="annio" class="form-label">Año de publicación:</label>
+                        <input type="text" class="form-control" name="annio" id="annio">
+                    </div>
+                    <div class="mb-3">
+                        <label for="resumen" class="form-label">Resumen:</label>
+                        <textarea class="form-control" name="resumen" id="resumen"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+</div>
+{% endblock contenido %}

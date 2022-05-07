@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card">
+        <h1 class="card-header text-center">Productos</h1>
+        <div class="card-body">
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Año Publicación</th>
+                        <th>Edicion</th>
+                        <th>Resumen</th>
+                        <th>Accion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos %}
+                    <tr>
+                        <td>{{producto.nombre}}</td>
+                        <td>{{producto.tipo}}</td>
+                        <td>{{producto.annio}}</td>
+                        <td>{{producto.edicion}}</td>
+                        <td>{{producto.resumen}}</td>
+                        <td>
+                            <button class="btn btn-primary">ver</button>
+                            <button class="btn btn-warning">editar</button>
+                            <button class="btn btn-danger">borrar</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock contenido %}
