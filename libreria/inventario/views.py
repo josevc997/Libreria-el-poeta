@@ -80,3 +80,22 @@ def registroBodegas(request):
         annio = request.POST['direccion']
 
     return render(request, template, data)
+
+def editoriales(request): 
+    template = "editoriales/lista.html"
+    data = dict()
+    data['titulo'] = "Editoriales Registrados"
+    data['editoriales'] = [{'nombre': 'Zig-Zag', 'id': 1},{'nombre': 'Alfaguara', 'id': 2},{'nombre': 'Libros Premiere', 'id': 3}]
+    return render(request, template, data)
+
+def registroEditoriales(request):
+    template = "editoriales/registro.html"
+    data = dict()
+    data['titulo'] = "Registro Editoriales"
+
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        tipo = request.POST['comuna']
+        annio = request.POST['direccion']
+
+    return render(request, template, data)

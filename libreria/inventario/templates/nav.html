@@ -38,6 +38,23 @@
                 </ul>
             </li>
             <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="EditorialesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
+                    <i class="fa-solid fa-landmark"></i> Editoriales
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="EditorialesDropdown">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'registroEditoriales' %}">
+                            Registro
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'editoriales' %}">
+                            Historial
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" id="BodegasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
                     <i class="fa-solid fa-warehouse"></i> Bodegas
                 </a>
