@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import Persona
 
 # Create your views here.
 def index(request):
@@ -100,5 +101,34 @@ def registroEditoriales(request):
         nombre = request.POST['nombre']
         tipo = request.POST['comuna']
         annio = request.POST['direccion']
+
+    return render(request, template, data)
+
+def registroPersonas(request):
+    template = "personas/registro.html"
+    data = dict()
+    data['titulo'] = "Registro Personas"
+
+    if request.method == 'POST':
+        persona = Persona()
+        if(request.POST['nombre'].strip(" ") != ''):
+            persona.nombres = request.POST['nombre']
+        if(request.POST['rut'].strip(" ") != ''):
+            persona.rut = request.POST['rut']
+        if(request.POST['apellidos'].strip(" ") != ''):
+            persona.apellidos = request.POST['apellidos']
+        if(request.POST['direccion'].strip(" ") != ''):
+            persona.direccion = request.POST['direccion']
+        if(request.POST['correo'].strip(" ") != ''):
+            persona.correo = request.POST['correo']
+        if(request.POST['telefono'].strip(" ") != ''):
+            persona.telefono = request.POST['telefono']
+        if(persona.nombres != '' and persona.rut != ''):
+            persona.save()
+            data['toast'] = "Exito"
+            data['mensaje'] = "Persona registrada correctamente"
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "Persona no registrada, debe rellenar los campos obligatorios"
 
     return render(request, template, data)
