@@ -132,3 +132,21 @@ def registroPersonas(request):
             data['mensaje'] = "Persona no registrada, debe rellenar los campos obligatorios"
 
     return render(request, template, data)
+
+def listaPersonas(request):
+    template = "personas/lista.html"
+    
+    data = dict()
+    data['titulo'] = "Lista Personas"
+    data['personas'] = Persona.objects.all()
+
+    return render(request, template, data)
+
+def detallePersonas(request, id_persona):
+    template = "personas/detalle.html"
+    
+    data = dict()
+    data['titulo'] = "Detalle Personas"
+    data['persona'] = Persona.objects.get(id_persona=id_persona)
+
+    return render(request, template, data)
