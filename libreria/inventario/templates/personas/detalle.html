@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            {{titulo}}
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    {{persona.nombres}}
+                </div>
+                <div class="col-12 col-md-6">
+                    {{persona.apellidos}}
+                </div>
+                <div class="col-12 col-md-6">
+                    {{persona.direccion}}
+                </div>
+                <div class="col-12 col-md-6">
+                    {{persona.correo}}
+                </div>
+                <div class="col-12 col-md-6">
+                    {{persona.telefono}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

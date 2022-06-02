@@ -7,9 +7,6 @@
             <div class="card-header">
                 Registro Persona
             </div>
-            {% for p in personas %}
-            {{p.nombres}}
-            {% endfor %}
             <div class="card-body">
                 <form action="{% url 'registroPersonas' %}" method="POST">
                     {% csrf_token %}

@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            {{titulo}}
+        </div>
+        <div class="card-body">
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Telefono</th>
+                        <th>Accion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for persona in personas %}
+                    <tr>
+                        <td>{{persona.nombres}}</td>
+                        <td>{{persona.correo}}</td>
+                        <td>{{persona.telefono}}</td>
+                        <td>
+                            <a href="{% url 'detallePersonas' persona.id_persona %}">
+                                <button class="btn btn-primary">ver</button>
+                            </a>
+                            <button class="btn btn-warning">editar</button>
+                            <button class="btn btn-danger">borrar</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
