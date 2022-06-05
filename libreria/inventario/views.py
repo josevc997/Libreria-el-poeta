@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Persona
+from .models import Persona, Editorial, Publicacion, Autor, Autor_Publicacion
 
 # Create your views here.
 def index(request):
@@ -13,22 +13,27 @@ def autores(request):
     data = dict()
     data['titulo'] = "Autores Registrados"
     info = dict()
-    autores = []
-    autores.append({'nombre': "Jose", 'apellido': "Valencia", 'correo': "jose.valencia@gmail.com"})
-    autores.append({'nombre': "Juan", 'apellido': "Vasquez", 'correo': "juan.vasquez@gmail.com"})
-    autores.append({'nombre': "Javiera", 'apellido': "Simpson", 'correo': "javiera.Simpson@gmail.com"})
-    data['autores'] = autores
+    data['autores'] = Autor.objects.all()
     return render(request, template, data)
 
 def registroAutores(request):
     template = "autores/registro.html"
     data = dict()
     data['titulo'] = "Registro Autores"
-    print("saludos")
 
     if request.method == 'POST':
-        nombre = request.POST['nombre']
-        apellido = request.POST['apellido']
+        autor = Autor()
+        if(request.POST['nombre'].strip(" ") != ''):
+            autor.nombres_autor = request.POST['nombre']
+        if(request.POST['apellido'].strip(" ") != ''):
+            autor.apellidos_autor = request.POST['apellido']
+        if(request.POST['correo'].strip(" ") != ''):
+            autor.correo_autor = request.POST['correo']
+        if(request.POST['nacionalidad'].strip(" ") != ''):
+            autor.nacionalidad_autor = request.POST['nacionalidad']
+        if(request.POST['pseudonimo'].strip(" ") != ''):
+            autor.pseudonimo_autor = request.POST['pseudonimo']
+        autor.save()
 
     return render(request, template, data)
 
@@ -36,25 +41,49 @@ def productos(request):
     template = "productos/lista.html"
     data = dict()
     data['titulo'] = "productos Registrados"
-    data['productos'] = [{'nombre': "primer libro", 'tipo': "Revista", 'annio': 2015, 'edicion': 'Primera Edición', 'resumen': "Mejor libro de todos"}, {'nombre': "segundo libro", 'tipo': "libro", 'annio': 1997, 'edicion': 'Segunda Edición', 'resumen': "Segundo mejor libro de todos"}, {'nombre': "tercer libro", 'tipo': "enciclopedia", 'annio': 2022, 'edicion': 'Ultima Edición', 'resumen': "Peor libro de todos"}]
+    data['productos'] = Publicacion.objects.all()
+    for producto in data['productos']:
+        # autor = Autor.objects.get(id_autor = request.POST['autor'])
+        autores = Autor_Publicacion.objects.get(id_publicacion = 1)
+        print(producto.id_publicacion)
     return render(request, template, data)
 
 def registroProductos(request):
     template = "productos/registro.html"
     data = dict()
     data['titulo'] = "Registro Productos"
-    data['autores'] = [{'nombre': 'Neftali Reyes', 'id': 1},{'nombre': 'Violeta Parra', 'id': 2},{'nombre': 'Nicanor Parra', 'id': 3}]
-    data['editoriales'] = [{'nombre': 'Zig-Zag', 'id': 1},{'nombre': 'Alfaguara', 'id': 2},{'nombre': 'Libros Premiere', 'id': 3}]
+    # data['autores'] = [{'nombre': 'Neftali Reyes', 'id': 1},{'nombre': 'Violeta Parra', 'id': 2},{'nombre': 'Nicanor Parra', 'id': 3}]
+    data['editoriales'] = Editorial.objects.all()
+    data['autores'] = Autor.objects.all()
 
     if request.method == 'POST':
-        nombre = request.POST['nombre']
-        tipo = request.POST['tipo']
-        annio = request.POST['annio']
-        edicion = request.POST['edicion']
-        resumen = request.POST['resumen']
-        autor = request.POST['autor']
-
-        print(autor)
+        publicacion = Publicacion()
+        if(request.POST['nombre'].strip(" ") != ''):
+            publicacion.nombre = request.POST['nombre']
+        if(request.POST['autor'].strip(" ") != ''):
+            autor = Autor.objects.get(id_autor = request.POST['autor'])
+        if(request.POST['tipo'].strip(" ") != ''):
+            publicacion.tipo_producto = request.POST['tipo']
+        if(request.POST['editorial'].strip(" ") != ''):
+            editorial = Editorial.objects.get(id_editorial = int(request.POST['editorial']))
+            publicacion.id_editorial = editorial
+        if(request.POST['edicion'].strip(" ") != ''):
+            publicacion.edicion = request.POST['edicion']
+        if(request.POST['fecha'].strip(" ") != ''):
+            publicacion.fecha_publicacion = request.POST['fecha']
+        if(request.POST['isbn'].strip(" ") != ''):
+            publicacion.isbn = request.POST['isbn']
+        if(request.POST['serie'].strip(" ") != ''):
+            publicacion.numero_serie = int(request.POST['serie'])
+        if(request.POST['resumen'].strip(" ") != ''):
+            publicacion.resumen = request.POST['resumen']
+        if(request.POST['precio'].strip(" ") != ''):
+            publicacion.precio = int(request.POST['precio'])
+        publicacion.save()
+        autor_publicacion = Autor_Publicacion()
+        autor_publicacion.id_publicacion = publicacion
+        autor_publicacion.id_autor = autor
+        autor_publicacion.save()
 
     return render(request, template, data)
 
@@ -89,7 +118,7 @@ def editoriales(request):
     template = "editoriales/lista.html"
     data = dict()
     data['titulo'] = "Editoriales Registrados"
-    data['editoriales'] = [{'nombre': 'Zig-Zag', 'id': 1},{'nombre': 'Alfaguara', 'id': 2},{'nombre': 'Libros Premiere', 'id': 3}]
+    data['editoriales'] = Editorial.objects.all()
     return render(request, template, data)
 
 def registroEditoriales(request):
@@ -98,9 +127,15 @@ def registroEditoriales(request):
     data['titulo'] = "Registro Editoriales"
 
     if request.method == 'POST':
-        nombre = request.POST['nombre']
-        tipo = request.POST['comuna']
-        annio = request.POST['direccion']
+        editorial = Editorial()
+        if(request.POST['nombre'].strip(" ") != ''):
+            editorial.nombre_editorial = request.POST['nombre']
+        if(request.POST['correo'].strip(" ") != ''):
+            editorial.correo_editorial = request.POST['correo']
+        if(request.POST['telefono'].strip(" ") != ''):
+            editorial.telefono_editorial = request.POST['telefono']
+        editorial.save()
+
 
     return render(request, template, data)
 

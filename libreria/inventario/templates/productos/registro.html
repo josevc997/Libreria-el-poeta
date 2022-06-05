@@ -16,24 +16,24 @@
                     <div class="mb-3">
                         <label for="autor" class="form-label">Autor:</label>
                         <select name="autor" id="autor" class="form-select" aria-label="Select autor">
-                            <option selected>Seleccione un autor</option>
+                            <option value="" selected>Seleccione un autor</option>
                             {% for autor in autores  %}
-                            <option value="{{autor.id}}">{{autor.nombre}}</option>
+                            <option value="{{autor.id_autor}}">{{autor.pseudonimo_autor}}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Tipo de producto:</label>
                         <div class="form-check">
-                            <input type="radio" name="tipo" id="libro" class="form-check-input" checked>
+                            <input type="radio" name="tipo" id="libro" class="form-check-input" value="libro" checked>
                             <label for="libro" class="form-check-label">Libro</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" name="tipo" id="revista" class="form-check-input">
+                            <input type="radio" name="tipo" id="revista" class="form-check-input" value="revista">
                             <label for="revista" class="form-check-label">Revista</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" name="tipo" id="enciclopedia" class="form-check-input">
+                            <input type="radio" name="tipo" id="enciclopedia" class="form-check-input" value="enciclopedia}">
                             <label for="enciclopedia" class="form-check-label">Enciclopedia</label>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                         <select name="editorial" id="editorial" class="form-select" aria-label="Select editorial">
                             <option selected>Seleccione un editorial</option>
                             {% for editorial in editoriales  %}
-                            <option value="{{editorial.id}}">{{editorial.nombre}}</option>
+                            <option value="{{editorial.id_editorial}}">{{editorial.nombre_editorial}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -51,8 +51,20 @@
                         <input type="text" class="form-control" name="edicion" id="edicion">
                     </div>
                     <div class="mb-3">
-                        <label for="annio" class="form-label">Año de publicación:</label>
-                        <input type="text" class="form-control" name="annio" id="annio">
+                        <label for="fecha" class="form-label">fecha de publicación:</label>
+                        <input type="text" class="form-control" name="fecha" id="fecha">
+                    </div>
+                    <div class="mb-3">
+                        <label for="isbn" class="form-label">ISBN:</label>
+                        <input type="text" class="form-control" name="isbn" id="isbn">
+                    </div>
+                    <div class="mb-3">
+                        <label for="serie" class="form-label">Numero de serie:</label>
+                        <input type="text" class="form-control" name="serie" id="serie">
+                    </div>
+                    <div class="mb-3">
+                        <label for="precio" class="form-label">Precio:</label>
+                        <input type="text" class="form-control" name="precio" id="precio">
                     </div>
                     <div class="mb-3">
                         <label for="resumen" class="form-label">Resumen:</label>

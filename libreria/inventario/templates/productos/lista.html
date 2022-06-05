@@ -12,7 +12,6 @@
                         <th>Tipo</th>
                         <th>Año Publicación</th>
                         <th>Edicion</th>
-                        <th>Resumen</th>
                         <th>Accion</th>
                     </tr>
                 </thead>
@@ -20,10 +19,9 @@
                     {% for producto in productos %}
                     <tr>
                         <td>{{producto.nombre}}</td>
-                        <td>{{producto.tipo}}</td>
-                        <td>{{producto.annio}}</td>
+                        <td>{{producto.tipo_producto}}</td>
+                        <td>{{producto.fecha_publicacion}}</td>
                         <td>{{producto.edicion}}</td>
-                        <td>{{producto.resumen}}</td>
                         <td>
                             <button class="btn btn-primary">ver</button>
                             <button class="btn btn-warning">editar</button>
