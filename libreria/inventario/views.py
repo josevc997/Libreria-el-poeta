@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Persona, Editorial, Publicacion, Autor, Autor_Publicacion
+from .models import Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor
 
 # Create your views here.
 def index(request):
@@ -42,10 +42,6 @@ def productos(request):
     data = dict()
     data['titulo'] = "productos Registrados"
     data['productos'] = Publicacion.objects.all()
-    for producto in data['productos']:
-        # autor = Autor.objects.get(id_autor = request.POST['autor'])
-        autores = Autor_Publicacion.objects.get(id_publicacion = 1)
-        print(producto.id_publicacion)
     return render(request, template, data)
 
 def registroProductos(request):
@@ -80,10 +76,7 @@ def registroProductos(request):
         if(request.POST['precio'].strip(" ") != ''):
             publicacion.precio = int(request.POST['precio'])
         publicacion.save()
-        autor_publicacion = Autor_Publicacion()
-        autor_publicacion.id_publicacion = publicacion
-        autor_publicacion.id_autor = autor
-        autor_publicacion.save()
+        publicacion.autores.add(autor)
 
     return render(request, template, data)
 
@@ -183,5 +176,14 @@ def detallePersonas(request, id_persona):
     data = dict()
     data['titulo'] = "Detalle Personas"
     data['persona'] = Persona.objects.get(id_persona=id_persona)
+
+    return render(request, template, data)
+
+def registroProveedores(request):
+    template = "proveedores/registro.html"
+
+    data = dict()
+
+    data['titulo'] = "Registro Proveedores"
 
     return render(request, template, data)
