@@ -10,7 +10,7 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Tipo</th>
-                        <th>Año Publicación</th>
+                        <th>Autores</th>
                         <th>Edicion</th>
                         <th>Accion</th>
                     </tr>
@@ -20,7 +20,16 @@
                     <tr>
                         <td>{{producto.nombre}}</td>
                         <td>{{producto.tipo_producto}}</td>
-                        <td>{{producto.fecha_publicacion}}</td>
+                        <td>
+                        {% for i in producto.autor_publicacion_set.all %}
+                            {{i.id_autor.pseudonimo_autor}}
+                        {% endfor %}
+                        <br>
+                        {% for i in producto.autor_publicacion_set.all %}
+                            {{i.id_autor.pseudonimo_autor}}
+                        {% endfor %}
+                            {% comment %} {{producto.fecha_publicacion}} {% endcomment %}
+                        </td>
                         <td>{{producto.edicion}}</td>
                         <td>
                             <button class="btn btn-primary">ver</button>
