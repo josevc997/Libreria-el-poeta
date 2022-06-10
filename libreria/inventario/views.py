@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor
+from .seed import seedTables
 
 # Create your views here.
 def index(request):
@@ -187,3 +188,22 @@ def registroProveedores(request):
     data['titulo'] = "Registro Proveedores"
 
     return render(request, template, data)
+
+def seed(request):
+    seedTables()
+    template = "inventario/index.html"
+
+    data = dict()
+
+    data['titulo'] = "Registro Proveedores"
+    return render(request, template, data)    
+
+# Codigo Bruno Pozo
+
+
+
+# Codigo Pablo Cea
+
+
+
+# # #
