@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            {{titulo}}
+        </div>
+        <div class="card-body">
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Direccion</th>
+                        <th>Comuna</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for proveedor in proveedores %}
+                    <tr>
+                        <td>{{proveedor.nombre_proveedor}}</td>
+                        <td>{{proveedor.direccion_proveedor}}</td>
+                        <td>{{proveedor.comuna_proveedor}}</td>
+                        <td>{{proveedor.correo_proveedor}}</td>
+                        <td>{{proveedor.telefono_proveedor}}</td>
+                        <td>
+                            {% comment %} <a href="{% url 'detalleproveedors' proveedor.id_proveedor %}">
+                                <button class="btn btn-primary">ver</button>
+                            </a> {% endcomment %}
+                            <button class="btn btn-warning">editar</button>
+                            <button class="btn btn-danger">borrar</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

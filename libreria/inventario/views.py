@@ -1,3 +1,4 @@
+from ast import If
 from django.shortcuts import render
 from .models import Compra, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor
 from .seed import seedTables
@@ -233,7 +234,28 @@ def registroProveedores(request):
 
     data['titulo'] = "Registro Proveedores"
 
+    if request.method == 'POST':
+        nombre = request.POST['nombreP']
+        direccion = request.POST['direccionP']
+        comuna =    request.POST['comunaP']
+        correo =    request.POST['correoP']
+        telefono =  request.POST['telefonoP']
+        proveedor = Proveedor()
+        proveedor.nombre_proveedor = nombre
+        proveedor.direccion_proveedor = direccion
+        proveedor.comuna_proveedor = comuna
+        proveedor.correo_proveedor = correo
+        proveedor.telefono_proveedor = telefono
+        proveedor.save()
     return render(request, template, data)
 
+def proveedores(request):
+    template = "proveedores/historial.html"
+    data = dict()
 
+    data['titulo'] = "Registro Proveedores"
+
+    
+    data['proveedores'] = Proveedor.objects.all()
+    return render(request, template, data)
 # # #
