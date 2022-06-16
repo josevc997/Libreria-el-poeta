@@ -18,4 +18,5 @@ urlpatterns = [
     path('personas/detalle/<int:id_persona>', views.detallePersonas, name='detallePersonas'),
     path('proveedores/registro', views.registroProveedores, name='registroProveedores'),
     path('seed', views.seed, name='seed'),
+    path('personas/editar/<int:id_persona>', views.editarPersonas, name='editarPersonas'),
 ]

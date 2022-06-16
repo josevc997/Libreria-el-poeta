@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor
+from .models import Compra, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor
 from .seed import seedTables
 
 # Create your views here.
@@ -177,6 +177,40 @@ def detallePersonas(request, id_persona):
     data = dict()
     data['titulo'] = "Detalle Personas"
     data['persona'] = Persona.objects.get(id_persona=id_persona)
+    data['compras'] = Compra.objects.filter(id_persona=id_persona)
+    # print(data['persona'].publicacion_compra_set.all())
+
+    return render(request, template, data)
+
+def editarPersonas(request, id_persona):
+    template = "personas/editar.html"
+    
+    data = dict()
+    data['titulo'] = "Editar Persona"
+    persona = Persona.objects.get(id_persona=id_persona)
+    data['persona'] = persona
+    if request.method == 'POST':
+        persona = Persona.objects.get(id_persona=id_persona)
+        if(request.POST['nombre'].strip(" ") != ''):
+            persona.nombres = request.POST['nombre']
+        if(request.POST['rut'].strip(" ") != ''):
+            persona.rut = request.POST['rut']
+        if(request.POST['apellidos'].strip(" ") != ''):
+            persona.apellidos = request.POST['apellidos']
+        if(request.POST['direccion'].strip(" ") != ''):
+            persona.direccion = request.POST['direccion']
+        if(request.POST['correo'].strip(" ") != ''):
+            persona.correo = request.POST['correo']
+        if(request.POST['telefono'].strip(" ") != ''):
+            persona.telefono = request.POST['telefono']
+        if(persona.nombres != '' and persona.rut != ''):
+            persona.save()
+            data['toast'] = "Exito"
+            data['mensaje'] = "Persona registrada correctamente"
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "Persona no registrada, debe rellenar los campos obligatorios"
+    # print(data['persona'].publicacion_compra_set.all())
 
     return render(request, template, data)
 

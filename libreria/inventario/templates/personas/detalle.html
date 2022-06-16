@@ -18,6 +18,10 @@
                 <div class="col-8 col-md-4">
                     <input type="text" readonly class="form-control-plaintext" id="apellido" value="{{persona.apellidos}}">
                 </div>
+                <label for="rut" class="col-4 col-md-2 col-form-label text-end">Rut:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="rut" value="{{persona.rut}}">
+                </div>
                 <label for="direccion" class="col-4 col-md-2 col-form-label text-end">Direccion:</label>
                 <div class="col-8 col-md-4">
                     <input type="text" readonly class="form-control-plaintext" id="direccion" value="{{persona.direccion}}">
@@ -48,9 +52,11 @@
             </div>
         </div>
         <div class="card-footer text-end">
-            <button class="btn btn-warning text">
-                Editar
-            </button>
+            <a href="{% url 'editarPersonas' persona.id_persona%}">
+                <button class="btn btn-warning text">
+                    Editar
+                </button>
+            </a>
         </div>
     </div>
     <div class="card">
@@ -82,23 +88,25 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for compra in compras %}
                         <tr>
                             <td>
-                                23-05-2022
+                                {{compra.fecha_compra}}
                             </td>
                             <td>
-                                Santiago Centro
+                                {{compra.id_bodega}}
                             </td>
                             <td>
-                                Debito
+                                {{compra.metodo_pago}}
                             </td>
                             <td>
-                                $20500
+                                {{compra.total}}
                             </td>
                             <td>
                                 <button class="btn btn-primary">ver</button>
                             </td>
                         </tr>
+                        {% endfor %}
                         <tr>
                             <td>
                                 28-05-2022
