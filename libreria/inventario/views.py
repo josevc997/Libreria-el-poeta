@@ -81,33 +81,6 @@ def registroProductos(request):
 
     return render(request, template, data)
 
-def bodegas(request): 
-    template = "bodegas/lista.html"
-    data = dict()
-    data['titulo'] = "Bodegas Registrados"
-    data['bodegas'] = [{'id': 1, 'nombre': 'Santiago','comuna': 'Santiago Centro','direccion': 'Almirante Barroso #333'},{'id': 2, 'nombre': 'Concepción','comuna': 'Concepción','direccion': 'Paseo Costero #1125'},{'id': 3, 'nombre': 'Valparaiso','comuna': 'Con Con','direccion': 'Ambrosio Ohiggins #2201'}]
-    return render(request, template, data)
-
-def detalleBodegas(request, bodega_id): 
-    template = "bodegas/detalle.html"
-    data = dict()
-    data['titulo'] = "Bodega XXXXX"
-    data['bodega'] = {'id': 3, 'nombre': 'Valparaiso','comuna': 'Con Con','direccion': 'Ambrosio Ohiggins #2201'}
-    data['productos'] = [{'nombre': "primer libro", 'tipo': "Revista", 'annio': 2015, 'edicion': 'Primera Edición', 'resumen': "Mejor libro de todos", 'cantidad': 15}, {'nombre': "segundo libro", 'tipo': "libro", 'annio': 1997, 'edicion': 'Segunda Edición', 'resumen': "Segundo mejor libro de todos", 'cantidad': 23}, {'nombre': "tercer libro", 'tipo': "enciclopedia", 'annio': 2022, 'edicion': 'Ultima Edición', 'resumen': "Peor libro de todos", 'cantidad': 30}]
-    return render(request, template, data)
-
-def registroBodegas(request):
-    template = "bodegas/registro.html"
-    data = dict()
-    data['titulo'] = "Registro bodegas"
-
-    if request.method == 'POST':
-        nombre = request.POST['nombre']
-        tipo = request.POST['comuna']
-        annio = request.POST['direccion']
-
-    return render(request, template, data)
-
 def editoriales(request): 
     template = "editoriales/lista.html"
     data = dict()
@@ -214,15 +187,6 @@ def editarPersonas(request, id_persona):
 
     return render(request, template, data)
 
-def registroProveedores(request):
-    template = "proveedores/registro.html"
-
-    data = dict()
-
-    data['titulo'] = "Registro Proveedores"
-
-    return render(request, template, data)
-
 def seed(request):
     seedTables()
     template = "inventario/index.html"
@@ -233,11 +197,43 @@ def seed(request):
     return render(request, template, data)    
 
 # Codigo Bruno Pozo
+def bodegas(request): 
+    template = "bodegas/lista.html"
+    data = dict()
+    data['titulo'] = "Bodegas Registrados"
+    data['bodegas'] = [{'id': 1, 'nombre': 'Santiago','comuna': 'Santiago Centro','direccion': 'Almirante Barroso #333'},{'id': 2, 'nombre': 'Concepción','comuna': 'Concepción','direccion': 'Paseo Costero #1125'},{'id': 3, 'nombre': 'Valparaiso','comuna': 'Con Con','direccion': 'Ambrosio Ohiggins #2201'}]
+    return render(request, template, data)
 
+def detalleBodegas(request, bodega_id): 
+    template = "bodegas/detalle.html"
+    data = dict()
+    data['titulo'] = "Bodega XXXXX"
+    data['bodega'] = {'id': 3, 'nombre': 'Valparaiso','comuna': 'Con Con','direccion': 'Ambrosio Ohiggins #2201'}
+    data['productos'] = [{'nombre': "primer libro", 'tipo': "Revista", 'annio': 2015, 'edicion': 'Primera Edición', 'resumen': "Mejor libro de todos", 'cantidad': 15}, {'nombre': "segundo libro", 'tipo': "libro", 'annio': 1997, 'edicion': 'Segunda Edición', 'resumen': "Segundo mejor libro de todos", 'cantidad': 23}, {'nombre': "tercer libro", 'tipo': "enciclopedia", 'annio': 2022, 'edicion': 'Ultima Edición', 'resumen': "Peor libro de todos", 'cantidad': 30}]
+    return render(request, template, data)
+
+def registroBodegas(request):
+    template = "bodegas/registro.html"
+    data = dict()
+    data['titulo'] = "Registro bodegas"
+
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        tipo = request.POST['comuna']
+        annio = request.POST['direccion']
+
+    return render(request, template, data)
 
 
 # Codigo Pablo Cea
+def registroProveedores(request):
+    template = "proveedores/registro.html"
 
+    data = dict()
+
+    data['titulo'] = "Registro Proveedores"
+
+    return render(request, template, data)
 
 
 # # #
