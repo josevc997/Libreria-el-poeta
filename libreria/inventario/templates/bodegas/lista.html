@@ -17,11 +17,12 @@
                 <tbody>
                     {% for bodega in bodegas %}
                     <tr>
-                        <td>{{bodega.nombre}}</td>
+                        <td>{{bodega.nombre_bodega}}</td>
                         <td>{{bodega.comuna}}</td>
                         <td>{{bodega.direccion}}</td>
+                        <td>{{bodega.telefono_bodega}}</td>
                         <td>
-                            <a href="{% url 'detalleBodegas' bodega.id %}" class="btn btn-primary">ver</a>
+                            {% comment %} <a href="{% url 'detalleBodegas' bodega.id %}" class="btn btn-primary">ver</a> {% endcomment %}
                             <button class="btn btn-warning">editar</button>
                             <button class="btn btn-danger">borrar</button>
                         </td>

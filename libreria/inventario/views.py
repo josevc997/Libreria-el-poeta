@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Compra, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor
+from .models import Compra, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega
 from .seed import seedTables
 
 # Create your views here.
@@ -201,7 +201,7 @@ def bodegas(request):
     template = "bodegas/lista.html"
     data = dict()
     data['titulo'] = "Bodegas Registrados"
-    data['bodegas'] = [{'id': 1, 'nombre': 'Santiago','comuna': 'Santiago Centro','direccion': 'Almirante Barroso #333'},{'id': 2, 'nombre': 'Concepción','comuna': 'Concepción','direccion': 'Paseo Costero #1125'},{'id': 3, 'nombre': 'Valparaiso','comuna': 'Con Con','direccion': 'Ambrosio Ohiggins #2201'}]
+    data['bodegas'] = Bodega.objects.all()
     return render(request, template, data)
 
 def detalleBodegas(request, bodega_id): 
@@ -217,10 +217,17 @@ def registroBodegas(request):
     data = dict()
     data['titulo'] = "Registro bodegas"
 
-    if request.method == 'POST':
+    if request.method == "POST":
         nombre = request.POST['nombre']
-        tipo = request.POST['comuna']
-        annio = request.POST['direccion']
+        direccion = request.POST['direccion']
+        comuna = request.POST['comuna']
+        telefono = request.POST['telefono']
+        bodega = Bodega()
+        bodega.nombre_bodega = nombre
+        bodega.direccion = direccion
+        bodega.comuna = comuna
+        bodega.telefono_bodega = telefono
+        bodega.save()
 
     return render(request, template, data)
 
