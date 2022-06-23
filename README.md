@@ -1,62 +1,67 @@
 ## Configuración Inicial
 1. Instalar XAMPP (en caso de ser necesario se debe agregar mysql al Path)
 2. Inicializar el servicio de msyql desde la aplicación de XAMPP
-2. Instalar Python
-3. Clonar repositorio
+3. Instalar Python
+4. Instalar Git
+~~~
+git config --global user.name "Tu Nombre"
+git config --global user.email Tucorreo@example.com
+~~~
+5. Clonar repositorio
 
 ~~~
 git clone url_de_repositorio
 ~~~
 
-4. Moverse a la carpeta del repositorio
+6. Moverse a la carpeta del repositorio
 
 ~~~
 cd nombre_de_carpeta_de_repositorio
 ~~~
 
-5. Crear entorno virtual
+7. Crear entorno virtual
 ~~~
 python -m venv env
 ~~~
 
-6. Activar entorno virtual
+8. Activar entorno virtual
 
 ~~~
 env/Scripts/activate
 ~~~
 
-7. Instalar requirements.txt
+9. Instalar requirements.txt
 
 ~~~
 pip install -r requirements.txt
 ~~~
 
-8. Crear base de datos(La terminal debe ser de tipo command prompt o CMD)
+10. Crear base de datos(La terminal debe ser de tipo command prompt o CMD)
 
 ~~~
 mysql -u root -h localhost -p < ./DB/script.sql
 ~~~
 
 
-9. Moverse a la carpeta en la cual se encuentra ./manage.py
+11. Moverse a la carpeta en la cual se encuentra ./manage.py
 
 ~~~
 cd libreria
 ~~~
 
-10. Crear migraciones
+12. Crear migraciones
 
 ~~~
 python libreria/manage.py makemigrations
 ~~~
 
-11. Ejecutar migraciones
+13. Ejecutar migraciones
 
 ~~~
 python libreria/manage.py migrate
 ~~~
 
-12. Ejecutar servidor
+14. Ejecutar servidor
 
 ~~~
 python libreria/manage.py runserver
