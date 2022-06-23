@@ -19,5 +19,6 @@ urlpatterns = [
     path('proveedores/registro', views.registroProveedores, name='registroProveedores'),
     path('seed', views.seed, name='seed'),
     path('personas/editar/<int:id_persona>', views.editarPersonas, name='editarPersonas'),
-    path('proveedores', views.proveedores, name='proveedores')
+    path('proveedores', views.proveedores, name='proveedores'),
+    path('login', views.loginPerfil, name='login')
 ]

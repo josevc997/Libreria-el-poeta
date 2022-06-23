@@ -1,7 +1,8 @@
 from ast import If
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Compra, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega
 from .seed import seedTables
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 def index(request):
@@ -195,6 +196,29 @@ def seed(request):
     data = dict()
 
     data['titulo'] = "Registro Proveedores"
+    return render(request, template, data)    
+
+def loginPerfil(request):
+    template = "perfil/login.html"
+
+    data = dict()
+
+    data['titulo'] = "Inicio de sesion"
+    
+    if(request.method == "POST"):
+        nombre = request.POST['username']
+        contraseña = request.POST['password']
+        user = authenticate(username=nombre, password=contraseña)
+        if user is not None:
+            # A backend authenticated the credentials
+            print("* * if * *")
+            login(request, user)
+            return redirect('productos')
+        else:
+            # No backend authenticated the credentials
+            print("* * else * *")
+
+
     return render(request, template, data)    
 
 # Codigo Bruno Pozo

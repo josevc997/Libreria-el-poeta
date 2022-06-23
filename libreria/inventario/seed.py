@@ -102,7 +102,7 @@ def seedTables():
     perfil = Perfil()
     perfil.id_persona = persona
     perfil.id_bodega = bodega
-    perfil.nombre_usuario = "brun12"
+    perfil.username = "brun12"
     perfil.set_password("clave123")
     perfil.is_superuser = 0
     perfil.first_name = "Armin"
