@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            {{titulo}}
+        </div>
+        <div class="card-body">
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th>Fecha Compra</th>
+                        <th>Metodo de Pago</th>
+                        <th>Total</th>
+                        <th>Accion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for compra in compras %}
+                    <tr>
+                        <td>{{compra.fecha_compra}}</td>
+                        <td>{{compra.metodo_pago}}</td>
+                        <td>{{compra.total}}</td>
+                        <td>
+                            <a href="">
+                                <button class="btn btn-primary">ver</button>
+                            </a>
+                            <button class="btn btn-warning">editar</button>
+                            <button class="btn btn-danger">borrar</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
