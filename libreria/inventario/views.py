@@ -256,6 +256,21 @@ def registroBodegas(request):
 
     return render(request, template, data)
 
+def listaCompras(request):
+    template = "compras/lista.html"
+    data = dict()
+    data['titulo'] = "Lista Compras"
+    data['compras']= Compra.objects.all()
+
+    return render(request, template, data)
+
+def registroCompras(request):
+    template = "compras/registro.html"
+    data = dict()
+    data['titulo'] = "Registro Compras"
+
+
+
 
 # Codigo Pablo Cea
 def registroProveedores(request):
