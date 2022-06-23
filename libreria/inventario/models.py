@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # Create your models here.
@@ -136,16 +137,17 @@ class Persona(models.Model):
         verbose_name_plural = "personas"
         managed = False
 
-class Perfil(models.Model):
-    id_perfil = models.AutoField(primary_key=True)
+class Perfil(AbstractUser):
+    id = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(Persona, on_delete=models.CASCADE, db_column='id_persona')
     id_bodega = models.ForeignKey(Bodega, on_delete=models.CASCADE, db_column='id_bodega')
-    nombre_usuario = models.CharField(max_length=30)
-    clave = models.CharField(max_length=30)
+    username = models.CharField(max_length=30, unique=True)
     tipo_usuario = models.CharField(max_length=30)
     
     def __str__(self):
-        return u'%s' % (self.nombre_usuario)
+        return u'%s' % (self.username)
+
+    USERNAME_FIELD = 'username'
     
     class Meta:
         db_table = "perfil"
@@ -171,7 +173,7 @@ class Proveedor(models.Model):
 
 class Pedido(models.Model):
     id_pedido = models.AutoField(primary_key=True)
-    id_perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, db_column='id_perfil')
+    id = models.ForeignKey(Perfil, on_delete=models.CASCADE, db_column='id')
     id_bodega = models.ForeignKey(Bodega, on_delete=models.CASCADE, db_column='id_bodega')
     id_proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, db_column='id_proveedor')
     fecha_pedido = models.CharField(max_length=30)
@@ -233,7 +235,7 @@ class Publicacion_Compra(models.Model):
 
 class Movimiento(models.Model):
     id_movimiento = models.AutoField(primary_key=True)
-    id_perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, db_column='id_perfil')
+    id = models.ForeignKey(Perfil, on_delete=models.CASCADE, db_column='id')
     id_bodega_origen = models.ForeignKey(Bodega, on_delete=models.CASCADE, db_column='id_bodega_origen', related_name='bodega_origen')
     id_bodega_destino = models.ForeignKey(Bodega, on_delete=models.CASCADE, db_column='id_bodega_destino', related_name='bodega_destino')
     fecha_solicitud = models.CharField(max_length=30)

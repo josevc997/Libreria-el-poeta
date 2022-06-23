@@ -91,13 +91,21 @@ CREATE TABLE persona (
 );
 
 CREATE TABLE perfil (
-    id_perfil INTEGER NOT NULL AUTO_INCREMENT,
+    id INTEGER NOT NULL AUTO_INCREMENT,
     id_persona INTEGER NOT NULL,
     id_bodega INTEGER NOT NULL,
-    nombre_usuario VARCHAR(30) NOT NULL,
-    clave VARCHAR(30),
+    username VARCHAR(30) NOT NULL UNIQUE,
+    `password` varchar(128) NOT NULL,
+    last_login datetime(6) DEFAULT NULL,
+    is_superuser tinyint(1) NOT NULL,
+    first_name varchar(150) NOT NULL,
+    last_name varchar(150) NOT NULL,
+    email varchar(254) NOT NULL,
+    is_staff tinyint(1) NOT NULL,
+    is_active tinyint(1) NOT NULL,
+    date_joined datetime(6) NOT NULL,
     tipo_usuario VARCHAR(30) NOT NULL,
-    PRIMARY KEY (id_perfil),
+    PRIMARY KEY (id),
     FOREIGN KEY (id_persona) REFERENCES persona(id_persona),
     FOREIGN KEY (id_bodega) REFERENCES bodega(id_bodega)
 );
@@ -114,13 +122,13 @@ CREATE TABLE proveedor (
 
 CREATE TABLE pedido (
     id_pedido INTEGER NOT NULL AUTO_INCREMENT,
-    id_perfil INTEGER NOT NULL,
+    id INTEGER NOT NULL,
     id_bodega INTEGER NOT NULL,
     id_proveedor INTEGER NOT NULL,
     fecha_pedido VARCHAR(30),
     total_pedido VARCHAR(30),
     PRIMARY KEY (id_pedido),
-    FOREIGN KEY (id_perfil) REFERENCES perfil(id_perfil),
+    FOREIGN KEY (id) REFERENCES perfil(id),
     FOREIGN KEY (id_bodega) REFERENCES bodega(id_bodega),
     FOREIGN KEY (id_proveedor) REFERENCES proveedor(id_proveedor)
 );
@@ -161,14 +169,14 @@ CREATE TABLE publicacion_compra (
 
 CREATE TABLE movimiento (
     id_movimiento INTEGER NOT NULL AUTO_INCREMENT,
-    id_perfil INTEGER NOT NULL,
+    id INTEGER NOT NULL,
     id_bodega_origen INTEGER NOT NULL,
     id_bodega_destino INTEGER NOT NULL,
     fecha_solicitud VARCHAR(30),
     estado VARCHAR(30),
     fecha_realizado VARCHAR(30),
     PRIMARY KEY (id_movimiento),
-    FOREIGN KEY (id_perfil) REFERENCES perfil(id_perfil),
+    FOREIGN KEY (id) REFERENCES perfil(id),
     FOREIGN KEY (id_bodega_origen) REFERENCES bodega(id_bodega),
     FOREIGN KEY (id_bodega_destino) REFERENCES bodega(id_bodega)
 );

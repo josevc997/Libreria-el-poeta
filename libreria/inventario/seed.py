@@ -1,5 +1,5 @@
 from .models import *
-
+from datetime import datetime
 
 def seedTables():
     autor = Autor()
@@ -103,7 +103,14 @@ def seedTables():
     perfil.id_persona = persona
     perfil.id_bodega = bodega
     perfil.nombre_usuario = "brun12"
-    perfil.clave = "clave123"
+    perfil.set_password("clave123")
+    perfil.is_superuser = 0
+    perfil.first_name = "Armin"
+    perfil.last_name = "Brün"
+    perfil.email = "armin.brun@gmail.com"
+    perfil.is_staff = 1
+    perfil.is_active = 1
+    perfil.date_joined = datetime.now()
     perfil.tipo_usuario = "Administrador"
     perfil.save()
 
@@ -116,7 +123,7 @@ def seedTables():
     proveedor.save()
 
     pedido = Pedido()
-    pedido.id_perfil = perfil
+    pedido.id = perfil
     pedido.id_bodega = bodega
     pedido.id_proveedor = proveedor
     pedido.fecha_pedido = "09/06/2022"
@@ -134,7 +141,7 @@ def seedTables():
     compra.publicaciones.add(publicacion, through_defaults = { 'cantidad': 1, 'precio': publicacion.precio})
 
     movimiento = Movimiento()
-    movimiento.id_perfil = perfil
+    movimiento.id = perfil
     movimiento.id_bodega_origen = bodega
     movimiento.id_bodega_destino = bodega
     movimiento.fecha_solicitud = "10/06/2022"
