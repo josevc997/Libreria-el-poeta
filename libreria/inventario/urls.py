@@ -29,5 +29,7 @@ urlpatterns = [
     path('perfiles/editar/<int:id_perfil>', views.editarPerfil, name='editarPerfil'),
     path('perfiles/cambiarEstado/<int:id_perfil>', views.cambiarEstadoPerfil, name='cambiarEstadoPerfil'),
     # URLS Bruno Pozo
+    path('compras/registro',views.registroCompras,name='registroCompras'),
+    # path('compras/detalles',views.detalleCompras,)
     # URLS Pablo Cea
 ]
