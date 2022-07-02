@@ -22,4 +22,6 @@ urlpatterns = [
     path('proveedores', views.proveedores, name='proveedores'),
     path('login', views.loginPerfil, name='login'),
     path('compras',views.listaCompras, name='compras'),
+    path('compras/registro',views.registroCompras,name='registroCompras'),
+    path('compras/detalles',views.detalleCompras,)
 ]

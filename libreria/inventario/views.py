@@ -234,7 +234,7 @@ def detalleBodegas(request, bodega_id):
     data = dict()
     data['titulo'] = "Bodega XXXXX"
     data['bodega'] = {'id': 3, 'nombre': 'Valparaiso','comuna': 'Con Con','direccion': 'Ambrosio Ohiggins #2201'}
-    data['productos'] = [{'nombre': "primer libro", 'tipo': "Revista", 'annio': 2015, 'edicion': 'Primera Edición', 'resumen': "Mejor libro de todos", 'cantidad': 15}, {'nombre': "segundo libro", 'tipo': "libro", 'annio': 1997, 'edicion': 'Segunda Edición', 'resumen': "Segundo mejor libro de todos", 'cantidad': 23}, {'nombre': "tercer libro", 'tipo': "enciclopedia", 'annio': 2022, 'edicion': 'Ultima Edición', 'resumen': "Peor libro de todos", 'cantidad': 30}]
+    #data['productos'] = #.objects.filter()
     return render(request, template, data)
 
 def registroBodegas(request):
@@ -268,6 +268,9 @@ def registroCompras(request):
     template = "compras/registro.html"
     data = dict()
     data['titulo'] = "Registro Compras"
+    return render(request, template, data)
+
+#def detalleCompras(request):
 
 
 
