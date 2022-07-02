@@ -52,19 +52,19 @@ cd libreria
 12. Crear migraciones
 
 ~~~
-python libreria/manage.py makemigrations
+python manage.py makemigrations
 ~~~
 
 13. Ejecutar migraciones
 
 ~~~
-python libreria/manage.py migrate
+python manage.py migrate
 ~~~
 
 14. Ejecutar servidor
 
 ~~~
-python libreria/manage.py runserver
+python manage.py runserver
 ~~~
 
 ## Ejecución posterior a la configuración inicial
@@ -85,7 +85,7 @@ cd libreria
 4. Ejecutar servidor
 
 ~~~
-python libreria/manage.py runserver
+python manage.py runserver
 ~~~
 
 ## En caso de ser necesario reconstruir la base de datos
