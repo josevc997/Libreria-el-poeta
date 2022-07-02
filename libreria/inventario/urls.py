@@ -22,4 +22,12 @@ urlpatterns = [
     path('proveedores', views.proveedores, name='proveedores'),
     path('login', views.loginPerfil, name='login'),
     path('compras',views.listaCompras, name='compras'),
+    path('perfiles', views.perfiles, name='perfiles'),
+    path('perfiles/registro', views.registroPerfil, name='registroPerfil'),
+    path('perfiles/preregistro', views.preregistroPerfil, name='preregistroPerfil'),
+    path('perfiles/<int:perfil_id>', views.detallePerfiles, name='detallePerfiles'),
+    path('perfiles/editar/<int:id_perfil>', views.editarPerfil, name='editarPerfil'),
+    path('perfiles/cambiarEstado/<int:id_perfil>', views.cambiarEstadoPerfil, name='cambiarEstadoPerfil'),
+    # URLS Bruno Pozo
+    # URLS Pablo Cea
 ]

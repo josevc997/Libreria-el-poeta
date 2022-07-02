@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    {{titulo}}
+                </div>
+                <div class="card-body">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th>Nombre de usuario</th>
+                                <th>Tipo</th>
+                                <th>Estado</th>
+                                <th>Accion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for perfil in perfiles %}
+                            <tr>
+                                <td>{{perfil.username}}</td>
+                                <td>{{perfil.tipo_usuario}}</td>
+                                <td>
+                                    {% if perfil.is_active == False %}
+                                        <span class="badge bg-danger">Inactivo</span>
+                                    {% else %}
+                                        <span class="badge bg-success">Activo</span>
+                                    {% endif %}
+                                    {% comment %} {{perfil.is_active}} {% endcomment %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'detallePerfiles' perfil.id %}">
+                                        <button class="btn btn-primary">ver</button>
+                                    </a>
+                                    <a href="{% url 'editarPerfil' perfil.id %}">
+                                        <button class="btn btn-warning">editar</button>
+                                    </a>
+                                    {% comment %} <button class="btn btn-danger">borrar</button> {% endcomment %}
+                                    <button type="button" {% if perfil.is_active == 0 %}class="btn btn-success"{% else %}class="btn btn-danger" {% endif %} data-bs-toggle="modal" data-bs-target="#exampleModal{{perfil.id}}">
+                                        {% if perfil.is_active == 0 %}
+                                        Activar
+                                        {% else %}
+                                        Desactivar
+                                        {% endif %}
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal{{perfil.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    seguro que desea {% if perfil.is_active == 0 %}
+                                                    Activar
+                                                    {% else %}
+                                                    Desactivar
+                                                    {% endif %} a {{perfil.username}}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <a href="{% url 'cambiarEstadoPerfil' perfil.id %}">
+                                                        <button type="button" {% if perfil.is_active == 0 %}class="btn btn-success"{% else %}class="btn btn-danger" {% endif %}>
+                                                            {% if perfil.is_active == 0 %}
+                                                            Activar
+                                                            {% else %}
+                                                            Desactivar
+                                                            {% endif %}
+                                                        </button>
+                                                    </a>
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                      
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}

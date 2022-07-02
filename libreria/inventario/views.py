@@ -1,8 +1,8 @@
-from ast import If
 from django.shortcuts import render, redirect
-from .models import Compra, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega
+from .models import Compra, Movimiento, Pedido, Perfil, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega
 from .seed import seedTables
 from django.contrib.auth import authenticate, login
+from datetime import datetime
 
 # Create your views here.
 def index(request):
@@ -220,6 +220,121 @@ def loginPerfil(request):
 
 
     return render(request, template, data)    
+
+def perfiles(request):
+    template = "perfil/lista.html"
+
+    data = dict()
+    data['titulo'] = "Lista de perfiles"
+    data['perfiles'] = Perfil.objects.all()
+
+    return render(request, template, data)
+
+def detallePerfiles(request, perfil_id):
+    template = "perfil/detalle.html"
+
+    data = dict()
+    data['titulo'] = "detalle perfil"
+    data['perfil'] = Perfil.objects.get(id=perfil_id)
+    data['movimientos'] = Movimiento.objects.filter(id=perfil_id)
+    data['pedidos'] = Pedido.objects.filter(id=perfil_id)
+
+    return render(request, template, data)
+
+def editarPerfil(request, id_perfil):
+    template = "perfil/editar.html"
+
+    data = dict()
+    data['titulo'] = "Editar perfil"
+    perfil = Perfil.objects.get(id=id_perfil)
+    data['bodegas'] = Bodega.objects.all()
+    if request.method == "POST":
+        if(request.POST['username'].strip(" ") != '' and perfil.username != request.POST['username']):
+            perfil.username = request.POST['username']
+        if('activo' in request.POST):
+            perfil.is_active = 1
+        else:
+            perfil.is_active = 0
+        if(request.POST['tipo'].strip(" ") != '' and perfil.tipo_usuario != request.POST['tipo']):
+            perfil.tipo_usuario = request.POST['tipo']
+        if(request.POST['bodega'].strip(" ") != '' and perfil.id_bodega.id_bodega != int(request.POST['bodega'])):
+            perfil.id_bodega = Bodega.objects.get(id_bodega=int(request.POST['bodega']))
+        perfil.save()
+    data['perfil'] = perfil
+
+    return render(request, template, data)
+
+def registroPerfil(request):
+    template = "perfil/registro.html"
+
+    data = dict()
+    data['bodegas'] = Bodega.objects.all()
+    data['titulo'] = "Registro perfil"
+    if(request.method == "GET"):
+        if(request.GET["rut"] != ""):
+            rut = request.GET["rut"]
+            # personaPerfil = Persona.objects.get(rut=rut)
+            personaPerfil = Persona.objects.get_or_create(rut=request.GET['rut'])
+            data['persona'] = personaPerfil[0]
+    if(request.method == "POST"):
+        if(request.POST["rut"] != ""):
+            rut = request.POST["rut"]
+            personaPerfil = Persona.objects.get(rut=rut)
+        if(request.POST["nombres"] != ""):
+            personaPerfil.nombres = request.POST["nombres"]
+        if(request.POST["apellidos"] != ""):
+            personaPerfil.apellidos = request.POST["apellidos"]
+        if(request.POST["direccion"] != ""):
+            personaPerfil.direccion = request.POST["direccion"]
+        if(request.POST["correo"] != ""):
+            personaPerfil.correo = request.POST["correo"]
+        if(request.POST["telefono"] != ""):
+            personaPerfil.telefono = request.POST["telefono"]
+        personaPerfil.save()
+        perfil = Perfil()
+        if(request.POST["username"].strip(" ") != ""):
+            perfil.username = request.POST["username"]
+        if(request.POST["pass1"].strip(" ") != "" and request.POST["pass2"].strip(" ") != "" and request.POST["pass1"] == request.POST["pass2"]):
+            perfil.set_password(request.POST["pass1"])
+        if("activo" in request.POST):
+            perfil.is_active = 1
+        else:
+            perfil.is_active = 0
+        if(request.POST["tipo"].strip(" ") != ""):
+            perfil.tipo_usuario = request.POST["tipo"]
+        if(request.POST["bodega"].strip(" ") != ""):
+            perfil.id_bodega = Bodega.objects.get(id_bodega=int(request.POST["bodega"]))
+        perfil.id_persona = personaPerfil
+        perfil.is_superuser = 0
+        perfil.first_name = personaPerfil.nombres
+        perfil.last_name = personaPerfil.apellidos
+        perfil.email = personaPerfil.correo
+        perfil.is_staff = 0
+        perfil.is_active = 1
+        perfil.date_joined = datetime.now()
+        perfil.save()
+        
+    return render(request, template, data)
+
+def preregistroPerfil(request):
+    template = "perfil/preregistro.html"
+
+    data = dict()
+    data['titulo'] = "Registro perfil"
+        
+    return render(request, template, data)
+
+def cambiarEstadoPerfil(request, id_perfil):
+    perfil = Perfil.objects.get(id=id_perfil)
+    if(perfil.is_active == 0):
+        perfil.is_active = 1
+    elif(perfil.is_active == 1):
+        perfil.is_active = 0
+    print(perfil.is_active)
+    perfil.save()
+    return redirect('perfiles')
+
+
 
 # Codigo Bruno Pozo
 def bodegas(request): 

@@ -1,0 +1,76 @@
+
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+        <div class="card">
+            <div class="card-header">
+                {{titulo}}
+            </div>
+            <div class="card-body">
+                <form action="{% url 'editarPerfil' perfil.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="col-12 mb-3">
+                        <label for="username" class="form-label">Nombre de usuario:</label>
+                        <input type="text" class="form-control" id="username" name="username" value="{{perfil.username}}">
+                    </div>
+                    <div class="form-check col-12 mb-3">
+                        <input class="form-check-input" type="checkbox" id="activo" name="activo" {% if perfil.is_active %}checked{% endif %}>
+                        <label class="form-check-label" for="activo">
+                          Activo
+                        </label>
+                    </div>
+                    {% comment %} <div class="col-12 mb-3">
+                        <label for="tipo" class="form-label">Tipo:</label>
+                        <input type="text" class="form-control" id="tipo" value="{{perfil.tipo_usuario}}">
+                    </div> {% endcomment %}
+                    <div class="mb-3">
+                        <label for="tipo" class="form-label">Tipo de usuario:</label>
+                        <select name="tipo" id="tipo" class="form-select" aria-label="Select tipo">
+                            <option value="Administrador" {% if 'Administrador' == perfil.tipo_usuario %} selected{% endif %}>Administrador</option>
+                            <option value="Bodeguero" {% if 'Bodeguero' == perfil.tipo %} selected{% endif %}>Bodeguero</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="bodega" class="form-label">Bodega:</label>
+                        <select name="bodega" id="bodega" class="form-select" aria-label="Select bodega">
+                            {% for bodega in bodegas  %}
+                            <option value="{{bodega.id_bodega}}" {% if bodega == perfil.id_bodega %} selected{% endif %}>{{bodega.nombre_bodega}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% comment %} <div class="col-12 mb-3">
+                        <label for="bodega" class="form-label">Bodega:</label>
+                        <input type="text" class="form-control" id="bodega" value="{{perfil.id_bodega}}">
+                    </div> {% endcomment %}
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% if toast %}
+        <div class="toast-container text-bg-primary position-fixed bottom-0 start-0 p-3">
+            {% if toast == "Error" %}
+                <div id="liveToast" class="toast bg-danger text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% else %}
+                <div id="liveToast" class="toast bg-success text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% endif %}
+                <div class="toast-header">
+                    <i class="fa-solid fa-circle-exclamation m-1"></i>
+                    <strong class="me-auto">{{toast}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{mensaje}}
+                </div>
+            </div>
+        </div>
+        <script> 
+            const toastLiveExample = document.getElementById('liveToast')
+            const toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        </script>
+        {% endif %}
+</div>
+{% endblock contenido %}

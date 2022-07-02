@@ -1,0 +1,93 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    {{titulo}}
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'registroPerfil' %}" method="POST">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <h3>Información Personal</h3>
+                                <hr/>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="nombres" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" name="nombres" id="nombres" value="{{persona.nombres}}">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="apellidos" class="form-label">Apellidos</label>
+                                <input type="text" class="form-control" name="apellidos" id="apellidos"  value="{{persona.apellidos}}">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="rut" class="form-label">Rut</label>
+                                <input type="text" class="form-control-plaintext" name="rut" id="rut" value="{{persona.rut}}" readonly>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="direccion" class="form-label">Dirección</label>
+                                <input type="text" class="form-control" name="direccion" id="direccion" value="{{persona.direccion}}">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="correo" class="form-label">Correo</label>
+                                <input type="text" class="form-control" name="correo" id="correo" value="{{persona.correo}}">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="telefono" class="form-label">Telefono</label>
+                                <input type="text" class="form-control" name="telefono" id="telefono" value="{{persona.telefono}}">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <h3>Información cuenta</h3>
+                                <hr/>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="username" class="form-label">Nombre de usuario:</label>
+                                <input type="text" class="form-control" id="username" name="username" >
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="pass1" class="form-label">Contraseña:</label>
+                                <input type="password" class="form-control" id="pass1" name="pass1" >
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="pass2" class="form-label">Repetir contraseña:</label>
+                                <input type="password" class="form-control" id="pass2" name="pass2" >
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="form-check">
+                                    <label class="form-check-label" for="activo">
+                                        Activo
+                                    </label>
+                                    <input class="form-check-input" type="checkbox" id="activo" name="activo" />
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="tipo" class="form-label">Tipo de usuario:</label>
+                                <select name="tipo" id="tipo" class="form-select" aria-label="Select tipo">
+                                    <option value="Administrador" {% if 'Administrador' == perfil.tipo_usuario %} selected{% endif %}>Administrador</option>
+                                    <option value="Bodeguero" {% if 'Bodeguero' == perfil.tipo %} selected{% endif %}>Bodeguero</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="bodega" class="form-label">Bodega:</label>
+                                <select name="bodega" id="bodega" class="form-select" aria-label="Select bodega">
+                                    {% for bodega in bodegas  %}
+                                    <option value="{{bodega.id_bodega}}" {% if bodega == perfil.id_bodega %} selected{% endif %}>{{bodega.nombre_bodega}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <input type="submit" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}

@@ -1,0 +1,179 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header text-center">
+            <h3>
+                {{titulo}}
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <h3>Persona</h3>
+                <hr />
+                <label for="nombre" class="col-4 col-md-2 col-form-label text-end">Nombre:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="nombre" value="{{perfil.id_persona.nombres}}">
+                </div>
+                <label for="apellido" class="col-4 col-md-2 col-form-label text-end">Apellidos:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="apellido" value="{{perfil.id_persona.apellidos}}">
+                </div>
+                <label for="rut" class="col-4 col-md-2 col-form-label text-end">Rut:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="rut" value="{{perfil.id_persona.rut}}">
+                </div>
+                <label for="direccion" class="col-4 col-md-2 col-form-label text-end">Direccion:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="direccion" value="{{perfil.id_persona.direccion}}">
+                </div>
+                <label for="correo" class="col-4 col-md-2 col-form-label text-end">Correo:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="correo" value="{{perfil.id_persona.correo}}">
+                </div>
+                <label for="telefono" class="col-4 col-md-2 col-form-label text-end">Telefono:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="telefono" value="{{perfil.id_persona.telefono}}">
+                </div>
+                <h3>Perfil</h3>
+                <hr />
+                <label for="username" class="col-4 col-md-2 col-form-label text-end">Nombre de usuario:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="username" value="{{perfil.username}}">
+                </div>
+                <label for="activo" class="col-4 col-md-2 col-form-label text-end">Activo:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="activo" value="{{perfil.is_active}}">
+                </div>
+                <label for="tipo" class="col-4 col-md-2 col-form-label text-end">Tipo:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="tipo" value="{{perfil.tipo_usuario}}">
+                </div>
+                <label for="fechaIngreso" class="col-4 col-md-2 col-form-label text-end">Fecha de Ingreso:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="fechaIngreso" value="{{perfil.date_joined}}">
+                </div>
+                <label for="bodega" class="col-4 col-md-2 col-form-label text-end">Bodega:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="bodega" value="{{perfil.id_bodega}}">
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <a href="{% url 'editarPerfil' perfil.id%}">
+                <button class="btn btn-warning text">
+                    Editar
+                </button>
+            </a>
+            <!-- Button trigger modal -->
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header text-center">
+            <h3>
+                Movimientos Solicitados
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                Fecha de Solicitud
+                            </th>
+                            <th>
+                                Bodega de Origen
+                            </th>
+                            <th>
+                                Bodega de Destino
+                            </th>
+                            <th>
+                                Estado
+                            </th>
+                            <th>
+                                Acción
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movimiento in movimientos %}
+                        <tr>
+                            <td>
+                                {{movimiento.fecha_solicitud}}
+                            </td>
+                            <td>
+                                {{movimiento.id_bodega_origen}}
+                            </td>
+                            <td>
+                                {{movimiento.id_bodega_destino}}
+                            </td>
+                            <td>
+                                {{movimiento.estado}}
+                            </td>
+                            <td>
+                                <button class="btn btn-primary">ver</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header text-center">
+            <h3>
+                Pedidos Solicitados
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                Fecha de Solicitud
+                            </th>
+                            <th>
+                                Bodega
+                            </th>
+                            <th>
+                                Proveedor
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                            <th>
+                                Acción
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pedido in pedidos %}
+                        <tr>
+                            <td>
+                                {{pedido.fecha_pedido}}
+                            </td>
+                            <td>
+                                {{pedido.id_bodega}}
+                            </td>
+                            <td>
+                                {{pedido.id_proveedor}}
+                            </td>
+                            <td>
+                                {{pedido.total_pedido}}
+                            </td>
+                            <td>
+                                <button class="btn btn-primary">ver</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}
