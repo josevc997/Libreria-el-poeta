@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header text-center">
+            <h3>
+                {{titulo}}
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <h3>Autor</h3>
+                <hr />
+                <label for="nombre" class="col-4 col-md-2 col-form-label text-end">Nombre:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="nombre" value="{{autor.nombres_autor}}">
+                </div>
+                <label for="apellido" class="col-4 col-md-2 col-form-label text-end">Apellidos:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="apellido" value="{{autor.apellidos_autor}}">
+                </div>
+                <label for="correo" class="col-4 col-md-2 col-form-label text-end">Correo:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="correo" value="{{autor.correo_autor}}">
+                </div>
+                <label for="nacionalidad" class="col-4 col-md-2 col-form-label text-end">Nacionalidad:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="nacionalidad" value="{{autor.nacionalidad_autor}}">
+                </div>
+                <label for="pseudonimo" class="col-4 col-md-2 col-form-label text-end">Pseudonimo:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="pseudonimo" value="{{autor.pseudonimo_autor}}">
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <a href="{% url 'editarAutor' autor.id_autor%}">
+                <button class="btn btn-warning text">
+                    Editar
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header text-center">
+            <h3>
+                Publicaciones
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Año de publicación</th>
+                            <th>Edicion</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for publicacion in autor.publicacion_set.all %}
+                        <tr>
+                            <td>{{publicacion.nombre}}</td>
+                            <td>{{publicacion.tipo_producto}}</td>
+                            <td>
+                                {{publicacion.fecha_publicacion}}
+                            </td>
+                            <td>{{publicacion.edicion}}</td>
+                            <td>
+                                <button class="btn btn-primary">ver</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}

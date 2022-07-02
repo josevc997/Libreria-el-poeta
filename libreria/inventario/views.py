@@ -15,8 +15,41 @@ def autores(request):
     template = "autores/lista.html"
     data = dict()
     data['titulo'] = "Autores Registrados"
-    info = dict()
     data['autores'] = Autor.objects.all()
+    return render(request, template, data)
+
+def detalleAutor(request, id_autor):
+    template = "autores/detalle.html"
+    
+    data = dict()
+    data['titulo'] = "Detalle Autor"
+    data['autor'] = Autor.objects.get(id_autor=id_autor)
+
+    return render(request, template, data)
+
+def editarAutor(request, id_autor):
+    template = "autores/editar.html"
+    
+    data = dict()
+    data['titulo'] = "Editar Autor"
+    autor = Autor.objects.get(id_autor=id_autor)
+    data['autor'] = autor
+
+    if request.method == 'POST':
+        if(request.POST['nombre'].strip(" ") != ''):
+            autor.nombres_autor = request.POST['nombre']
+        if(request.POST['apellido'].strip(" ") != ''):
+            autor.apellidos_autor = request.POST['apellido']
+        if(request.POST['correo'].strip(" ") != ''):
+            autor.correo_autor = request.POST['correo']
+        if(request.POST['nacionalidad'].strip(" ") != ''):
+            autor.nacionalidad_autor = request.POST['nacionalidad']
+        if(request.POST['pseudonimo'].strip(" ") != ''):
+            autor.pseudonimo_autor = request.POST['pseudonimo']
+        print(autor)
+        autor.save()
+        return redirect('detalleAutor', id_autor)
+
     return render(request, template, data)
 
 def registroAutores(request):

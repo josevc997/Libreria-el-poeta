@@ -1,0 +1,63 @@
+
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+        <div class="card">
+            <div class="card-header">
+                Registro Persona
+            </div>
+            <div class="card-body">
+                <form action="{% url 'editarAutor' autor.id_autor %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" name="nombre" id="nombre" value="{{autor.nombres_autor}}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="apellido" class="form-label">Apellido:</label>
+                        <input type="text" class="form-control" name="apellido" id="apellido" value="{{autor.apellidos_autor}}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="correo" class="form-label">Correo:</label>
+                        <input type="text" class="form-control" name="correo" id="correo" value="{{autor.correo_autor}}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="nacionalidad" class="form-label">Nacionalidad:</label>
+                        <input type="text" class="form-control" name="nacionalidad" id="nacionalidad" value="{{autor.nacionalidad_autor}}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pseudonimo" class="form-label">Pseudonimo:</label>
+                        <input type="text" class="form-control" name="pseudonimo" id="pseudonimo" value="{{autor.pseudonimo_autor}}">
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% if toast %}
+        <div class="toast-container text-bg-primary position-fixed bottom-0 start-0 p-3">
+            {% if toast == "Error" %}
+                <div id="liveToast" class="toast bg-danger text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% else %}
+                <div id="liveToast" class="toast bg-success text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% endif %}
+                <div class="toast-header">
+                    <i class="fa-solid fa-circle-exclamation m-1"></i>
+                    <strong class="me-auto">{{toast}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{mensaje}}
+                </div>
+            </div>
+        </div>
+        <script> 
+            const toastLiveExample = document.getElementById('liveToast')
+            const toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        </script>
+        {% endif %}
+</div>
+{% endblock contenido %}

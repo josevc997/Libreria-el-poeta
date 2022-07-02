@@ -21,9 +21,13 @@
                         <td>{{autor.nacionalidad_autor}}</td>
                         <td>{{autor.correo_autor}}</td>
                         <td>
-                            <button class="btn btn-primary">ver</button>
-                            <button class="btn btn-warning">editar</button>
-                            <button class="btn btn-danger">borrar</button>
+                            <a href="{% url 'detalleAutor' autor.id_autor %}" >
+                                <button class="btn btn-primary">ver</button>
+                            </a>
+                            <a href="{% url 'editarAutor' autor.id_autor%}">
+                                <button class="btn btn-warning">editar</button>
+                            </a>
+                            {% comment %} <button class="btn btn-danger">borrar</button> {% endcomment %}
                         </td>
                     </tr>
                     {% endfor %}
