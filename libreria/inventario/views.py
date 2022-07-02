@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Compra, Movimiento, Pedido, Perfil, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega
 from .seed import seedTables
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from datetime import datetime
 
 # Create your views here.
@@ -211,15 +211,23 @@ def loginPerfil(request):
         user = authenticate(username=nombre, password=contraseña)
         if user is not None:
             # A backend authenticated the credentials
-            print("* * if * *")
             login(request, user)
             return redirect('productos')
         else:
-            # No backend authenticated the credentials
-            print("* * else * *")
+            data['toast'] = "Error"
+            data['mensaje'] = "Usuario o contraseña incorrectos"
 
 
     return render(request, template, data)    
+
+def logoutPerfil(request):
+    data = dict()
+
+    data['titulo'] = "Cerrar sesion"
+    
+    if(request.user.is_authenticated):
+        logout(request)
+    return redirect('index')
 
 def perfiles(request):
     template = "perfil/lista.html"

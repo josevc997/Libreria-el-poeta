@@ -2,5 +2,22 @@
 {% load static %}
 
 {% block contenido %}
-asd
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h2>
+                Bienvenido al gestor de inventario el poeta
+            </h2>
+            <p>Con nuestro sistema podra:</p>
+            <ol>
+                <li>Gestionar el stock de sus publicaciones</li>
+                <li>Gestionar las sucursales de su empresa</li>
+                <li>Gestionar los trabajadores de sus sucursales</li>
+                {% if user.is_authenticated %}
+                {{user}}
+                {% endif %}
+            </ol>
+        </div>
+    </div>
+</div>
 {% endblock %}

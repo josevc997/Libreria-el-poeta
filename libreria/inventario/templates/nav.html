@@ -2,6 +2,7 @@
     <div class="container-fluid">
         <div class="navbar-brand">Inventario</div>
         <ul class="navbar-nav">
+            {% if user.is_authenticated %}
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" id="AutoresDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
                     <i class="fa-solid fa-user-pen"></i> 
@@ -88,6 +89,18 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesion
+                </a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">
+                    <i class="fa-solid fa-right-to-bracket"></i> Iniciar sesion
+                </a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

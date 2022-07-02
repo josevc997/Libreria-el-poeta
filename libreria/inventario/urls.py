@@ -16,6 +16,7 @@ urlpatterns = [
     path('seed', views.seed, name='seed'),
     path('personas/editar/<int:id_persona>', views.editarPersonas, name='editarPersonas'),
     path('login', views.loginPerfil, name='login'),
+    path('logout', views.logoutPerfil, name='logout'),
     path('perfiles', views.perfiles, name='perfiles'),
     path('perfiles/registro', views.registroPerfil, name='registroPerfil'),
     path('perfiles/preregistro', views.preregistroPerfil, name='preregistroPerfil'),
