@@ -70,7 +70,9 @@
                             </td>
                             <td>{{publicacion.edicion}}</td>
                             <td>
-                                <button class="btn btn-primary">ver</button>
+                                <a href="{% url 'detallePublicacion' publicacion.id_publicacion %}">
+                                    <button class="btn btn-primary">ver</button>
+                                </a>
                             </td>
                         </tr>
                         {% endfor %}

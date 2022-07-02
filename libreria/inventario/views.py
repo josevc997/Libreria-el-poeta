@@ -80,6 +80,39 @@ def productos(request):
     data['productos'] = Publicacion.objects.all()
     return render(request, template, data)
 
+def detallePublicacion(request, id_publicacion):
+    template = "productos/detalle.html"
+    
+    data = dict()
+    data['titulo'] = "Detalle Publicacion"
+    data['publicacion'] = Publicacion.objects.get(id_publicacion=id_publicacion)
+
+    return render(request, template, data)
+
+def editarPublicacion(request, id_publicacion):
+    template = "productos/editar.html"
+    
+    data = dict()
+    data['titulo'] = "Editar Publicacion"
+    publicacion = Publicacion.objects.get(id_publicacion=id_publicacion)
+    data['publicacion'] = publicacion 
+
+    if(request.POST):
+        if(request.POST['nombre'].strip(" ") != ''):
+            publicacion.nombre = request.POST['nombre']
+        if(request.POST['edicion'].strip(" ") != ''):
+            publicacion.edicion = request.POST['edicion']
+        if(request.POST['isbn'].strip(" ") != ''):
+            publicacion.isbn = request.POST['isbn']
+        if(request.POST['resumen'].strip(" ") != ''):
+            publicacion.resumen = request.POST['resumen']
+        if(request.POST['precio'].strip(" ") != ''):
+            publicacion.precio = int(request.POST['precio'])
+        publicacion.save()
+        return redirect('detallePublicacion', publicacion.id_publicacion)
+
+    return render(request, template, data)
+
 def registroProductos(request):
     template = "productos/registro.html"
     data = dict()

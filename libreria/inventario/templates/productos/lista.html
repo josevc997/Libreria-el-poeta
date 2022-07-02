@@ -32,8 +32,12 @@
                         </td>
                         <td>{{producto.edicion}}</td>
                         <td>
-                            <button class="btn btn-primary">ver</button>
-                            <button class="btn btn-warning">editar</button>
+                            <a href="{% url 'detallePublicacion' producto.id_publicacion %}">
+                                <button class="btn btn-primary">ver</button>
+                            </a>
+                            <a href="{% url 'editarPublicacion' producto.id_publicacion %}">
+                                <button class="btn btn-warning">editar</button>
+                            </a>
                             <button class="btn btn-danger">borrar</button>
                         </td>
                     </tr>

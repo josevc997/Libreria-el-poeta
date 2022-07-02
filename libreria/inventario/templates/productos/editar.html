@@ -1,0 +1,75 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header text-center">
+            <h3>
+                {{titulo}}
+            </h3>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'editarPublicacion' publicacion.id_publicacion %}" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <h3>Libro : {{publicacion.nombre}}</h3>
+                    <hr />
+                    <label for="nombre" class="col-4 col-md-2 col-form-label text-end">Nombre:</label>
+                    <div class="col-8 col-md-4 mb-3">
+                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{publicacion.nombre}}">
+                    </div>
+                    <label for="editorial" class="col-4 col-md-2 col-form-label text-end">Editorial:</label>
+                    <div class="col-8 col-md-4 mb-3">
+                        <input type="text" readonly class="form-control-plaintext" name="editorial" id="editorial" value="{{publicacion.id_editorial}}">
+                    </div>
+                    <label for="tipo_producto" class="col-4 col-md-2 col-form-label text-end">tipo_producto:</label>
+                    <div class="col-8 col-md-4 mb-3">
+                        <input type="text" readonly class="form-control-plaintext" name="tipo_producto" id="tipo_producto" value="{{publicacion.tipo_producto}}">
+                    </div>
+                    <label for="edicion" class="col-4 col-md-2 col-form-label text-end">edicion:</label>
+                    <div class="col-8 col-md-4 mb-3">
+                        <input type="text" readonly class="form-control-plaintext" name="edicion" id="edicion" value="{{publicacion.edicion}}">
+                    </div>
+                    <label for="fecha_publicacion" class="col-4 col-md-2 col-form-label text-end">fecha_publicacion:</label>
+                    <div class="col-8 col-md-4 mb-3">
+                        <input type="text" readonly class="form-control-plaintext" name="fecha_publicacion" id="fecha_publicacion" value="{{publicacion.fecha_publicacion}}">
+                    </div>
+                    <label for="isbn" class="col-4 col-md-2 col-form-label text-end">isbn:</label>
+                    <div class="col-8 col-md-4 mb-3">
+                        <input type="text" readonly class="form-control-plaintext" name="isbn" id="isbn" value="{{publicacion.isbn}}">
+                    </div>
+                    <label for="numero_serie" class="col-4 col-md-2 col-form-label text-end">numero_serie:</label>
+                    <div class="col-8 col-md-4 mb-3">
+                        <input type="text" readonly class="form-control-plaintext" name="numero_serie" id="numero_serie" value="{{publicacion.numero_serie}}">
+                    </div>
+                    <label for="precio" class="col-4 col-md-2 col-form-label text-end">precio:</label>
+                    <div class="col-8 col-md-4 mb-3">
+                        <input type="text" class="form-control" name="precio" id="precio" value="{{publicacion.precio}}">
+                    </div>
+                    <label for="resumen" class="col-4 col-md-2 col-form-label text-end">resumen:</label>
+                    <div class="col-8 col-md-10 mb-3">
+                        <textarea class="form-control" name="resumen" id="resumen" rows="3">{{publicacion.resumen}}</textarea>
+                    </div>
+                    <label for="autores" class="col-4 col-md-2 col-form-label text-end">autores:</label>
+                    <div class="col-8 col-md-4">
+                        {% for autor in publicacion.autor_publicacion_set.all %}
+                            {{autor.id_autor}}
+                            <br/>
+                        {% endfor %}
+                    </div>
+                    <label for="generos" class="col-4 col-md-2 col-form-label text-end">generos:</label>
+                    <div class="col-8 col-md-4 mb-3">
+                        {% for genero in publicacion.genero_publicacion_set.all %}
+                            {{genero.id_genero}}
+                            <br/>
+                        {% endfor %}
+                    </div>
+                    <div class="container mb-3 text-center">
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}
