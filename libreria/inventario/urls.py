@@ -43,4 +43,5 @@ urlpatterns = [
     # URLS Pablo Cea
     path('proveedores/registro', views.registroProveedores, name='registroProveedores'),
     path('proveedores', views.proveedores, name='proveedores'),
+    path('proveedores/detalle', views.detalleProveedores, name='detalleProveedor'),
 ]

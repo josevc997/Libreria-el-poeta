@@ -1,3 +1,4 @@
+from re import template
 from django.shortcuts import render, redirect
 from .models import Compra, Genero, Movimiento, Pedido, Perfil, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega
 from .seed import seedTables
@@ -602,4 +603,13 @@ def proveedores(request):
     
     data['proveedores'] = Proveedor.objects.all()
     return render(request, template, data)
+
+def detalleProveedores(request):
+    template = "proveedores/detalle.html"
+    data = dict()
+    data['titulo'] = "Detalle autor"
+
+    return render(request,template,data)
+    
+
 # # #
