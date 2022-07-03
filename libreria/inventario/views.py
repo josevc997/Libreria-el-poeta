@@ -566,6 +566,17 @@ def registroCompras(request):
     data['titulo'] = "Registro Compras"
     return render(request, template, data)
 
+def detalleCompras(request, id_persona, id_compra):
+    template = "compras/detalle.html"
+    data = dict()
+    data['titulo'] = "Detalle Compras"
+    data['Persona'] = Persona.objects.get(id_persona=id_persona)
+    data['Total'] = Compra.objects.filter(id_compra=id_compra)
+    data['Fecha Compra'] = Compra.objects.filter(id_compra=id_compra)
+    data['Metodo Pago'] = Compra.objects.get(id_compra=id_compra)
+
+    return render(request, template, data)
+
 #def detalleCompras(request):
 
 
@@ -604,10 +615,11 @@ def proveedores(request):
     data['proveedores'] = Proveedor.objects.all()
     return render(request, template, data)
 
-def detalleProveedores(request):
+def detalleProveedores(request,id_proveedor):
     template = "proveedores/detalle.html"
     data = dict()
     data['titulo'] = "Detalle autor"
+    data['proveedor'] = Proveedor.objects.get(id_proveedor=id_proveedor)
 
     return render(request,template,data)
     

@@ -39,9 +39,10 @@ urlpatterns = [
     path('bodegas', views.bodegas, name='bodegas'),
     path('bodegas/<int:bodega_id>', views.detalleBodegas, name='detalleBodegas'),
     path('bodegas/registro', views.registroBodegas, name='registroBodegas'),
+    path('compras/detalle',views.detalleCompras,name='detalleCompras'),
     # path('compras/detalles',views.detalleCompras,)
     # URLS Pablo Cea
     path('proveedores/registro', views.registroProveedores, name='registroProveedores'),
     path('proveedores', views.proveedores, name='proveedores'),
-    path('proveedores/detalle', views.detalleProveedores, name='detalleProveedor'),
+    path('proveedores/detalle/<int:id_proveedor>', views.detalleProveedores, name='detalleProveedor'),
 ]

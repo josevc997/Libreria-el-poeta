@@ -26,9 +26,10 @@
                         <td>{{proveedor.correo_proveedor}}</td>
                         <td>{{proveedor.telefono_proveedor}}</td>
                         <td>
-                            {% comment %} <a href="{% url 'detalleproveedors' proveedor.id_proveedor %}">
+                            <a href="{% url 'detalleProveedor' proveedor.id_proveedor %}">
                                 <button class="btn btn-primary">ver</button>
-                            </a> {% endcomment %}
+                            </a> 
+                            
                             <button class="btn btn-warning">editar</button>
                             <button class="btn btn-danger">borrar</button>
                         </td>
