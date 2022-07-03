@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card mb-3">
+        <div class="card-header">
+            {{titulo}}
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <label for="nombre" class="col-4 col-md-2 col-form-label text-end">Nombre:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="nombre" id="nombre" value="{{genero.nombre_genero}}">
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <a href="{% url 'editarGenero' genero.id_genero%}">
+                <button class="btn btn-warning text">
+                    Editar
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header text-center">
+            <h3>
+                Publicaciones
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Año de publicación</th>
+                            <th>Edicion</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for publicacion in genero.publicacion_set.all %}
+                        <tr>
+                            <td>{{publicacion.nombre}}</td>
+                            <td>{{publicacion.tipo_producto}}</td>
+                            <td>
+                                {{publicacion.fecha_publicacion}}
+                            </td>
+                            <td>{{publicacion.edicion}}</td>
+                            <td>
+                                <a href="{% url 'detallePublicacion' publicacion.id_publicacion %}">
+                                    <button class="btn btn-primary">ver</button>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}

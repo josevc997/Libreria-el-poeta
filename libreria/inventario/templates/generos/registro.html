@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+        <div class="card">
+            <div class="card-header">
+                Registro Editorial
+            </div>
+            <div class="card-body">
+                <form action="{% url 'registroGeneros' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre <span class="text-muted">(Campo Obligatorio)<span></label>
+                        <input type="text" class="form-control" name="nombre" id="nombre">
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+</div>
+{% if toast %}
+        <div class="toast-container text-bg-primary position-fixed bottom-0 start-0 p-3">
+            {% if toast == "Error" %}
+                <div id="liveToast" class="toast bg-danger text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% else %}
+                <div id="liveToast" class="toast bg-success text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% endif %}
+                <div class="toast-header">
+                    <i class="fa-solid fa-circle-exclamation m-1"></i>
+                    <strong class="me-auto">{{toast}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{mensaje}}
+                </div>
+            </div>
+        </div>
+        <script> 
+            const toastLiveExample = document.getElementById('liveToast')
+            const toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        </script>
+        {% endif %}
+{% endblock contenido %}

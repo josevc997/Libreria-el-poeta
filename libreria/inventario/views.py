@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Compra, Movimiento, Pedido, Perfil, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega
+from .models import Compra, Genero, Movimiento, Pedido, Perfil, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega
 from .seed import seedTables
 from django.contrib.auth import authenticate, login, logout
 from datetime import datetime
@@ -149,6 +149,56 @@ def registroProductos(request):
 
     return render(request, template, data)
 
+def generos(request): 
+    template = "generos/lista.html"
+    data = dict()
+    data['titulo'] = "Generos Registrados"
+    data['generos'] = Genero.objects.all()
+    return render(request, template, data)
+
+def registroGeneros(request):
+    template = "generos/registro.html"
+    data = dict()
+    data['titulo'] = "Registro Generos"
+
+    if request.method == 'POST':
+        genero = Genero()
+        if(request.POST['nombre'].strip(" ") != ''):
+            genero.nombre_genero = request.POST['nombre']
+            genero.save()
+            return redirect('generos')
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "genero no registrada, debe rellenar los campos obligatorios"
+    return render(request, template, data)
+    
+
+def detalleGenero(request, id_genero):
+    template = "generos/detalle.html"
+    
+    data = dict()
+    data['titulo'] = "Detalle Genero"
+    data['genero'] = Genero.objects.get(id_genero=id_genero)
+
+    return render(request, template, data)
+
+def editarGenero(request, id_genero):
+    template = "generos/editar.html"
+    data = dict()
+    data['titulo'] = "Editar Generos"
+    genero = Genero.objects.get(id_genero=id_genero)
+    data['genero'] = genero
+
+    if request.method == 'POST':
+        if(request.POST['nombre'].strip(" ") != ''):
+            genero.nombre_genero = request.POST['nombre']
+            genero.save()
+            return redirect('generos')
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "genero no registrada, debe rellenar los campos obligatorios"
+    return render(request, template, data)
+
 def editoriales(request): 
     template = "editoriales/lista.html"
     data = dict()
@@ -176,6 +226,7 @@ def registroEditoriales(request):
         else:
             data['toast'] = "Error"
             data['mensaje'] = "Editorial no registrada, debe rellenar los campos obligatorios"
+    return render(request, template, data)
 
 def detalleEditorial(request, id_editorial):
     template = "editoriales/detalle.html"
