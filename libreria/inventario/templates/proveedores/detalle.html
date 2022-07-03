@@ -61,7 +61,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        {% for pedido in proveedor.pedido_set.all %}
+                        <tr>
+                            <td>{{pedido.id_pedido}}</td>
+                            <td>{{pedido.id_bodega}}</td>
+                            <td>
+                                {{pedido.fecha_pedido}}
+                            </td>
+                            <td>{{pedido.total_pedido}}</td>
+                            <td>
+                                
+                                <a href="">
+                                    <button class="btn btn-primary">ver</button>
+                                </a>
+                                
+                            </td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
