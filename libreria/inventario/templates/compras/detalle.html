@@ -5,7 +5,7 @@
     <div class="card mb-4">
         <div class="card-header text-center">
             <h3>
-                {{titulo}}
+                Detalle Compra
             </h3>
         </div>
         <div class="card-body">
@@ -34,157 +34,47 @@
                 <div class="col-8 col-md-4">
                     <input type="text" readonly class="form-control-plaintext" id="fechacompra" value="{{compra.fecha_compra}}">
                 </div>
+                {% comment %}
                 <label for="telefono" class="col-4 col-md-2 col-form-label text-end">Publicaciones:</label>
                 <div class="col-8 col-md-4">
-                    <input type="text" readonly class="form-control-plaintext" id="publicaciones" value="{{persona.publicaciones}}">
+                    <input type="text" readonly class="form-control-plaintext" id="publicaciones" value="{{compra.publicaciones}}">
                 </div>
-                <!-- <div class="col-12 col-md-6">
-                    {{persona.nombres}}
-                </div>
-                <div class="col-12 col-md-6">
-                    {{persona.apellidos}}
-                </div>
-                <div class="col-12 col-md-6">
-                    {{persona.direccion}}
-                </div>
-                <div class="col-12 col-md-6">
-                    {{persona.correo}}
-                </div>
-                <div class="col-12 col-md-6">
-                    {{persona.telefono}}
-                </div> -->
-            </div>
-        </div>
-        <div class="card-footer text-end">
-            <a href="{% url 'editarCompras' compra.id_compra%}">
-                <button class="btn btn-warning text">
-                    Editar
-                </button>
-            </a>
-        </div>
+                {% endcomment %}
     </div>
-    <div class="card">
-        <div class="card-header text-center">
-            <h3>
-                Compras Anteriores
-            </h3>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>
-                                Fecha de Compra
-                            </th>
-                            <th>
-                                Bodega
-                            </th>
-                            <th>
-                                Forma de Pago
-                            </th>
-                            <th>
-                                Total
-                            </th>
-                            <th>
-                                Acción
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for compra in compras %}
-                        <tr>
-                            <td>
-                                {{compra.fecha_compra}}
-                            </td>
-                            <td>
-                                {{compra.id_bodega}}
-                            </td>
-                            <td>
-                                {{compra.metodo_pago}}
-                            </td>
-                            <td>
-                                {{compra.total}}
-                            </td>
-                            <td>
-                                <button class="btn btn-primary">ver</button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        <tr>
-                            <td>
-                                28-05-2022
-                            </td>
-                            <td>
-                                Santiago Centro
-                            </td>
-                            <td>
-                                Debito
-                            </td>
-                            <td>
-                                $20500
-                            </td>
-                            <td>
-                                <button class="btn btn-primary">ver</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                13-05-2022
-                            </td>
-                            <td>
-                                Santiago Centro
-                            </td>
-                            <td>
-                                Debito
-                            </td>
-                            <td>
-                                $20500
-                            </td>
-                            <td>
-                                <button class="btn btn-primary">ver</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                01-06-2022
-                            </td>
-                            <td>
-                                Santiago Centro
-                            </td>
-                            <td>
-                                Debito
-                            </td>
-                            <td>
-                                $20500
-                            </td>
-                            <td>
-                                <button class="btn btn-primary">ver</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                03-05-2022
-                            </td>
-                            <td>
-                                Santiago Centro
-                            </td>
-                            <td>
-                                Debito
-                            </td>
-                            <td>
-                                $20500
-                            </td>
-                            <td>
-                                <button class="btn btn-primary">ver</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-            </div>
-        </div>
+</div>
+<div class="card-footer text-end">
+    <a href="http://127.0.0.1:8000/compras/detalle">
+        <button class="btn btn-warning text">
+            Editar
+        </button>
+    </a>
+</div>
+</div>
+<div class="card mb-4">
+<div class="card-header text-center">
+    <h3>
+        Pedidos
+    </h3>
+</div>
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Bodega</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
     </div>
+</div>
+</div>
 </div>
 
 {% endblock %}
