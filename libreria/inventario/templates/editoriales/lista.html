@@ -17,8 +17,12 @@
                     <tr>
                         <td>{{editorial.nombre_editorial}}</td>
                         <td>
-                            <button class="btn btn-primary">ver</button>
-                            <button class="btn btn-warning">editar</button>
+                            <a href="{% url 'detalleEditorial' editorial.id_editorial %}">
+                                <button class="btn btn-primary">ver</button>
+                            </a>
+                            <a href="{% url 'editarEditorial' editorial.id_editorial %}">
+                                <button class="btn btn-warning">editar</button>
+                            </a>
                             <button class="btn btn-danger">borrar</button>
                         </td>
                     </tr>

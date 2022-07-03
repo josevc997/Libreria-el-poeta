@@ -1,29 +1,30 @@
+
 {% extends 'layout.html' %}
 
 {% block contenido %}
 <div class="container">
         <div class="card">
             <div class="card-header">
-                Registro Editorial
+                {{titulo}}
             </div>
             <div class="card-body">
-                <form action="{% url 'registroEditoriales' %}" method="POST">
+                <form action="{% url 'editarEditorial' editorial.id_editorial %}" method="POST">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre <span class="text-muted">(Campo Obligatorio)<span></label>
-                        <input type="text" class="form-control" name="nombre" id="nombre">
+                        <label for="nombre" class="form-label">Nombre: <span class="text-muted">(Campo Obligatorio)<span></label>
+                        <input type="text" class="form-control" name="nombre" id="nombre" value="{{editorial.nombre_editorial}}">
                     </div>
                     <div class="mb-3">
-                        <label for="correo" class="form-label">Correo</label>
-                        <input type="text" class="form-control" name="correo" id="correo">
+                        <label for="correo" class="form-label">Correo:</label>
+                        <input type="text" class="form-control" name="correo" id="correo" value="{{editorial.correo_editorial}}">
                     </div>
                     <div class="mb-3">
-                        <label for="telefono" class="form-label">Telefono</label>
-                        <input type="text" class="form-control" name="telefono" id="telefono">
+                        <label for="telefono" class="form-label">Telefono:</label>
+                        <input type="text" class="form-control" name="telefono" id="telefono" value="{{editorial.telefono_editorial}}">
                     </div>
                     <div class="mb-3">
-                        <label for="direccion" class="form-label">Direccion</label>
-                        <input type="text" class="form-control" name="direccion" id="direccion">
+                        <label for="direccion" class="form-label">Direccion:</label>
+                        <input type="text" class="form-control" name="direccion" id="direccion" value="{{editorial.direccion_editorial}}">
                     </div>
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary">Enviar</button>
@@ -31,8 +32,7 @@
                 </form>
             </div>
         </div>
-</div>
-{% if toast %}
+        {% if toast %}
         <div class="toast-container text-bg-primary position-fixed bottom-0 start-0 p-3">
             {% if toast == "Error" %}
                 <div id="liveToast" class="toast bg-danger text-light" role="alert" aria-live="assertive" aria-atomic="true">
@@ -55,4 +55,5 @@
             toast.show()
         </script>
         {% endif %}
+</div>
 {% endblock contenido %}

@@ -163,13 +163,68 @@ def registroEditoriales(request):
 
     if request.method == 'POST':
         editorial = Editorial()
-        if(request.POST['nombre'].strip(" ") != ''):
-            editorial.nombre_editorial = request.POST['nombre']
         if(request.POST['correo'].strip(" ") != ''):
             editorial.correo_editorial = request.POST['correo']
         if(request.POST['telefono'].strip(" ") != ''):
             editorial.telefono_editorial = request.POST['telefono']
-        editorial.save()
+        if(request.POST['direccion'].strip(" ") != ''):
+            editorial.direccion_editorial = request.POST['direccion']
+        if(request.POST['nombre'].strip(" ") != ''):
+            editorial.nombre_editorial = request.POST['nombre']
+            editorial.save()
+            return redirect('editoriales')
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "Editorial no registrada, debe rellenar los campos obligatorios"
+
+def detalleEditorial(request, id_editorial):
+    template = "editoriales/detalle.html"
+    data = dict()
+    data['titulo'] = "Detalle Editorial"
+
+    editorial = Editorial.objects.get(id_editorial=id_editorial)
+    data["editorial"] = editorial
+
+    if request.method == 'POST':
+        if(request.POST['correo'].strip(" ") != ''):
+            editorial.correo_editorial = request.POST['correo']
+        if(request.POST['telefono'].strip(" ") != ''):
+            editorial.telefono_editorial = request.POST['telefono']
+        if(request.POST['direccion'].strip(" ") != ''):
+            editorial.direccion_editorial = request.POST['direccion']
+        if(request.POST['nombre'].strip(" ") != ''):
+            editorial.nombre_editorial = request.POST['nombre']
+            editorial.save()
+            return redirect('editoriales')
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "Editorial no modificada, debe rellenar los campos obligatorios"
+
+
+    return render(request, template, data)
+
+def editarEditorial(request, id_editorial):
+    template = "editoriales/editar.html"
+    data = dict()
+    data['titulo'] = "Editar Editorial"
+
+    editorial = Editorial.objects.get(id_editorial=id_editorial)
+    data["editorial"] = editorial
+
+    if request.method == 'POST':
+        if(request.POST['correo'].strip(" ") != ''):
+            editorial.correo_editorial = request.POST['correo']
+        if(request.POST['telefono'].strip(" ") != ''):
+            editorial.telefono_editorial = request.POST['telefono']
+        if(request.POST['direccion'].strip(" ") != ''):
+            editorial.direccion_editorial = request.POST['direccion']
+        if(request.POST['nombre'].strip(" ") != ''):
+            editorial.nombre_editorial = request.POST['nombre']
+            editorial.save()
+            return redirect('editoriales')
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "Editorial no modificada, debe rellenar los campos obligatorios"
 
 
     return render(request, template, data)
