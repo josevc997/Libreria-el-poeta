@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+        <div class="card">
+            <div class="card-header">
+                Registro Movimiento
+            </div>
+            <div class="card-body">
+                <form action="{% url 'registroMovimientos' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="col-12 mb-3">
+                        <label for="bodega_origen" class="form-label">bodega de Origen:</label>
+                        <select name="bodega_origen" id="bodega_origen" class="form-select" aria-label="Select bodega origen">
+                            {% for bodega in bodegas  %}
+                            <option value="{{bodega.id_bodega}}" {% if bodega == perfil.id_bodega %} selected{% endif %}>{{bodega.nombre_bodega}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label for="bodega_destino" class="form-label">bodega de Destino:</label>
+                        <select name="bodega_destino" id="bodega_destino" class="form-select" aria-label="Select bodega destino">
+                            {% for bodega in bodegas  %}
+                            <option value="{{bodega.id_bodega}}" {% if bodega == perfil.id_bodega %} selected{% endif %}>{{bodega.nombre_bodega}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+</div>
+{% if toast %}
+        <div class="toast-container text-bg-primary position-fixed bottom-0 start-0 p-3">
+            {% if toast == "Error" %}
+                <div id="liveToast" class="toast bg-danger text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% else %}
+                <div id="liveToast" class="toast bg-success text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% endif %}
+                <div class="toast-header">
+                    <i class="fa-solid fa-circle-exclamation m-1"></i>
+                    <strong class="me-auto">{{toast}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{mensaje}}
+                </div>
+            </div>
+        </div>
+        <script> 
+            const toastLiveExample = document.getElementById('liveToast')
+            const toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        </script>
+        {% endif %}
+{% endblock contenido %}

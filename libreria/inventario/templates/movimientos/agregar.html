@@ -1,0 +1,138 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card mb-3">
+        <div class="card-header">
+            {{titulo}}
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <label for="id" class="col-4 col-md-2 col-form-label text-end">Perfil:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="id" id="id" value="{{movimiento.id}}">
+                </div>
+                <label for="id_bodega_origen" class="col-4 col-md-2 col-form-label text-end">Bodega de Origen:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="id_bodega_origen" id="id_bodega_origen" value="{{movimiento.id_bodega_origen}}">
+                </div>
+                <label for="id_bodega_destino" class="col-4 col-md-2 col-form-label text-end">Bodega de Destino:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="id_bodega_destino" id="id_bodega_destino" value="{{movimiento.id_bodega_destino}}">
+                </div>
+                <label for="fecha_solicitud" class="col-4 col-md-2 col-form-label text-end">Fecha de solicitud:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="fecha_solicitud" id="fecha_solicitud" value="{{movimiento.fecha_solicitud_normal}}">
+                </div>
+                <label for="estado" class="col-4 col-md-2 col-form-label text-end">Estado:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="estado" id="estado" value="{{movimiento.estado}}">
+                </div>
+                <label for="fecha_realizado" class="col-4 col-md-2 col-form-label text-end">Fecha de Realizado:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="fecha_realizado" id="fecha_realizado" {% if movimiento.fecha_realizado %} value="{{movimiento.fecha_realizado_normal}}" {% else %} value="No Realizado" {% endif %} >
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            {% comment %} <a href="{% url 'editarMovimiento' movimiento.id_movimiento%}">
+                <button class="btn btn-warning text">
+                    Editar
+                </button>
+            </a> {% endcomment %}
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header text-center">
+            publicaciones
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <form action="{% url 'agregarPublicacionMovimiento' movimiento.id_movimiento%}" method="POST">
+                    {% csrf_token %}
+                    <div class="col-12 col-md-8 mb-3">
+                        <label for="publicacion" class="form-label">Publicacion:</label>
+                        <select name="publicacion" id="publicacion" class="form-select" aria-label="Select publicacion">
+                            {% for publicacion in publicaciones  %}
+                            <option value="{{publicacion.id_publicacion.id_publicacion}}" >{{publicacion.id_publicacion}} (Stock: {{publicacion.cantidad}})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4 mb-3">
+                        <label for="cantidad" class="form-label">Cantidad:</label>
+                        <input type="text" class="form-control"  name="cantidad" id="cantidad">
+                    </div>
+                    <div class="col-12 col-md-12 mb-3">
+                        <input type="submit" class="btn btn-primary btn-block" value="Enviar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header text-center">
+            <h3>
+                Publicaciones Solicitadas
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Año de publicación</th>
+                            <th>Edicion</th>
+                            <th>Cantidad</th>
+                            {% comment %} <th>Accion</th> {% endcomment %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{compra.publicacion_compra_set.all}}
+                        {% for publicacion in movimiento.publicacion_movimiento_set.all %}
+                        <tr>
+                            <td>{{publicacion.id_publicacion}}</td>
+                            <td>{{publicacion.id_publicacion.tipo_producto}}</td>
+                            <td>
+                                {{publicacion.id_publicacion.fecha_publicacion}}
+                            </td>
+                            <td>{{publicacion.id_publicacion.edicion}}</td>
+                            <td>{{publicacion.cantidad}}</td>
+                            {% comment %} <td>
+                                <a href="{% url 'detallePublicacion' publicacion.id_publicacion.id_publicacion %}">
+                                    <button class="btn btn-primary">ver</button>
+                                </a>
+                            </td> {% endcomment %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% if toast %}
+        <div class="toast-container text-bg-primary position-fixed bottom-0 start-0 p-3">
+            {% if toast == "Error" %}
+                <div id="liveToast" class="toast bg-danger text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% else %}
+                <div id="liveToast" class="toast bg-success text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% endif %}
+                <div class="toast-header">
+                    <i class="fa-solid fa-circle-exclamation m-1"></i>
+                    <strong class="me-auto">{{toast}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{mensaje}}
+                </div>
+            </div>
+        </div>
+        <script> 
+            const toastLiveExample = document.getElementById('liveToast')
+            const toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        </script>
+        {% endif %}
+{% endblock contenido %}

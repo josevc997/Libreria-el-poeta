@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card mb-3">
+        <div class="card-header">
+            {{titulo}}
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <label for="id" class="col-4 col-md-2 col-form-label text-end">Perfil:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="id" id="id" value="{{movimiento.id}}">
+                </div>
+                <label for="id_bodega_origen" class="col-4 col-md-2 col-form-label text-end">Bodega de Origen:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="id_bodega_origen" id="id_bodega_origen" value="{{movimiento.id_bodega_origen}}">
+                </div>
+                <label for="id_bodega_destino" class="col-4 col-md-2 col-form-label text-end">Bodega de Destino:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="id_bodega_destino" id="id_bodega_destino" value="{{movimiento.id_bodega_destino}}">
+                </div>
+                <label for="fecha_solicitud" class="col-4 col-md-2 col-form-label text-end">Fecha de solicitud:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="fecha_solicitud" id="fecha_solicitud" value="{{movimiento.fecha_solicitud_normal}}">
+                </div>
+                <label for="estado" class="col-4 col-md-2 col-form-label text-end">Estado:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="estado" id="estado" value="{{movimiento.estado}}">
+                </div>
+                <label for="fecha_realizado" class="col-4 col-md-2 col-form-label text-end">Fecha de Realizado:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="fecha_realizado" id="fecha_realizado" {% if movimiento.fecha_realizado %} value="{{movimiento.fecha_realizado_normal}}" {% else %} value="No Realizado" {% endif %} >
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <a href="{% url 'editarMovimiento' movimiento.id_movimiento%}">
+                <button class="btn btn-warning text">
+                    Editar
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header text-center">
+            <h3>
+                Publicaciones Solicitadas
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Año de publicación</th>
+                            <th>Edicion</th>
+                            <th>Cantidad</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{compra.publicacion_compra_set.all}}
+                        {% for publicacion in movimiento.publicacion_movimiento_set.all %}
+                        <tr>
+                            <td>{{publicacion.id_publicacion}}</td>
+                            <td>{{publicacion.id_publicacion.tipo_producto}}</td>
+                            <td>
+                                {{publicacion.id_publicacion.fecha_publicacion}}
+                            </td>
+                            <td>{{publicacion.id_publicacion.edicion}}</td>
+                            <td>{{publicacion.cantidad}}</td>
+                            <td>
+                                <a href="{% url 'detallePublicacion' publicacion.id_publicacion.id_publicacion %}">
+                                    <button class="btn btn-primary">ver</button>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}
