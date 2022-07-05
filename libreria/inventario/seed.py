@@ -126,8 +126,9 @@ def seedTables():
     pedido.id = perfil
     pedido.id_bodega = bodega
     pedido.id_proveedor = proveedor
-    pedido.fecha_pedido = "09/06/2022"
+    pedido.fecha_pedido = datetime.now()
     pedido.total_pedido = publicacion.precio
+    pedido.estado = "Pendiente"
     pedido.save()
     pedido.publicaciones.add(publicacion, through_defaults={ 'cantidad': 1, 'precio_proveedor': 15000 })
 
@@ -136,7 +137,8 @@ def seedTables():
     compra.id_persona = persona
     compra.total = publicacion.precio
     compra.metodo_pago = "Efectivo"
-    compra.fecha_compra = "10/06/2022"
+    compra.fecha_compra = datetime.now()
+    compra.estado = "Pendiente"
     compra.save()
     compra.publicaciones.add(publicacion, through_defaults = { 'cantidad': 1, 'precio': publicacion.precio})
 
@@ -144,8 +146,8 @@ def seedTables():
     movimiento.id = perfil
     movimiento.id_bodega_origen = bodega
     movimiento.id_bodega_destino = bodega
-    movimiento.fecha_solicitud = "10/06/2022"
+    movimiento.fecha_solicitud = datetime.now()
     movimiento.estado = "Pendiente"
-    movimiento.fecha_realizado = "10/06/2022"
+    movimiento.fecha_realizado = datetime.now()
     movimiento.save()
     movimiento.publicaciones.add(publicacion, through_defaults = {"cantidad": 1})

@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card">
+        <h1 class="card-header text-center">Movimientos</h1>
+        <div class="card-body">
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th>Bodega de origen</th>
+                        <th>Bodega de destino</th>
+                        <th>Fecha de solicitud</th>
+                        <th>Estado</th>
+                        <th>Accion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for movimiento in movimientos %}
+                    <tr>
+                        <td>{{movimiento.fecha_solicitud_ddmmaa}}</td>
+                        <td>{{movimiento.id_bodega_origen}}</td>
+                        <td>{{movimiento.id_bodega_destino}}</td>
+                        <td>{{movimiento.estado}}</td>
+                        <td>
+                            <a href="{% url 'detalleMovimiento' movimiento.id_movimiento %}">
+                                <button class="btn btn-primary">ver</button>
+                            </a>
+                            <a href="{% url 'editarMovimiento' movimiento.id_movimiento %}">
+                                <button class="btn btn-warning">editar</button>
+                            </a>
+                            <button class="btn btn-danger">borrar</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}

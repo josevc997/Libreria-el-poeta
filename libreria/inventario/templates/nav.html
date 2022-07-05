@@ -89,6 +89,23 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="ComprasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
+                    <i class="fa-solid fa-warehouse"></i> Compras
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="ComprasDropdown">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'registroCompras' %}">
+                            Registro
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'compras' %}">
+                            Historial
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesion
