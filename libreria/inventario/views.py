@@ -525,12 +525,12 @@ def bodegas(request):
     data['bodegas'] = Bodega.objects.all()
     return render(request, template, data)
 
-def detalleBodegas(request, bodega_id): 
+def detalleBodegas(request, id_bodega): 
     template = "bodegas/detalle.html"
     data = dict()
-    data['titulo'] = "Bodega XXXXX"
-    data['bodega'] = {'id': 3, 'nombre': 'Valparaiso','comuna': 'Con Con','direccion': 'Ambrosio Ohiggins #2201'}
-    #data['productos'] = #.objects.filter()
+    data['titulo'] = "Detalle Bodegas"
+    data['bodega'] = Bodega.objects.get(id_bodega=id_bodega)
+    data['productos'] = Bodega.objects.filter(id_bodega=id_bodega)
     return render(request, template, data)
 
 def registroBodegas(request):
@@ -552,6 +552,30 @@ def registroBodegas(request):
 
     return render(request, template, data)
 
+def editarBodegas(request, id_bodega):
+    template = "bodegas/editar.html"
+
+    data = dict()
+    data['titulo'] = "Editar Bodega"
+    bodega = Bodega.objects.get(id_bodega=id_bodega)
+    data['bodega'] = bodega
+
+    if request.method == 'POST':
+        if(request.POST['nombre'].strip(" ") != ''):
+            bodega.nombre_bodega = request.POST['nombre']
+        if(request.POST['comuna'].strip(" ") != ''):
+            bodega.comuna = request.POST['comuna']
+        if(request.POST['direccion'].strip(" ") != ''):
+            bodega.direccion = request.POST['direccion']
+        if(request.POST['telefono'].strip(" ") != ''):
+            bodega.telefono_bodega = request.POST['telefono']
+        print(bodega)
+        bodega.save()
+        return redirect('detalleBodegas', id_bodega)
+
+    return render(request, template, data)
+
+
 def listaCompras(request):
     template = "compras/lista.html"
     data = dict()
@@ -566,14 +590,14 @@ def registroCompras(request):
     data['titulo'] = "Registro Compras"
     return render(request, template, data)
 
-def detalleCompras(request, id_persona, id_compra):
+def detalleCompras(request, id_compra):
     template = "compras/detalle.html"
     data = dict()
     data['titulo'] = "Detalle Compras"
-    data['Persona'] = Persona.objects.get(id_persona=id_persona)
-    data['Total'] = Compra.objects.filter(id_compra=id_compra)
-    data['Fecha Compra'] = Compra.objects.filter(id_compra=id_compra)
-    data['Metodo Pago'] = Compra.objects.get(id_compra=id_compra)
+    #data['Persona'] = Persona.objects.get(id_persona=id_persona)
+    data['compra'] = Compra.objects.get(id_compra=id_compra)
+    #data['Fecha Compra'] = Compra.objects.filter(id_compra=id_compra)
+    #data['Metodo Pago'] = Compra.objects.get(id_compra=id_compra)
 
     return render(request, template, data)
 

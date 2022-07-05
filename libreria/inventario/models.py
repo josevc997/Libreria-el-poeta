@@ -225,8 +225,8 @@ class Publicacion_Compra(models.Model):
     cantidad = models.IntegerField(null=True)
     precio = models.IntegerField(null=True)
     
-    # def __str__(self):
-    #     return u'%s' % (self.nombre_genero)
+    def calculo_total(self):
+        return (self.cantidad * self.precio) 
 
     class Meta:
         db_table = "publicacion_compra"

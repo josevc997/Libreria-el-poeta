@@ -37,8 +37,9 @@ urlpatterns = [
     path('compras/registro',views.registroCompras,name='registroCompras'),
     path('compras',views.listaCompras, name='compras'),
     path('bodegas', views.bodegas, name='bodegas'),
-    path('bodegas/<int:bodega_id>', views.detalleBodegas, name='detalleBodegas'),
+    path('bodegas/detalle/<int:id_bodega>', views.detalleBodegas, name='detalleBodegas'),
     path('bodegas/registro', views.registroBodegas, name='registroBodegas'),
+    path('bodegas/editar/<int:id_bodega>',views.editarBodegas, name='editarBodegas'),
     path('compras/detalle/<int:id_compra>',views.detalleCompras,name='detalleCompras'),
     # path('compras/detalles',views.detalleCompras,)
     # URLS Pablo Cea
