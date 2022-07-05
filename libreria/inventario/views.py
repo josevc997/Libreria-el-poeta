@@ -622,6 +622,26 @@ def detalleProveedores(request,id_proveedor):
     data['proveedor'] = Proveedor.objects.get(id_proveedor=id_proveedor)
 
     return render(request,template,data)
-    
 
+def pedidos(request):
+    template = "pedidos/detalle.html"
+    data = dict()
+
+    data['titulo'] = "Pedidos"
+
+    
+    data['pedidos'] = Pedido.objects.all()
+    return render(request, template, data)
+    
+def registroPedidos(request):
+    template = "pedidos/registro.html"
+
+    data = dict()
+
+    data['titulo'] = "Nuevo pedido"
+
+    if request.method == 'POST':
+
+        pedido.save()
+    return render(request, template, data)
 # # #
