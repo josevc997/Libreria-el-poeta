@@ -4,40 +4,44 @@ USE libreria;
 
 CREATE TABLE autor (
     id_autor INTEGER NOT NULL AUTO_INCREMENT,
-    nombres_autor VARCHAR(30),
-    apellidos_autor VARCHAR(30),
-    correo_autor VARCHAR(30),
-    nacionalidad_autor VARCHAR(30),
-    pseudonimo_autor VARCHAR(30) NOT NULL,
+    nombres_autor VARCHAR(150),
+    apellidos_autor VARCHAR(150),
+    correo_autor VARCHAR(150),
+    nacionalidad_autor VARCHAR(150),
+    pseudonimo_autor VARCHAR(150) NOT NULL,
+    is_active BOOLEAN DEFAULT 1,
     PRIMARY KEY (id_autor)
 );
 
 CREATE TABLE genero (
     id_genero INTEGER NOT NULL AUTO_INCREMENT,
-    nombre_genero VARCHAR(30) NOT NULL,
+    nombre_genero VARCHAR(150) NOT NULL,
+    is_active BOOLEAN DEFAULT 1,
     PRIMARY KEY (id_genero)
 );
 
 CREATE TABLE editorial (
     id_editorial INTEGER NOT NULL AUTO_INCREMENT,
-    nombre_editorial VARCHAR(30) NOT NULL,
-    correo_editorial VARCHAR(30),
-    telefono_editorial VARCHAR(30),
-    direccion_editorial VARCHAR(30),
+    nombre_editorial VARCHAR(150) NOT NULL,
+    correo_editorial VARCHAR(150),
+    telefono_editorial VARCHAR(150),
+    direccion_editorial VARCHAR(150),
+    is_active BOOLEAN DEFAULT 1,
     PRIMARY KEY (id_editorial)
 );
 
 CREATE TABLE publicacion (
     id_publicacion INTEGER NOT NULL AUTO_INCREMENT,
     id_editorial INTEGER NOT NULL,
-    nombre VARCHAR(30) NOT NULL,
+    nombre VARCHAR(150) NOT NULL,
     resumen Text,
-    tipo_producto VARCHAR(30) NOT NULL,
-    edicion VARCHAR(30),
-    fecha_publicacion VARCHAR(30),
-    isbn VARCHAR(30),
+    tipo_producto VARCHAR(150) NOT NULL,
+    edicion VARCHAR(150),
+    fecha_publicacion VARCHAR(150),
+    isbn VARCHAR(150),
     numero_serie INTEGER,
     precio INTEGER,
+    is_active BOOLEAN DEFAULT 1,
     PRIMARY KEY (id_publicacion),
     FOREIGN KEY (id_editorial) REFERENCES editorial(id_editorial)
 );
@@ -62,10 +66,11 @@ CREATE TABLE autor_publicacion (
 
 CREATE TABLE bodega (
     id_bodega INTEGER NOT NULL AUTO_INCREMENT,
-    nombre_bodega VARCHAR(30),
-    direccion VARCHAR(30),
-    comuna VARCHAR(30),
-    telefono_bodega VARCHAR(30),
+    nombre_bodega VARCHAR(150),
+    direccion VARCHAR(150),
+    comuna VARCHAR(150),
+    telefono_bodega VARCHAR(150),
+    is_active BOOLEAN DEFAULT 1,
     PRIMARY KEY (id_bodega)
 );
 
@@ -81,12 +86,13 @@ CREATE TABLE publicacion_bodega (
 
 CREATE TABLE persona (
     id_persona INTEGER NOT NULL AUTO_INCREMENT,
-    nombres VARCHAR(30) NOT NULL,
-    apellidos VARCHAR(30),
-    rut VARCHAR(30) NOT NULL,
-    direccion VARCHAR(30),
-    correo VARCHAR(30),
-    telefono VARCHAR(30),
+    nombres VARCHAR(150) NOT NULL,
+    apellidos VARCHAR(150),
+    rut VARCHAR(150) NOT NULL,
+    direccion VARCHAR(150),
+    correo VARCHAR(150),
+    telefono VARCHAR(150),
+    is_active BOOLEAN DEFAULT 1,
     PRIMARY KEY (id_persona)
 );
 
@@ -94,17 +100,17 @@ CREATE TABLE perfil (
     id INTEGER NOT NULL AUTO_INCREMENT,
     id_persona INTEGER NOT NULL,
     id_bodega INTEGER NOT NULL,
-    username VARCHAR(30) NOT NULL UNIQUE,
-    `password` varchar(128) NOT NULL,
+    username VARCHAR(150) NOT NULL UNIQUE,
+    `password` varchar(150) NOT NULL,
     last_login datetime(6) DEFAULT NULL,
     is_superuser tinyint(1) NOT NULL,
     first_name varchar(150) NOT NULL,
     last_name varchar(150) NOT NULL,
-    email varchar(254) NOT NULL,
+    email varchar(150) NOT NULL,
     is_staff tinyint(1) NOT NULL,
-    is_active tinyint(1) NOT NULL,
+    is_active tinyint(1) NOT NULL DEFAULT 1,
     date_joined datetime(6) NOT NULL,
-    tipo_usuario VARCHAR(30) NOT NULL,
+    tipo_usuario VARCHAR(150) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_persona) REFERENCES persona(id_persona),
     FOREIGN KEY (id_bodega) REFERENCES bodega(id_bodega)
@@ -112,11 +118,12 @@ CREATE TABLE perfil (
 
 CREATE TABLE proveedor (
     id_proveedor INTEGER NOT NULL AUTO_INCREMENT,
-    nombre_proveedor VARCHAR(30),
-    direccion_proveedor VARCHAR(30),
-    comuna_proveedor VARCHAR(30),
-    correo_proveedor VARCHAR(30),
-    telefono_proveedor VARCHAR(30),
+    nombre_proveedor VARCHAR(150),
+    direccion_proveedor VARCHAR(150),
+    comuna_proveedor VARCHAR(150),
+    correo_proveedor VARCHAR(150),
+    telefono_proveedor VARCHAR(150),
+    is_active BOOLEAN DEFAULT 1,
     PRIMARY KEY (id_proveedor)
 );
 
@@ -125,8 +132,9 @@ CREATE TABLE pedido (
     id INTEGER NOT NULL,
     id_bodega INTEGER NOT NULL,
     id_proveedor INTEGER NOT NULL,
-    fecha_pedido VARCHAR(30),
-    total_pedido VARCHAR(30),
+    fecha_pedido VARCHAR(150),
+    total_pedido VARCHAR(150),
+    estado VARCHAR(150),
     PRIMARY KEY (id_pedido),
     FOREIGN KEY (id) REFERENCES perfil(id),
     FOREIGN KEY (id_bodega) REFERENCES bodega(id_bodega),
@@ -149,8 +157,9 @@ CREATE TABLE compra (
     id_bodega INTEGER NOT NULL,
     id_persona INTEGER NOT NULL,
     total INTEGER,
-    metodo_pago VARCHAR(30),
-    fecha_compra VARCHAR(30),
+    metodo_pago VARCHAR(150),
+    fecha_compra VARCHAR(150),
+    estado VARCHAR(150),
     PRIMARY KEY (id_compra),
     FOREIGN KEY (id_bodega) REFERENCES bodega(id_bodega),
     FOREIGN KEY (id_persona) REFERENCES persona(id_persona)
@@ -172,9 +181,9 @@ CREATE TABLE movimiento (
     id INTEGER NOT NULL,
     id_bodega_origen INTEGER NOT NULL,
     id_bodega_destino INTEGER NOT NULL,
-    fecha_solicitud VARCHAR(30),
-    estado VARCHAR(30),
-    fecha_realizado VARCHAR(30),
+    fecha_solicitud VARCHAR(150),
+    estado VARCHAR(150),
+    fecha_realizado VARCHAR(150),
     PRIMARY KEY (id_movimiento),
     FOREIGN KEY (id) REFERENCES perfil(id),
     FOREIGN KEY (id_bodega_origen) REFERENCES bodega(id_bodega),

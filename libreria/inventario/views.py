@@ -1,6 +1,6 @@
 from re import template
 from django.shortcuts import render, redirect
-from .models import Compra, Genero, Movimiento, Pedido, Perfil, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega
+from .models import Compra, Genero, Movimiento, Pedido, Perfil, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega, Publicacion_Bodega
 from .seed import seedTables
 from django.contrib.auth import authenticate, login, logout
 from datetime import datetime
@@ -200,6 +200,102 @@ def editarGenero(request, id_genero):
             data['mensaje'] = "genero no registrada, debe rellenar los campos obligatorios"
     return render(request, template, data)
 
+def movimientos(request): 
+    template = "movimientos/lista.html"
+    data = dict()
+    data['titulo'] = "Movimientos Registrados"
+    data['movimientos'] = Movimiento.objects.all()
+    return render(request, template, data)
+
+def registroMovimientos(request):
+    template = "movimientos/registro.html"
+    data = dict()
+    data['titulo'] = "Registro Movimientos"
+    data['bodegas'] = Bodega.objects.all()
+
+    if request.method == 'POST':
+        print(request.user.is_authenticated)
+        movimiento = Movimiento()
+        if(request.POST['bodega_origen'].strip(" ") != ''):
+            movimiento.id_bodega_origen = Bodega.objects.get(id_bodega = int(request.POST['bodega_origen']))
+        if(request.POST['bodega_destino'].strip(" ") != ''):
+            movimiento.id_bodega_destino = Bodega.objects.get(id_bodega = int(request.POST['bodega_destino']))
+        if(request.POST['bodega_origen'].strip(" ") == '' and request.POST['bodega_destino'].strip(" ") == ''):
+            data['toast'] = "Error"
+            data['mensaje'] = "Movimiento no registrada, debe rellenar los campos obligatorios"
+        elif(movimiento.id_bodega_origen == movimiento.id_bodega_destino):
+            data['toast'] = "Error"
+            data['mensaje'] = "Movimiento no registrada, La bodega de origen debe ser distinta a la bodega de destino"
+        if(not request.user.is_authenticated):
+            data['toast'] = "Error"
+            data['mensaje'] = "Movimiento no registrada, Debe iniciar sesión para registrar movimiento"
+        else:
+            movimiento.id = request.user
+            movimiento.estado = "Solicitando"
+            movimiento.fecha_solicitud = datetime.now()
+            movimiento.save()
+            return redirect('movimientos')
+    return render(request, template, data)
+
+def agregarPublicacionMovimiento(request, id_movimiento):
+    template = "movimientos/agregar.html"
+    data = dict()
+    data['titulo'] = "Agregar publicacions a movimiento"
+    movimiento = Movimiento.objects.get(id_movimiento = id_movimiento)
+
+    if request.method == 'POST':
+        print(request.POST['publicacion'])
+        if(request.POST['publicacion'].strip(" ") != ''):
+            publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
+            publicacionEnBodega = Publicacion_Bodega.objects.get(id_publicacion=int(request.POST['publicacion']), id_bodega=movimiento.id_bodega_origen.id_bodega)
+        if(request.POST['cantidad'].strip(" ") != ''):
+            cantidad = int(request.POST['cantidad'])
+        if(request.POST['publicacion'].strip(" ") == '' or request.POST['cantidad'].strip(" ") == ''):
+            data['toast'] = "Error"
+            data['mensaje'] = "Publicacion no registrada, Debe rellenar todos los campos"
+        elif(publicacion in movimiento.publicaciones.all()):
+            data['toast'] = "Error"
+            data['mensaje'] = "Publicacion ya agregada al movimiento"
+        elif (cantidad > publicacionEnBodega.cantidad):
+            data['toast'] = "Error"
+            data['mensaje'] = "No puede agregar más publicaciones de las que se encuentran en stock"
+        else:
+            movimiento.publicaciones.add(publicacion, through_defaults = {"cantidad": cantidad})
+            publicacionEnBodega.cantidad -= cantidad
+            publicacionEnBodega.save()
+
+    data['movimiento'] = movimiento
+    data['publicaciones'] = Publicacion_Bodega.objects.filter(id_bodega = request.user.id_bodega)
+
+    return render(request, template, data)
+    
+def detalleMovimiento(request, id_movimiento):
+    template = "movimientos/detalle.html"
+    
+    data = dict()
+    data['titulo'] = "Detalle Movimiento"
+    data['compra'] = Compra.objects.get(id_compra=1)
+    data['movimiento'] = Movimiento.objects.get(id_movimiento=id_movimiento)
+
+    return render(request, template, data)
+
+def editarMovimiento(request, id_movimiento):
+    template = "movimientos/editar.html"
+    data = dict()
+    data['titulo'] = "Editar Movimientos"
+    movimiento = Movimiento.objects.get(id_movimiento=id_movimiento)
+    data['movimiento'] = movimiento
+
+    # if request.method == 'POST':
+    #     if(request.POST['nombre'].strip(" ") != ''):
+    #         genero.nombre_genero = request.POST['nombre']
+    #         genero.save()
+    #         return redirect('generos')
+    #     else:
+    #         data['toast'] = "Error"
+    #         data['mensaje'] = "genero no registrada, debe rellenar los campos obligatorios"
+    return render(request, template, data)
+
 def editoriales(request): 
     template = "editoriales/lista.html"
     data = dict()
@@ -364,12 +460,7 @@ def editarPersonas(request, id_persona):
 
 def seed(request):
     seedTables()
-    template = "inventario/index.html"
-
-    data = dict()
-
-    data['titulo'] = "Registro Proveedores"
-    return render(request, template, data)    
+    return redirect('index')
 
 def loginPerfil(request):
     template = "perfil/login.html"
@@ -525,12 +616,12 @@ def bodegas(request):
     data['bodegas'] = Bodega.objects.all()
     return render(request, template, data)
 
-def detalleBodegas(request, bodega_id): 
+def detalleBodegas(request, id_bodega): 
     template = "bodegas/detalle.html"
     data = dict()
-    data['titulo'] = "Bodega XXXXX"
-    data['bodega'] = {'id': 3, 'nombre': 'Valparaiso','comuna': 'Con Con','direccion': 'Ambrosio Ohiggins #2201'}
-    #data['productos'] = #.objects.filter()
+    data['titulo'] = "Detalle Bodegas"
+    data['bodega'] = Bodega.objects.get(id_bodega=id_bodega)
+    data['productos'] = Bodega.objects.filter(id_bodega=id_bodega)
     return render(request, template, data)
 
 def registroBodegas(request):
@@ -552,6 +643,30 @@ def registroBodegas(request):
 
     return render(request, template, data)
 
+def editarBodegas(request, id_bodega):
+    template = "bodegas/editar.html"
+
+    data = dict()
+    data['titulo'] = "Editar Bodega"
+    bodega = Bodega.objects.get(id_bodega=id_bodega)
+    data['bodega'] = bodega
+
+    if request.method == 'POST':
+        if(request.POST['nombre'].strip(" ") != ''):
+            bodega.nombre_bodega = request.POST['nombre']
+        if(request.POST['comuna'].strip(" ") != ''):
+            bodega.comuna = request.POST['comuna']
+        if(request.POST['direccion'].strip(" ") != ''):
+            bodega.direccion = request.POST['direccion']
+        if(request.POST['telefono'].strip(" ") != ''):
+            bodega.telefono_bodega = request.POST['telefono']
+        print(bodega)
+        bodega.save()
+        return redirect('detalleBodegas', id_bodega)
+
+    return render(request, template, data)
+
+
 def listaCompras(request):
     template = "compras/lista.html"
     data = dict()
@@ -566,14 +681,14 @@ def registroCompras(request):
     data['titulo'] = "Registro Compras"
     return render(request, template, data)
 
-def detalleCompras(request, id_persona, id_compra):
+def detalleCompras(request, id_compra):
     template = "compras/detalle.html"
     data = dict()
     data['titulo'] = "Detalle Compras"
-    data['Persona'] = Persona.objects.get(id_persona=id_persona)
-    data['Total'] = Compra.objects.filter(id_compra=id_compra)
-    data['Fecha Compra'] = Compra.objects.filter(id_compra=id_compra)
-    data['Metodo Pago'] = Compra.objects.get(id_compra=id_compra)
+    #data['Persona'] = Persona.objects.get(id_persona=id_persona)
+    data['compra'] = Compra.objects.get(id_compra=id_compra)
+    #data['Fecha Compra'] = Compra.objects.filter(id_compra=id_compra)
+    #data['Metodo Pago'] = Compra.objects.get(id_compra=id_compra)
 
     return render(request, template, data)
 

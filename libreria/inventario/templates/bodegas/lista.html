@@ -22,8 +22,8 @@
                         <td>{{bodega.direccion}}</td>
                         <td>{{bodega.telefono_bodega}}</td>
                         <td>
-                            {% comment %} <a href="{% url 'detalleBodegas' bodega.id %}" class="btn btn-primary">ver</a> {% endcomment %}
-                            <button class="btn btn-warning">editar</button>
+                             <a href="{% url 'detalleBodegas' bodega.id_bodega %}" class="btn btn-primary">ver</a>
+                             <a href="{% url 'editarBodegas' bodega.id_bodega %}" class="btn btn-warning">editar</a>
                             <button class="btn btn-danger">borrar</button>
                         </td>
                     </tr>

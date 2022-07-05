@@ -9,13 +9,16 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12 col-md-6">
-                    <p>Nombre: {{bodega.nombre}}</p>
+                    <p>Nombre: {{bodega.nombre_bodega}}</p>
                 </div>
                 <div class="col-12 col-md-6">
                     <p>Comuna: {{bodega.comuna}}</p>
                 </div>
                 <div class="col-12 col-md-6">
                     <p>Dirección: {{bodega.direccion}}</p>
+                </div>
+                <div class="col-12 col-md-6">
+                    <p>Telefono: {{bodega.telefono_bodega}}</p>
                 </div>
             </div>
         </div>
@@ -44,12 +47,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for producto in productos %}
+                    {% for producto in bodega.publicacion_bodega_set.all %}
                         <tr>
-                            <td>{{producto.nombre}}</td>
-                            <td>{{producto.tipo}}</td>
-                            <td>{{producto.annio}}</td>
-                            <td>{{producto.edicion}}</td>
+                            <td>{{producto.id_publicacion.nombre}}</td>
+                            <td>{{producto.id_publicacion.tipo_producto}}</td>
+                            <td>{{producto.id_publicacion.fecha_publicacion}}</td>
+                            <td>{{producto.id_publicacion.edicion}}</td>
                             <td>{{producto.cantidad}}</td>
                         </tr>
                     {% endfor %}
