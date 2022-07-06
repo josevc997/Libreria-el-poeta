@@ -1,6 +1,6 @@
 from re import template
 from django.shortcuts import render, redirect
-from .models import Compra, Genero, Movimiento, Pedido, Perfil, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega, Publicacion_Bodega
+from .models import Compra, Genero, Movimiento, Pedido, Perfil, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega, Publicacion_Bodega, Publicacion_Compra
 from .seed import seedTables
 from django.contrib.auth import authenticate, login, logout
 from datetime import datetime
@@ -692,7 +692,38 @@ def detalleCompras(request, id_compra):
 
     return render(request, template, data)
 
-#def detalleCompras(request):
+def editarCompras(request, id_compra):
+    template = "compras/editar.html"
+    data = dict()
+    data['titulo'] = "Editar publicaciones a compras"
+    compra = Compra.objects.get(id_compra = id_compra)
+
+    if request.method == 'POST':
+        print(request.POST['publicacion'])
+        if(request.POST['publicacion'].strip(" ") != ''):
+            publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
+            publicacionEnBodega = Publicacion_Bodega.objects.get(id_publicacion=int(request.POST['publicacion']), id_compra=compra.id_compra_origen.id_compra)
+        if(request.POST['cantidad'].strip(" ") != ''):
+            cantidad = int(request.POST['cantidad'])
+        if(request.POST['publicacion'].strip(" ") == '' or request.POST['cantidad'].strip(" ") == ''):
+            data['toast'] = "Error"
+            data['mensaje'] = "Publicacion no registrada, Debe rellenar todos los campos"
+        elif(publicacion in compra.publicaciones.all()):
+            data['toast'] = "Error"
+            data['mensaje'] = "Publicacion ya agregada al movimiento"
+        elif (cantidad > publicacionEnBodega.cantidad):
+            data['toast'] = "Error"
+            data['mensaje'] = "No puede agregar más publicaciones de las que se encuentran en stock"
+        else:
+            compra.publicaciones.add(publicacion, through_defaults = {"cantidad": cantidad})
+            publicacionEnBodega.cantidad -= cantidad
+            publicacionEnBodega.save()
+
+    data['compra'] = compra
+    data['publicaciones'] = Publicacion_Compra.objects.filter(id_compra = request.user.id_compra)
+
+    return render(request, template, data)
+
 
 
 
