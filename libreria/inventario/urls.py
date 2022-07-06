@@ -47,6 +47,7 @@ urlpatterns = [
     path('bodegas/registro', views.registroBodegas, name='registroBodegas'),
     path('bodegas/editar/<int:id_bodega>',views.editarBodegas, name='editarBodegas'),
     path('compras/detalle/<int:id_compra>',views.detalleCompras,name='detalleCompras'),
+    path('compras/editar/<int:id_compra>',views.editarCompras,name='editarCompras'),
     # path('compras/detalles',views.detalleCompras,)
     # URLS Pablo Cea
     path('proveedores/registro', views.registroProveedores, name='registroProveedores'),
