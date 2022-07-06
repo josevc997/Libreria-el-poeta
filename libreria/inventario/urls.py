@@ -16,6 +16,7 @@ urlpatterns = [
     path('movimientos/registro', views.registroMovimientos, name='registroMovimientos'),
     path('movimientos/detalle/<int:id_movimiento>', views.detalleMovimiento, name='detalleMovimiento'),
     path('movimientos/editar/<int:id_movimiento>', views.editarMovimiento, name='editarMovimiento'),
+    path('movimientos/editar/estado/<int:id_movimiento>', views.editarEstadoMovimiento, name='editarEstadoMovimiento'),
     path('movimientos/agregar/<int:id_movimiento>', views.agregarPublicacionMovimiento, name='agregarPublicacionMovimiento'),
     path('productos', views.productos, name='productos'),
     path('productos/registro', views.registroProductos, name='registroProductos'),

@@ -34,22 +34,24 @@
                 </div>
             </div>
         </div>
+        {% comment %}
         <div class="card-footer text-end">
-            {% comment %} <a href="{% url 'editarMovimiento' movimiento.id_movimiento%}">
+            <a href="{% url 'editarMovimiento' movimiento.id_movimiento%}">
                 <button class="btn btn-warning text">
                     Editar
                 </button>
-            </a> {% endcomment %}
+            </a>
         </div>
+        {% endcomment %}
     </div>
     <div class="card mb-4">
         <div class="card-header text-center">
             publicaciones
         </div>
         <div class="card-body">
-            <div class="row">
-                <form action="{% url 'agregarPublicacionMovimiento' movimiento.id_movimiento%}" method="POST">
-                    {% csrf_token %}
+            <form action="{% url 'agregarPublicacionMovimiento' movimiento.id_movimiento%}" method="POST">
+                {% csrf_token %}
+                <div class="row">
                     <div class="col-12 col-md-8 mb-3">
                         <label for="publicacion" class="form-label">Publicacion:</label>
                         <select name="publicacion" id="publicacion" class="form-select" aria-label="Select publicacion">
@@ -65,8 +67,8 @@
                     <div class="col-12 col-md-12 mb-3">
                         <input type="submit" class="btn btn-primary btn-block" value="Enviar">
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
     <div class="card mb-4">
