@@ -226,7 +226,7 @@ def registroMovimientos(request):
         elif(movimiento.id_bodega_origen == movimiento.id_bodega_destino):
             data['toast'] = "Error"
             data['mensaje'] = "Movimiento no registrada, La bodega de origen debe ser distinta a la bodega de destino"
-        if(not request.user.is_authenticated):
+        elif(not request.user.is_authenticated):
             data['toast'] = "Error"
             data['mensaje'] = "Movimiento no registrada, Debe iniciar sesión para registrar movimiento"
         else:
@@ -244,7 +244,6 @@ def agregarPublicacionMovimiento(request, id_movimiento):
     movimiento = Movimiento.objects.get(id_movimiento = id_movimiento)
 
     if request.method == 'POST':
-        print(request.POST['publicacion'])
         if(request.POST['publicacion'].strip(" ") != ''):
             publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
             publicacionEnBodega = Publicacion_Bodega.objects.get(id_publicacion=int(request.POST['publicacion']), id_bodega=movimiento.id_bodega_origen.id_bodega)
@@ -274,7 +273,6 @@ def detalleMovimiento(request, id_movimiento):
     
     data = dict()
     data['titulo'] = "Detalle Movimiento"
-    data['compra'] = Compra.objects.get(id_compra=1)
     data['movimiento'] = Movimiento.objects.get(id_movimiento=id_movimiento)
 
     return render(request, template, data)
@@ -282,19 +280,58 @@ def detalleMovimiento(request, id_movimiento):
 def editarMovimiento(request, id_movimiento):
     template = "movimientos/editar.html"
     data = dict()
-    data['titulo'] = "Editar Movimientos"
-    movimiento = Movimiento.objects.get(id_movimiento=id_movimiento)
-    data['movimiento'] = movimiento
+    data['titulo'] = "Editar Movimiento"
+    movimiento = Movimiento.objects.get(id_movimiento = id_movimiento)
 
-    # if request.method == 'POST':
-    #     if(request.POST['nombre'].strip(" ") != ''):
-    #         genero.nombre_genero = request.POST['nombre']
-    #         genero.save()
-    #         return redirect('generos')
-    #     else:
-    #         data['toast'] = "Error"
-    #         data['mensaje'] = "genero no registrada, debe rellenar los campos obligatorios"
+    if request.method == 'POST':
+        if(movimiento.estado == "Solicitando"):
+            if(request.POST['publicacion'].strip(" ") != ''):
+                publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
+                publicacionEnBodega = Publicacion_Bodega.objects.get(id_publicacion=int(request.POST['publicacion']), id_bodega=movimiento.id_bodega_origen.id_bodega)
+            if(request.POST['cantidad'].strip(" ") != ''):
+                cantidad = int(request.POST['cantidad'])
+            if(request.POST['publicacion'].strip(" ") == '' or request.POST['cantidad'].strip(" ") == ''):
+                data['toast'] = "Error"
+                data['mensaje'] = "Publicacion no registrada, Debe rellenar todos los campos"
+            elif(publicacion in movimiento.publicaciones.all()):
+                data['toast'] = "Error"
+                data['mensaje'] = "Publicacion ya agregada al movimiento"
+            elif (cantidad > publicacionEnBodega.cantidad):
+                data['toast'] = "Error"
+                data['mensaje'] = "No puede agregar más publicaciones de las que se encuentran en stock"
+            else:
+                movimiento.publicaciones.add(publicacion, through_defaults = {"cantidad": cantidad})
+                publicacionEnBodega.cantidad -= cantidad
+                publicacionEnBodega.save()
+
+    data['movimiento'] = movimiento
+    data['publicaciones'] = Publicacion_Bodega.objects.filter(id_bodega = request.user.id_bodega)
+
     return render(request, template, data)
+
+def editarEstadoMovimiento(request, id_movimiento):
+    movimiento = Movimiento.objects.get(id_movimiento = id_movimiento)
+    print(len(movimiento.publicacion_movimiento_set.all()))
+    bodega = movimiento.id_bodega_destino
+    if(movimiento.estado=="Solicitando" and len(movimiento.publicacion_movimiento_set.all()) > 0):
+        movimiento.estado = "Pendiente"
+    elif(movimiento.estado=="Pendiente"):
+        movimiento.estado = "Enviado"
+    elif(movimiento.estado=="Enviado"):
+        movimiento.estado = "Entregado"
+        movimiento.fecha_realizado = datetime.now()
+        for publicacion in movimiento.publicacion_movimiento_set.all():
+            try:
+                publicacionBodega = Publicacion_Bodega.objects.get(id_bodega=bodega, id_publicacion=publicacion.id_publicacion)
+                publicacionBodega.cantidad += publicacion.cantidad
+                publicacionBodega.save()
+            except:
+                publicacionBodega = Publicacion_Bodega(id_bodega=bodega, id_publicacion=publicacion.id_publicacion, cantidad=publicacion.cantidad)
+                publicacionBodega.save()
+    movimiento.save()
+            # print(publicacion.id_publicacion)
+    # return redirect('detalleMovimiento', id_movimiento)
+    return redirect('detalleMovimiento', id_movimiento)
 
 def editoriales(request): 
     template = "editoriales/lista.html"
@@ -768,6 +805,26 @@ def detalleProveedores(request,id_proveedor):
     data['proveedor'] = Proveedor.objects.get(id_proveedor=id_proveedor)
 
     return render(request,template,data)
-    
 
+def pedidos(request):
+    template = "pedidos/detalle.html"
+    data = dict()
+
+    data['titulo'] = "Pedidos"
+
+    
+    data['pedidos'] = Pedido.objects.all()
+    return render(request, template, data)
+    
+def registroPedidos(request):
+    template = "pedidos/registro.html"
+
+    data = dict()
+
+    data['titulo'] = "Nuevo pedido"
+
+    if request.method == 'POST':
+
+        pedido.save()
+    return render(request, template, data)
 # # #

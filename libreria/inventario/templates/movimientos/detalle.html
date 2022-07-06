@@ -8,9 +8,13 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <label for="id" class="col-4 col-md-2 col-form-label text-end">Perfil:</label>
+                <label for="id" class="col-4 col-md-2 col-form-label text-end">Solicitante:</label>
                 <div class="col-8 col-md-4">
-                    <input type="text" class="form-control-plaintext" readonly name="id" id="id" value="{{movimiento.id}}">
+                    <input type="text" class="form-control-plaintext" readonly name="id" id="id" value="{{movimiento.id.id_persona}} {{movimiento.id.id_persona.apellidos}}">
+                </div>
+                <label for="estado" class="col-4 col-md-2 col-form-label text-end">Estado:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" class="form-control-plaintext" readonly name="estado" id="estado" value="{{movimiento.estado}}">
                 </div>
                 <label for="id_bodega_origen" class="col-4 col-md-2 col-form-label text-end">Bodega de Origen:</label>
                 <div class="col-8 col-md-4">
@@ -24,23 +28,62 @@
                 <div class="col-8 col-md-4">
                     <input type="text" class="form-control-plaintext" readonly name="fecha_solicitud" id="fecha_solicitud" value="{{movimiento.fecha_solicitud_normal}}">
                 </div>
-                <label for="estado" class="col-4 col-md-2 col-form-label text-end">Estado:</label>
-                <div class="col-8 col-md-4">
-                    <input type="text" class="form-control-plaintext" readonly name="estado" id="estado" value="{{movimiento.estado}}">
-                </div>
                 <label for="fecha_realizado" class="col-4 col-md-2 col-form-label text-end">Fecha de Realizado:</label>
                 <div class="col-8 col-md-4">
                     <input type="text" class="form-control-plaintext" readonly name="fecha_realizado" id="fecha_realizado" {% if movimiento.fecha_realizado %} value="{{movimiento.fecha_realizado_normal}}" {% else %} value="No Realizado" {% endif %} >
                 </div>
             </div>
         </div>
+        {% if movimiento.estado != 'Entregado' %}
         <div class="card-footer text-end">
+            <button type="button" class="btn btn-warning text" data-bs-toggle="modal" data-bs-target="#CambiarEstadoModal">
+                Cambiar a {% if movimiento.estado == 'Solicitando' %}
+                Pendiente
+                {% elif movimiento.estado == 'Pendiente' %}
+                Enviado
+                {% elif movimiento.estado == 'Enviado' %}
+                Entregado
+                {% endif %}
+            </button>
+            {% if movimiento.estado == 'Solicitando' %}
             <a href="{% url 'editarMovimiento' movimiento.id_movimiento%}">
                 <button class="btn btn-warning text">
                     Editar
                 </button>
             </a>
+            {% endif %}
+            <!-- Modal -->
+            <div class="modal fade" id="CambiarEstadoModal" tabindex="-1" aria-labelledby="CambiarEstadoLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="CambiarEstadoLabel">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Seguro que desea cambiar el estado de {{movimiento.estado}} a 
+                            {% if movimiento.estado == 'Solicitando' %}
+                            Pendiente
+                            {% elif movimiento.estado == 'Pendiente' %}
+                            Enviado
+                            {% elif movimiento.estado == 'Enviado' %}
+                            Entregado
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <a href="{% url 'editarEstadoMovimiento' movimiento.id_movimiento%}">
+                                <button type="button" class="btn btn-warning">
+                                    Cambiar Estado
+                                </button>
+                            </a>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin Modal -->
         </div>
+        {% endif %}
     </div>
     <div class="card mb-4">
         <div class="card-header text-center">
@@ -62,7 +105,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{compra.publicacion_compra_set.all}}
                         {% for publicacion in movimiento.publicacion_movimiento_set.all %}
                         <tr>
                             <td>{{publicacion.id_publicacion}}</td>
