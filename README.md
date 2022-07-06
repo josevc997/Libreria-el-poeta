@@ -67,6 +67,11 @@ python manage.py migrate
 python manage.py runserver
 ~~~
 
+15. Cargamos la base de datos entrando a la siguiente url:
+~~~
+http://127.0.0.1:8000/seed
+~~~
+
 ## Ejecución posterior a la configuración inicial
 1. Activar entorno virtual
 
@@ -114,4 +119,14 @@ exit;
 ~~~
 mysql -u root -h localhost -p < ./DB/script.sql
 ~~~
- 
+
+6. Ejecutar migraciones
+
+~~~
+python manage.py migrate
+~~~
+
+7. Volvemos a cargar la base de datos entrando a la siguiente:
+~~~
+http://127.0.0.1:8000/seed
+~~~
