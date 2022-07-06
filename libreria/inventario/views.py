@@ -850,15 +850,60 @@ def pedidos(request):
     data['pedidos'] = Pedido.objects.all()
     return render(request, template, data)
     
+
 def registroPedidos(request):
     template = "pedidos/registro.html"
-
     data = dict()
-
-    data['titulo'] = "Nuevo pedido"
+    data['titulo'] = "Registro Pedidos"
+    data['publicaciones'] = Publicacion.objects.all()
 
     if request.method == 'POST':
+        print(request.user.is_authenticated)
+        pedido = Publicacion_Pedido()
+        if(request.POST['publicacion'].strip(" ") != ''):
+            pedido.publicaciones = Publicacion.objects.get(id_publicacion = int(request.POST['publicacion']))
+        if(request.POST['cantidad'].strip(" ") != ''):
+            pedido.cantidad = int(request.POST['bodega_destino'])
+        if(not request.user.is_authenticated):
+            data['toast'] = "Error"
+            data['mensaje'] = "pedido no registrada, Debe iniciar sesión para registrar pedido"
+        else:
+            pedido.id_publicacion = pedido.publicaciones
+            pedido.cantidad = pedido.cantidad
 
-        pedido.save()
+            pedido.save()
+            return redirect('pedidos')
+ 
     return render(request, template, data)
+
+def editarProveedor(request, id_proveedor):
+    template = "proveedores/editar.html"
+    
+    data = dict()
+    data['titulo'] = "Editar Proveedor"
+    proveedor = Proveedor.objects.get(id_proveedor=id_proveedor)
+    data['proveedor'] = proveedor
+
+    if request.method == 'POST':
+        nombre = request.POST['nombreP']
+        direccion = request.POST['direccionP']
+        comuna =    request.POST['comunaP']
+        correo =    request.POST['correoP']
+        telefono =  request.POST['telefonoP']
+        proveedor = Proveedor()
+        proveedor.nombre_proveedor = nombre
+        proveedor.direccion_proveedor = direccion
+        proveedor.comuna_proveedor = comuna
+        proveedor.correo_proveedor = correo
+        proveedor.telefono_proveedor = telefono
+        proveedor.save()
+        return redirect('proveedores', id_proveedor)
+
+    return render(request, template, data)
+
+
+   # if request.method == 'POST':
+
+
+    #return render(request, template, data)
 # # #

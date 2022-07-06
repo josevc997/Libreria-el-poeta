@@ -1,28 +1,58 @@
 {% extends 'layout.html' %}
+
 {% block contenido %}
-<div class= "container p-3">
-<h4>Nuevo pedido</h4>
-<br>
-<form action="{% url 'pedidos' %}" method = "POST">
-    {% csrf_token %}
-    <div class="mb-3">
-        <label class="form-label">Publicación (id)</label>
-        <select class="form-select" id="publi" name="publi">
-        <option value="pendiente">Pendiente</option>
-        <option value="pendiente">Pendiente</option>
-
-        </select>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Cantidad</label>
-        <input type="number" class="form-control" id="canti" name="cantidad">
-    </div>
-    <br>
-    <button type="submit" class="btn btn-primary">Registro</button>
-  </form>
+<div class="container">
+        <div class="card">
+            <div class="card-header">
+                Registro Pedido
+            </div>
+            <div class="card-body">
+                <form action="{% url 'registroPedidos' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="col-12 mb-3">
+                        <label for="publicacion" class="form-label">Publicación</label>
+                        <select name="publicacion" id="publicacion" class="form-select" aria-label="Select publicacion">
+                            {% for publicacion in publicaciones  %}
+                            <option value="{{publicacion.id_publicacion}}" >{{publicacion.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label for="cantidad" class="form-label">Cantidad:</label>
+                        <select name="cantidad" id="cantidad" class="form-select" aria-label="Select cantidad">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 </div>
-
-<h1>preguntar jose</h1>
-
+{% if toast %}
+        <div class="toast-container text-bg-primary position-fixed bottom-0 start-0 p-3">
+            {% if toast == "Error" %}
+                <div id="liveToast" class="toast bg-danger text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% else %}
+                <div id="liveToast" class="toast bg-success text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% endif %}
+                <div class="toast-header">
+                    <i class="fa-solid fa-circle-exclamation m-1"></i>
+                    <strong class="me-auto">{{toast}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{mensaje}}
+                </div>
+            </div>
+        </div>
+        <script> 
+            const toastLiveExample = document.getElementById('liveToast')
+            const toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        </script>
+        {% endif %}
 {% endblock contenido %}
