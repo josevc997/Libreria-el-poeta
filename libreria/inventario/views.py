@@ -791,7 +791,7 @@ def editarCompras(request, id_compra):
             publicacionEnBodega.save()
 
     data['compra'] = compra
-    data['publicaciones'] = Publicacion_Compra.objects.filter(id_compra = request.user.id_compra)
+    data['publicaciones'] = Publicacion_Compra.objects.filter(id_compra=id_compra)
 
     return render(request, template, data)
 
