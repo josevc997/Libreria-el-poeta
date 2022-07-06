@@ -1,6 +1,6 @@
 from re import template
 from django.shortcuts import render, redirect
-from .models import Compra, Genero, Movimiento, Pedido, Perfil, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega, Publicacion_Bodega, Publicacion_Compra
+from .models import Compra, Genero, Movimiento, Pedido, Perfil, Persona, Editorial, Publicacion, Autor, Autor_Publicacion, Proveedor, Bodega, Publicacion_Bodega, Publicacion_Compra, Publicacion_Pedido
 from .seed import seedTables
 from django.contrib.auth import authenticate, login, logout
 from datetime import datetime
