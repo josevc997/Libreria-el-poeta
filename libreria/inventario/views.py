@@ -4,6 +4,7 @@ from .models import Compra, Genero, Movimiento, Pedido, Perfil, Persona, Editori
 from .seed import seedTables
 from django.contrib.auth import authenticate, login, logout
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -12,6 +13,7 @@ def index(request):
     data['titulo'] = "Inventario El Poeta"
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def autores(request): 
     template = "autores/lista.html"
     data = dict()
@@ -19,6 +21,7 @@ def autores(request):
     data['autores'] = Autor.objects.all()
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def detalleAutor(request, id_autor):
     template = "autores/detalle.html"
     
@@ -28,6 +31,7 @@ def detalleAutor(request, id_autor):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def editarAutor(request, id_autor):
     template = "autores/editar.html"
     
@@ -53,6 +57,7 @@ def editarAutor(request, id_autor):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def registroAutores(request):
     template = "autores/registro.html"
     data = dict()
@@ -74,6 +79,7 @@ def registroAutores(request):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def productos(request): 
     template = "productos/lista.html"
     data = dict()
@@ -81,6 +87,7 @@ def productos(request):
     data['productos'] = Publicacion.objects.all()
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def detallePublicacion(request, id_publicacion):
     template = "productos/detalle.html"
     
@@ -90,6 +97,7 @@ def detallePublicacion(request, id_publicacion):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def editarPublicacion(request, id_publicacion):
     template = "productos/editar.html"
     
@@ -114,6 +122,7 @@ def editarPublicacion(request, id_publicacion):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def registroProductos(request):
     template = "productos/registro.html"
     data = dict()
@@ -150,6 +159,7 @@ def registroProductos(request):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def generos(request): 
     template = "generos/lista.html"
     data = dict()
@@ -157,6 +167,7 @@ def generos(request):
     data['generos'] = Genero.objects.all()
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def registroGeneros(request):
     template = "generos/registro.html"
     data = dict()
@@ -174,6 +185,7 @@ def registroGeneros(request):
     return render(request, template, data)
     
 
+@login_required(login_url='/login')
 def detalleGenero(request, id_genero):
     template = "generos/detalle.html"
     
@@ -183,6 +195,7 @@ def detalleGenero(request, id_genero):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def editarGenero(request, id_genero):
     template = "generos/editar.html"
     data = dict()
@@ -200,6 +213,7 @@ def editarGenero(request, id_genero):
             data['mensaje'] = "genero no registrada, debe rellenar los campos obligatorios"
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def movimientos(request): 
     template = "movimientos/lista.html"
     data = dict()
@@ -207,6 +221,7 @@ def movimientos(request):
     data['movimientos'] = Movimiento.objects.all()
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def registroMovimientos(request):
     template = "movimientos/registro.html"
     data = dict()
@@ -237,6 +252,7 @@ def registroMovimientos(request):
             return redirect('movimientos')
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def agregarPublicacionMovimiento(request, id_movimiento):
     template = "movimientos/agregar.html"
     data = dict()
@@ -268,6 +284,7 @@ def agregarPublicacionMovimiento(request, id_movimiento):
 
     return render(request, template, data)
     
+@login_required(login_url='/login')
 def detalleMovimiento(request, id_movimiento):
     template = "movimientos/detalle.html"
     
@@ -277,6 +294,7 @@ def detalleMovimiento(request, id_movimiento):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def editarMovimiento(request, id_movimiento):
     template = "movimientos/editar.html"
     data = dict()
@@ -309,6 +327,7 @@ def editarMovimiento(request, id_movimiento):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def editarEstadoMovimiento(request, id_movimiento):
     movimiento = Movimiento.objects.get(id_movimiento = id_movimiento)
     print(len(movimiento.publicacion_movimiento_set.all()))
@@ -333,6 +352,7 @@ def editarEstadoMovimiento(request, id_movimiento):
     # return redirect('detalleMovimiento', id_movimiento)
     return redirect('detalleMovimiento', id_movimiento)
 
+@login_required(login_url='/login')
 def editoriales(request): 
     template = "editoriales/lista.html"
     data = dict()
@@ -340,6 +360,7 @@ def editoriales(request):
     data['editoriales'] = Editorial.objects.all()
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def registroEditoriales(request):
     template = "editoriales/registro.html"
     data = dict()
@@ -362,6 +383,7 @@ def registroEditoriales(request):
             data['mensaje'] = "Editorial no registrada, debe rellenar los campos obligatorios"
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def detalleEditorial(request, id_editorial):
     template = "editoriales/detalle.html"
     data = dict()
@@ -388,6 +410,7 @@ def detalleEditorial(request, id_editorial):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def editarEditorial(request, id_editorial):
     template = "editoriales/editar.html"
     data = dict()
@@ -414,6 +437,7 @@ def editarEditorial(request, id_editorial):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def registroPersonas(request):
     template = "personas/registro.html"
     data = dict()
@@ -443,6 +467,7 @@ def registroPersonas(request):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def listaPersonas(request):
     template = "personas/lista.html"
     
@@ -452,6 +477,7 @@ def listaPersonas(request):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def detallePersonas(request, id_persona):
     template = "personas/detalle.html"
     
@@ -463,6 +489,7 @@ def detallePersonas(request, id_persona):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def editarPersonas(request, id_persona):
     template = "personas/editar.html"
     
@@ -521,6 +548,7 @@ def loginPerfil(request):
 
     return render(request, template, data)    
 
+@login_required(login_url='/login')
 def logoutPerfil(request):
     data = dict()
 
@@ -530,6 +558,7 @@ def logoutPerfil(request):
         logout(request)
     return redirect('index')
 
+@login_required(login_url='/login')
 def perfiles(request):
     template = "perfil/lista.html"
 
@@ -539,6 +568,7 @@ def perfiles(request):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def detallePerfiles(request, perfil_id):
     template = "perfil/detalle.html"
 
@@ -550,6 +580,7 @@ def detallePerfiles(request, perfil_id):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def editarPerfil(request, id_perfil):
     template = "perfil/editar.html"
 
@@ -573,6 +604,7 @@ def editarPerfil(request, id_perfil):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def registroPerfil(request):
     template = "perfil/registro.html"
 
@@ -625,6 +657,7 @@ def registroPerfil(request):
         
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def preregistroPerfil(request):
     template = "perfil/preregistro.html"
 
@@ -633,6 +666,7 @@ def preregistroPerfil(request):
         
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def cambiarEstadoPerfil(request, id_perfil):
     perfil = Perfil.objects.get(id=id_perfil)
     if(perfil.is_active == 0):
