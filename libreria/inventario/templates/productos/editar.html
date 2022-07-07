@@ -12,8 +12,6 @@
             <form action="{% url 'editarPublicacion' publicacion.id_publicacion %}" method="POST">
                 {% csrf_token %}
                 <div class="row">
-                    <h3>Libro : {{publicacion.nombre}}</h3>
-                    <hr />
                     <label for="nombre" class="col-4 col-md-2 col-form-label text-end">Nombre:</label>
                     <div class="col-8 col-md-4 mb-3">
                         <input type="text" class="form-control" id="nombre" name="nombre" value="{{publicacion.nombre}}">
@@ -63,6 +61,13 @@
                             {{genero.id_genero}}
                             <br/>
                         {% endfor %}
+                    </div>
+                    <label for="estado" class="col-4 col-md-2 col-form-label text-end"></label>
+                    <div class="col-8 col-md-4 form-check mb-3 align-content-end">
+                        <input class="form-check-input" type="checkbox" id="activo" name="activo" {% if publicacion.is_active %}checked{% endif %}>
+                        <label class="form-check-label" for="activo">
+                          Activo
+                        </label>
                     </div>
                     <div class="container mb-3 text-center">
                         <button type="submit" class="btn btn-primary">Enviar</button>

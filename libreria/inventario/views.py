@@ -14,295 +14,367 @@ def index(request):
     return render(request, template, data)
 
 @login_required(login_url='/login')
-def autores(request): 
-    template = "autores/lista.html"
-    data = dict()
-    data['titulo'] = "Autores Registrados"
-    data['autores'] = Autor.objects.all()
+def autores(request):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "autores/lista.html"
+        data = dict()
+        data['titulo'] = "Autores Registrados"
+        data['autores'] = Autor.objects.all()
+    else:
+        return redirect('accesoDenegado')
     return render(request, template, data)
 
 @login_required(login_url='/login')
+def cambiarEstadoAutor(request, id_autor):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        autor = Autor.objects.get(id_autor=id_autor)
+        if(autor.is_active == 0):
+            autor.is_active = 1
+        elif(autor.is_active == 1):
+            autor.is_active = 0
+        print(autor.is_active)
+        autor.save()
+    else:
+        return redirect('accesoDenegado')
+    return redirect('autores')
+
+@login_required(login_url='/login')
 def detalleAutor(request, id_autor):
-    template = "autores/detalle.html"
-    
-    data = dict()
-    data['titulo'] = "Detalle Autor"
-    data['autor'] = Autor.objects.get(id_autor=id_autor)
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "autores/detalle.html"
+        
+        data = dict()
+        data['titulo'] = "Detalle Autor"
+        data['autor'] = Autor.objects.get(id_autor=id_autor)
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def editarAutor(request, id_autor):
-    template = "autores/editar.html"
-    
-    data = dict()
-    data['titulo'] = "Editar Autor"
-    autor = Autor.objects.get(id_autor=id_autor)
-    data['autor'] = autor
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "autores/editar.html"
+        
+        data = dict()
+        data['titulo'] = "Editar Autor"
+        autor = Autor.objects.get(id_autor=id_autor)
+        data['autor'] = autor
 
-    if request.method == 'POST':
-        if(request.POST['nombre'].strip(" ") != ''):
-            autor.nombres_autor = request.POST['nombre']
-        if(request.POST['apellido'].strip(" ") != ''):
-            autor.apellidos_autor = request.POST['apellido']
-        if(request.POST['correo'].strip(" ") != ''):
-            autor.correo_autor = request.POST['correo']
-        if(request.POST['nacionalidad'].strip(" ") != ''):
-            autor.nacionalidad_autor = request.POST['nacionalidad']
-        if(request.POST['pseudonimo'].strip(" ") != ''):
-            autor.pseudonimo_autor = request.POST['pseudonimo']
-        print(autor)
-        autor.save()
-        return redirect('detalleAutor', id_autor)
+        if request.method == 'POST':
+            if(request.POST['nombre'].strip(" ") != ''):
+                autor.nombres_autor = request.POST['nombre']
+            if(request.POST['apellido'].strip(" ") != ''):
+                autor.apellidos_autor = request.POST['apellido']
+            if(request.POST['correo'].strip(" ") != ''):
+                autor.correo_autor = request.POST['correo']
+            if(request.POST['nacionalidad'].strip(" ") != ''):
+                autor.nacionalidad_autor = request.POST['nacionalidad']
+            if(request.POST['pseudonimo'].strip(" ") != ''):
+                autor.pseudonimo_autor = request.POST['pseudonimo']
+            if('activo' in request.POST):
+                autor.is_active = 1
+            else:
+                autor.is_active = 0
+            autor.save()
+            return redirect('detalleAutor', id_autor)
+
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def registroAutores(request):
-    template = "autores/registro.html"
-    data = dict()
-    data['titulo'] = "Registro Autores"
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "autores/registro.html"
+        data = dict()
+        data['titulo'] = "Registro Autores"
 
-    if request.method == 'POST':
-        autor = Autor()
-        if(request.POST['nombre'].strip(" ") != ''):
-            autor.nombres_autor = request.POST['nombre']
-        if(request.POST['apellido'].strip(" ") != ''):
-            autor.apellidos_autor = request.POST['apellido']
-        if(request.POST['correo'].strip(" ") != ''):
-            autor.correo_autor = request.POST['correo']
-        if(request.POST['nacionalidad'].strip(" ") != ''):
-            autor.nacionalidad_autor = request.POST['nacionalidad']
-        if(request.POST['pseudonimo'].strip(" ") != ''):
-            autor.pseudonimo_autor = request.POST['pseudonimo']
-        autor.save()
+        if request.method == 'POST':
+            autor = Autor()
+            if(request.POST['nombre'].strip(" ") != ''):
+                autor.nombres_autor = request.POST['nombre']
+            if(request.POST['apellido'].strip(" ") != ''):
+                autor.apellidos_autor = request.POST['apellido']
+            if(request.POST['correo'].strip(" ") != ''):
+                autor.correo_autor = request.POST['correo']
+            if(request.POST['nacionalidad'].strip(" ") != ''):
+                autor.nacionalidad_autor = request.POST['nacionalidad']
+            if(request.POST['pseudonimo'].strip(" ") != ''):
+                autor.pseudonimo_autor = request.POST['pseudonimo']
+            autor.save()
+
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def productos(request): 
-    template = "productos/lista.html"
-    data = dict()
-    data['titulo'] = "productos Registrados"
-    data['productos'] = Publicacion.objects.all()
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "productos/lista.html"
+        data = dict()
+        data['titulo'] = "productos Registrados"
+        data['productos'] = Publicacion.objects.all()
+    else:
+        return redirect('accesoDenegado')
     return render(request, template, data)
 
 @login_required(login_url='/login')
+def cambiarEstadoPublicacion(request, id_publicacion):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        publicacion = Publicacion.objects.get(id_publicacion=id_publicacion)
+        if(publicacion.is_active == 0):
+            publicacion.is_active = 1
+        elif(publicacion.is_active == 1):
+            publicacion.is_active = 0
+        publicacion.save()
+    else:
+        return redirect('accesoDenegado')
+    return redirect('productos')
+
+@login_required(login_url='/login')
 def detallePublicacion(request, id_publicacion):
-    template = "productos/detalle.html"
-    
-    data = dict()
-    data['titulo'] = "Detalle Publicacion"
-    data['publicacion'] = Publicacion.objects.get(id_publicacion=id_publicacion)
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "productos/detalle.html"
+        
+        data = dict()
+        data['titulo'] = "Detalle Publicacion"
+        data['publicacion'] = Publicacion.objects.get(id_publicacion=id_publicacion)
+
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def editarPublicacion(request, id_publicacion):
-    template = "productos/editar.html"
-    
-    data = dict()
-    data['titulo'] = "Editar Publicacion"
-    publicacion = Publicacion.objects.get(id_publicacion=id_publicacion)
-    data['publicacion'] = publicacion 
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "productos/editar.html"
+        
+        data = dict()
+        data['titulo'] = "Editar Publicacion"
+        publicacion = Publicacion.objects.get(id_publicacion=id_publicacion)
+        data['publicacion'] = publicacion 
 
-    if(request.POST):
-        if(request.POST['nombre'].strip(" ") != ''):
-            publicacion.nombre = request.POST['nombre']
-        if(request.POST['edicion'].strip(" ") != ''):
-            publicacion.edicion = request.POST['edicion']
-        if(request.POST['isbn'].strip(" ") != ''):
-            publicacion.isbn = request.POST['isbn']
-        if(request.POST['resumen'].strip(" ") != ''):
-            publicacion.resumen = request.POST['resumen']
-        if(request.POST['precio'].strip(" ") != ''):
-            publicacion.precio = int(request.POST['precio'])
-        publicacion.save()
-        return redirect('detallePublicacion', publicacion.id_publicacion)
+        if(request.POST):
+            if(request.POST['nombre'].strip(" ") != ''):
+                publicacion.nombre = request.POST['nombre']
+            if(request.POST['edicion'].strip(" ") != ''):
+                publicacion.edicion = request.POST['edicion']
+            if(request.POST['isbn'].strip(" ") != ''):
+                publicacion.isbn = request.POST['isbn']
+            if(request.POST['resumen'].strip(" ") != ''):
+                publicacion.resumen = request.POST['resumen']
+            if(request.POST['precio'].strip(" ") != ''):
+                publicacion.precio = int(request.POST['precio'])
+            if('activo' in request.POST):
+                publicacion.is_active = 1
+            else:
+                publicacion.is_active = 0
+            publicacion.save()
+            return redirect('detallePublicacion', publicacion.id_publicacion)
+
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def registroProductos(request):
-    template = "productos/registro.html"
-    data = dict()
-    data['titulo'] = "Registro Productos"
-    # data['autores'] = [{'nombre': 'Neftali Reyes', 'id': 1},{'nombre': 'Violeta Parra', 'id': 2},{'nombre': 'Nicanor Parra', 'id': 3}]
-    data['editoriales'] = Editorial.objects.all()
-    data['autores'] = Autor.objects.all()
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "productos/registro.html"
+        data = dict()
+        data['titulo'] = "Registro Productos"
+        # data['autores'] = [{'nombre': 'Neftali Reyes', 'id': 1},{'nombre': 'Violeta Parra', 'id': 2},{'nombre': 'Nicanor Parra', 'id': 3}]
+        data['editoriales'] = Editorial.objects.all()
+        data['autores'] = Autor.objects.all()
 
-    if request.method == 'POST':
-        publicacion = Publicacion()
-        if(request.POST['nombre'].strip(" ") != ''):
-            publicacion.nombre = request.POST['nombre']
-        if(request.POST['autor'].strip(" ") != ''):
-            autor = Autor.objects.get(id_autor = request.POST['autor'])
-        if(request.POST['tipo'].strip(" ") != ''):
-            publicacion.tipo_producto = request.POST['tipo']
-        if(request.POST['editorial'].strip(" ") != ''):
-            editorial = Editorial.objects.get(id_editorial = int(request.POST['editorial']))
-            publicacion.id_editorial = editorial
-        if(request.POST['edicion'].strip(" ") != ''):
-            publicacion.edicion = request.POST['edicion']
-        if(request.POST['fecha'].strip(" ") != ''):
-            publicacion.fecha_publicacion = request.POST['fecha']
-        if(request.POST['isbn'].strip(" ") != ''):
-            publicacion.isbn = request.POST['isbn']
-        if(request.POST['serie'].strip(" ") != ''):
-            publicacion.numero_serie = int(request.POST['serie'])
-        if(request.POST['resumen'].strip(" ") != ''):
-            publicacion.resumen = request.POST['resumen']
-        if(request.POST['precio'].strip(" ") != ''):
-            publicacion.precio = int(request.POST['precio'])
-        publicacion.save()
-        publicacion.autores.add(autor)
+        if request.method == 'POST':
+            publicacion = Publicacion()
+            if(request.POST['nombre'].strip(" ") != ''):
+                publicacion.nombre = request.POST['nombre']
+            if(request.POST['autor'].strip(" ") != ''):
+                autor = Autor.objects.get(id_autor = request.POST['autor'])
+            if(request.POST['tipo'].strip(" ") != ''):
+                publicacion.tipo_producto = request.POST['tipo']
+            if(request.POST['editorial'].strip(" ") != ''):
+                editorial = Editorial.objects.get(id_editorial = int(request.POST['editorial']))
+                publicacion.id_editorial = editorial
+            if(request.POST['edicion'].strip(" ") != ''):
+                publicacion.edicion = request.POST['edicion']
+            if(request.POST['fecha'].strip(" ") != ''):
+                publicacion.fecha_publicacion = request.POST['fecha']
+            if(request.POST['isbn'].strip(" ") != ''):
+                publicacion.isbn = request.POST['isbn']
+            if(request.POST['serie'].strip(" ") != ''):
+                publicacion.numero_serie = int(request.POST['serie'])
+            if(request.POST['resumen'].strip(" ") != ''):
+                publicacion.resumen = request.POST['resumen']
+            if(request.POST['precio'].strip(" ") != ''):
+                publicacion.precio = int(request.POST['precio'])
+            publicacion.save()
+            publicacion.autores.add(autor)
+    
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def generos(request): 
-    template = "generos/lista.html"
-    data = dict()
-    data['titulo'] = "Generos Registrados"
-    data['generos'] = Genero.objects.all()
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "generos/lista.html"
+        data = dict()
+        data['titulo'] = "Generos Registrados"
+        data['generos'] = Genero.objects.all()
+    else:
+        return redirect('accesoDenegado')
+
     return render(request, template, data)
 
 @login_required(login_url='/login')
-def registroGeneros(request):
-    template = "generos/registro.html"
-    data = dict()
-    data['titulo'] = "Registro Generos"
+def cambiarEstadoGenero(request, id_genero):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        genero = Genero.objects.get(id_genero=id_genero)
+        if(genero.is_active == 0):
+            genero.is_active = 1
+        elif(genero.is_active == 1):
+            genero.is_active = 0
+        genero.save()
+    else:
+        return redirect('accesoDenegado')
+    return redirect('generos')
 
-    if request.method == 'POST':
-        genero = Genero()
-        if(request.POST['nombre'].strip(" ") != ''):
-            genero.nombre_genero = request.POST['nombre']
-            genero.save()
-            return redirect('generos')
-        else:
-            data['toast'] = "Error"
-            data['mensaje'] = "genero no registrada, debe rellenar los campos obligatorios"
+@login_required(login_url='/login')
+def registroGeneros(request):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "generos/registro.html"
+        data = dict()
+        data['titulo'] = "Registro Generos"
+
+        if request.method == 'POST':
+            genero = Genero()
+            if(request.POST['nombre'].strip(" ") != ''):
+                genero.nombre_genero = request.POST['nombre']
+                genero.save()
+                return redirect('generos')
+            else:
+                data['toast'] = "Error"
+                data['mensaje'] = "genero no registrada, debe rellenar los campos obligatorios"
+
+    else:
+        return redirect('accesoDenegado')
+
     return render(request, template, data)
     
 
 @login_required(login_url='/login')
 def detalleGenero(request, id_genero):
-    template = "generos/detalle.html"
-    
-    data = dict()
-    data['titulo'] = "Detalle Genero"
-    data['genero'] = Genero.objects.get(id_genero=id_genero)
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "generos/detalle.html"
+        
+        data = dict()
+        data['titulo'] = "Detalle Genero"
+        data['genero'] = Genero.objects.get(id_genero=id_genero)
+
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def editarGenero(request, id_genero):
-    template = "generos/editar.html"
-    data = dict()
-    data['titulo'] = "Editar Generos"
-    genero = Genero.objects.get(id_genero=id_genero)
-    data['genero'] = genero
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "generos/editar.html"
+        data = dict()
+        data['titulo'] = "Editar Generos"
+        genero = Genero.objects.get(id_genero=id_genero)
+        data['genero'] = genero
 
-    if request.method == 'POST':
-        if(request.POST['nombre'].strip(" ") != ''):
-            genero.nombre_genero = request.POST['nombre']
-            genero.save()
-            return redirect('generos')
-        else:
-            data['toast'] = "Error"
-            data['mensaje'] = "genero no registrada, debe rellenar los campos obligatorios"
+        if request.method == 'POST':
+            if('activo' in request.POST):
+                genero.is_active = 1
+            else:
+                genero.is_active = 0
+            if(request.POST['nombre'].strip(" ") != ''):
+                genero.nombre_genero = request.POST['nombre']
+                genero.save()
+                return redirect('generos')
+            else:
+                data['toast'] = "Error"
+                data['mensaje'] = "genero no registrada, debe rellenar los campos obligatorios"
+    
+    else:
+        return redirect('accesoDenegado')
+
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def movimientos(request): 
-    template = "movimientos/lista.html"
-    data = dict()
-    data['titulo'] = "Movimientos Registrados"
-    data['movimientos'] = Movimiento.objects.all()
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "movimientos/lista.html"
+        data = dict()
+        data['titulo'] = "Movimientos Registrados"
+        data['movimientos'] = Movimiento.objects.all()
+        if(request.method == "POST"):
+            if(request.POST['tipo'] == 'Filtrar'):
+                if(request.POST['fecha_inicio'].strip(" ") != ''):
+                    fecha_inicio = request.POST['fecha_inicio']
+                if(request.POST['fecha_fin'].strip(" ") != ''):
+                    fecha_fin = request.POST['fecha_fin']
+                if(request.POST['fecha_fin'].strip(" ") != '' and request.POST['fecha_inicio'].strip(" ") != ''):
+                    data['movimientos'] = Movimiento.objects.filter(fecha_solicitud__range=[fecha_inicio, fecha_fin])
+    else:
+        return redirect('accesoDenegado')
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def registroMovimientos(request):
-    template = "movimientos/registro.html"
-    data = dict()
-    data['titulo'] = "Registro Movimientos"
-    data['bodegas'] = Bodega.objects.all()
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "movimientos/registro.html"
+        data = dict()
+        data['titulo'] = "Registro Movimientos"
+        data['bodegas'] = Bodega.objects.all()
 
-    if request.method == 'POST':
-        print(request.user.is_authenticated)
-        movimiento = Movimiento()
-        if(request.POST['bodega_origen'].strip(" ") != ''):
-            movimiento.id_bodega_origen = Bodega.objects.get(id_bodega = int(request.POST['bodega_origen']))
-        if(request.POST['bodega_destino'].strip(" ") != ''):
-            movimiento.id_bodega_destino = Bodega.objects.get(id_bodega = int(request.POST['bodega_destino']))
-        if(request.POST['bodega_origen'].strip(" ") == '' and request.POST['bodega_destino'].strip(" ") == ''):
-            data['toast'] = "Error"
-            data['mensaje'] = "Movimiento no registrada, debe rellenar los campos obligatorios"
-        elif(movimiento.id_bodega_origen == movimiento.id_bodega_destino):
-            data['toast'] = "Error"
-            data['mensaje'] = "Movimiento no registrada, La bodega de origen debe ser distinta a la bodega de destino"
-        elif(not request.user.is_authenticated):
-            data['toast'] = "Error"
-            data['mensaje'] = "Movimiento no registrada, Debe iniciar sesión para registrar movimiento"
-        else:
-            movimiento.id = request.user
-            movimiento.estado = "Solicitando"
-            movimiento.fecha_solicitud = datetime.now()
-            movimiento.save()
-            return redirect('movimientos')
+        if request.method == 'POST':
+            print(request.user.is_authenticated)
+            movimiento = Movimiento()
+            if(request.POST['bodega_origen'].strip(" ") != ''):
+                movimiento.id_bodega_origen = Bodega.objects.get(id_bodega = int(request.POST['bodega_origen']))
+            if(request.POST['bodega_destino'].strip(" ") != ''):
+                movimiento.id_bodega_destino = Bodega.objects.get(id_bodega = int(request.POST['bodega_destino']))
+            if(request.POST['bodega_origen'].strip(" ") == '' and request.POST['bodega_destino'].strip(" ") == ''):
+                data['toast'] = "Error"
+                data['mensaje'] = "Movimiento no registrada, debe rellenar los campos obligatorios"
+            elif(movimiento.id_bodega_origen == movimiento.id_bodega_destino):
+                data['toast'] = "Error"
+                data['mensaje'] = "Movimiento no registrada, La bodega de origen debe ser distinta a la bodega de destino"
+            elif(not request.user.is_authenticated):
+                data['toast'] = "Error"
+                data['mensaje'] = "Movimiento no registrada, Debe iniciar sesión para registrar movimiento"
+            else:
+                movimiento.id = request.user
+                movimiento.estado = "Solicitando"
+                movimiento.fecha_solicitud = datetime.now()
+                movimiento.save()
+                return redirect('movimientos')
+
+    else:
+        return redirect('accesoDenegado')
+
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def agregarPublicacionMovimiento(request, id_movimiento):
-    template = "movimientos/agregar.html"
-    data = dict()
-    data['titulo'] = "Agregar publicacions a movimiento"
-    movimiento = Movimiento.objects.get(id_movimiento = id_movimiento)
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "movimientos/agregar.html"
+        data = dict()
+        data['titulo'] = "Agregar publicacions a movimiento"
+        movimiento = Movimiento.objects.get(id_movimiento = id_movimiento)
 
-    if request.method == 'POST':
-        if(request.POST['publicacion'].strip(" ") != ''):
-            publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
-            publicacionEnBodega = Publicacion_Bodega.objects.get(id_publicacion=int(request.POST['publicacion']), id_bodega=movimiento.id_bodega_origen.id_bodega)
-        if(request.POST['cantidad'].strip(" ") != ''):
-            cantidad = int(request.POST['cantidad'])
-        if(request.POST['publicacion'].strip(" ") == '' or request.POST['cantidad'].strip(" ") == ''):
-            data['toast'] = "Error"
-            data['mensaje'] = "Publicacion no registrada, Debe rellenar todos los campos"
-        elif(publicacion in movimiento.publicaciones.all()):
-            data['toast'] = "Error"
-            data['mensaje'] = "Publicacion ya agregada al movimiento"
-        elif (cantidad > publicacionEnBodega.cantidad):
-            data['toast'] = "Error"
-            data['mensaje'] = "No puede agregar más publicaciones de las que se encuentran en stock"
-        else:
-            movimiento.publicaciones.add(publicacion, through_defaults = {"cantidad": cantidad})
-            publicacionEnBodega.cantidad -= cantidad
-            publicacionEnBodega.save()
-
-    data['movimiento'] = movimiento
-    data['publicaciones'] = Publicacion_Bodega.objects.filter(id_bodega = request.user.id_bodega)
-
-    return render(request, template, data)
-    
-@login_required(login_url='/login')
-def detalleMovimiento(request, id_movimiento):
-    template = "movimientos/detalle.html"
-    
-    data = dict()
-    data['titulo'] = "Detalle Movimiento"
-    data['movimiento'] = Movimiento.objects.get(id_movimiento=id_movimiento)
-
-    return render(request, template, data)
-
-@login_required(login_url='/login')
-def editarMovimiento(request, id_movimiento):
-    template = "movimientos/editar.html"
-    data = dict()
-    data['titulo'] = "Editar Movimiento"
-    movimiento = Movimiento.objects.get(id_movimiento = id_movimiento)
-
-    if request.method == 'POST':
-        if(movimiento.estado == "Solicitando"):
+        if request.method == 'POST':
             if(request.POST['publicacion'].strip(" ") != ''):
                 publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
                 publicacionEnBodega = Publicacion_Bodega.objects.get(id_publicacion=int(request.POST['publicacion']), id_bodega=movimiento.id_bodega_origen.id_bodega)
@@ -322,203 +394,295 @@ def editarMovimiento(request, id_movimiento):
                 publicacionEnBodega.cantidad -= cantidad
                 publicacionEnBodega.save()
 
-    data['movimiento'] = movimiento
-    data['publicaciones'] = Publicacion_Bodega.objects.filter(id_bodega = request.user.id_bodega)
+        data['movimiento'] = movimiento
+        data['publicaciones'] = Publicacion_Bodega.objects.filter(id_bodega = request.user.id_bodega)
+
+    else:
+        return redirect('accesoDenegado')
+
+    return render(request, template, data)
+    
+@login_required(login_url='/login')
+def detalleMovimiento(request, id_movimiento):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "movimientos/detalle.html"
+        
+        data = dict()
+        data['titulo'] = "Detalle Movimiento"
+        data['movimiento'] = Movimiento.objects.get(id_movimiento=id_movimiento)
+    
+    else:
+        return redirect('accesoDenegado')
+
+    return render(request, template, data)
+
+@login_required(login_url='/login')
+def editarMovimiento(request, id_movimiento):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "movimientos/editar.html"
+        data = dict()
+        data['titulo'] = "Editar Movimiento"
+        movimiento = Movimiento.objects.get(id_movimiento = id_movimiento)
+
+        if request.method == 'POST':
+            if(movimiento.estado == "Solicitando"):
+                if(request.POST['publicacion'].strip(" ") != ''):
+                    publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
+                    publicacionEnBodega = Publicacion_Bodega.objects.get(id_publicacion=int(request.POST['publicacion']), id_bodega=movimiento.id_bodega_origen.id_bodega)
+                if(request.POST['cantidad'].strip(" ") != ''):
+                    cantidad = int(request.POST['cantidad'])
+                if(request.POST['publicacion'].strip(" ") == '' or request.POST['cantidad'].strip(" ") == ''):
+                    data['toast'] = "Error"
+                    data['mensaje'] = "Publicacion no registrada, Debe rellenar todos los campos"
+                elif(publicacion in movimiento.publicaciones.all()):
+                    data['toast'] = "Error"
+                    data['mensaje'] = "Publicacion ya agregada al movimiento"
+                elif (cantidad > publicacionEnBodega.cantidad):
+                    data['toast'] = "Error"
+                    data['mensaje'] = "No puede agregar más publicaciones de las que se encuentran en stock"
+                else:
+                    movimiento.publicaciones.add(publicacion, through_defaults = {"cantidad": cantidad})
+                    publicacionEnBodega.cantidad -= cantidad
+                    publicacionEnBodega.save()
+
+        data['movimiento'] = movimiento
+        data['publicaciones'] = Publicacion_Bodega.objects.filter(id_bodega = request.user.id_bodega)
+
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def editarEstadoMovimiento(request, id_movimiento):
-    movimiento = Movimiento.objects.get(id_movimiento = id_movimiento)
-    print(len(movimiento.publicacion_movimiento_set.all()))
-    bodega = movimiento.id_bodega_destino
-    if(movimiento.estado=="Solicitando" and len(movimiento.publicacion_movimiento_set.all()) > 0):
-        movimiento.estado = "Pendiente"
-    elif(movimiento.estado=="Pendiente"):
-        movimiento.estado = "Enviado"
-    elif(movimiento.estado=="Enviado"):
-        movimiento.estado = "Entregado"
-        movimiento.fecha_realizado = datetime.now()
-        for publicacion in movimiento.publicacion_movimiento_set.all():
-            try:
-                publicacionBodega = Publicacion_Bodega.objects.get(id_bodega=bodega, id_publicacion=publicacion.id_publicacion)
-                publicacionBodega.cantidad += publicacion.cantidad
-                publicacionBodega.save()
-            except:
-                publicacionBodega = Publicacion_Bodega(id_bodega=bodega, id_publicacion=publicacion.id_publicacion, cantidad=publicacion.cantidad)
-                publicacionBodega.save()
-    movimiento.save()
-            # print(publicacion.id_publicacion)
-    # return redirect('detalleMovimiento', id_movimiento)
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        movimiento = Movimiento.objects.get(id_movimiento = id_movimiento)
+        print(len(movimiento.publicacion_movimiento_set.all()))
+        bodega = movimiento.id_bodega_destino
+        if(movimiento.estado=="Solicitando" and len(movimiento.publicacion_movimiento_set.all()) > 0):
+            movimiento.estado = "Pendiente"
+        elif(movimiento.estado=="Pendiente"):
+            movimiento.estado = "Enviado"
+        elif(movimiento.estado=="Enviado"):
+            movimiento.estado = "Entregado"
+            movimiento.fecha_realizado = datetime.now()
+            for publicacion in movimiento.publicacion_movimiento_set.all():
+                try:
+                    publicacionBodega = Publicacion_Bodega.objects.get(id_bodega=bodega, id_publicacion=publicacion.id_publicacion)
+                    publicacionBodega.cantidad += publicacion.cantidad
+                    publicacionBodega.save()
+                except:
+                    publicacionBodega = Publicacion_Bodega(id_bodega=bodega, id_publicacion=publicacion.id_publicacion, cantidad=publicacion.cantidad)
+                    publicacionBodega.save()
+        movimiento.save()
+
+    else:
+        return redirect('accesoDenegado')
+
     return redirect('detalleMovimiento', id_movimiento)
 
 @login_required(login_url='/login')
+def informeMovimiento(request):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        print(request.POST)
+    else:
+        return redirect('accesoDenegado')
+    return redirect('movimientos')
+
+@login_required(login_url='/login')
 def editoriales(request): 
-    template = "editoriales/lista.html"
-    data = dict()
-    data['titulo'] = "Editoriales Registrados"
-    data['editoriales'] = Editorial.objects.all()
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "editoriales/lista.html"
+        data = dict()
+        data['titulo'] = "Editoriales Registrados"
+        data['editoriales'] = Editorial.objects.all()
+    else:
+        return redirect('accesoDenegado')
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def registroEditoriales(request):
-    template = "editoriales/registro.html"
-    data = dict()
-    data['titulo'] = "Registro Editoriales"
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "editoriales/registro.html"
+        data = dict()
+        data['titulo'] = "Registro Editoriales"
 
-    if request.method == 'POST':
-        editorial = Editorial()
-        if(request.POST['correo'].strip(" ") != ''):
-            editorial.correo_editorial = request.POST['correo']
-        if(request.POST['telefono'].strip(" ") != ''):
-            editorial.telefono_editorial = request.POST['telefono']
-        if(request.POST['direccion'].strip(" ") != ''):
-            editorial.direccion_editorial = request.POST['direccion']
-        if(request.POST['nombre'].strip(" ") != ''):
-            editorial.nombre_editorial = request.POST['nombre']
-            editorial.save()
-            return redirect('editoriales')
-        else:
-            data['toast'] = "Error"
-            data['mensaje'] = "Editorial no registrada, debe rellenar los campos obligatorios"
+        if request.method == 'POST':
+            editorial = Editorial()
+            if(request.POST['correo'].strip(" ") != ''):
+                editorial.correo_editorial = request.POST['correo']
+            if(request.POST['telefono'].strip(" ") != ''):
+                editorial.telefono_editorial = request.POST['telefono']
+            if(request.POST['direccion'].strip(" ") != ''):
+                editorial.direccion_editorial = request.POST['direccion']
+            if(request.POST['nombre'].strip(" ") != ''):
+                editorial.nombre_editorial = request.POST['nombre']
+                editorial.save()
+                return redirect('editoriales')
+            else:
+                data['toast'] = "Error"
+                data['mensaje'] = "Editorial no registrada, debe rellenar los campos obligatorios"
+    
+    else:
+        return redirect('accesoDenegado')
+
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def detalleEditorial(request, id_editorial):
-    template = "editoriales/detalle.html"
-    data = dict()
-    data['titulo'] = "Detalle Editorial"
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "editoriales/detalle.html"
+        data = dict()
+        data['titulo'] = "Detalle Editorial"
 
-    editorial = Editorial.objects.get(id_editorial=id_editorial)
-    data["editorial"] = editorial
+        editorial = Editorial.objects.get(id_editorial=id_editorial)
+        data["editorial"] = editorial
 
-    if request.method == 'POST':
-        if(request.POST['correo'].strip(" ") != ''):
-            editorial.correo_editorial = request.POST['correo']
-        if(request.POST['telefono'].strip(" ") != ''):
-            editorial.telefono_editorial = request.POST['telefono']
-        if(request.POST['direccion'].strip(" ") != ''):
-            editorial.direccion_editorial = request.POST['direccion']
-        if(request.POST['nombre'].strip(" ") != ''):
-            editorial.nombre_editorial = request.POST['nombre']
-            editorial.save()
-            return redirect('editoriales')
-        else:
-            data['toast'] = "Error"
-            data['mensaje'] = "Editorial no modificada, debe rellenar los campos obligatorios"
+        if request.method == 'POST':
+            if(request.POST['correo'].strip(" ") != ''):
+                editorial.correo_editorial = request.POST['correo']
+            if(request.POST['telefono'].strip(" ") != ''):
+                editorial.telefono_editorial = request.POST['telefono']
+            if(request.POST['direccion'].strip(" ") != ''):
+                editorial.direccion_editorial = request.POST['direccion']
+            if(request.POST['nombre'].strip(" ") != ''):
+                editorial.nombre_editorial = request.POST['nombre']
+                editorial.save()
+                return redirect('editoriales')
+            else:
+                data['toast'] = "Error"
+                data['mensaje'] = "Editorial no modificada, debe rellenar los campos obligatorios"
 
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def editarEditorial(request, id_editorial):
-    template = "editoriales/editar.html"
-    data = dict()
-    data['titulo'] = "Editar Editorial"
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "editoriales/editar.html"
+        data = dict()
+        data['titulo'] = "Editar Editorial"
 
-    editorial = Editorial.objects.get(id_editorial=id_editorial)
-    data["editorial"] = editorial
+        editorial = Editorial.objects.get(id_editorial=id_editorial)
+        data["editorial"] = editorial
 
-    if request.method == 'POST':
-        if(request.POST['correo'].strip(" ") != ''):
-            editorial.correo_editorial = request.POST['correo']
-        if(request.POST['telefono'].strip(" ") != ''):
-            editorial.telefono_editorial = request.POST['telefono']
-        if(request.POST['direccion'].strip(" ") != ''):
-            editorial.direccion_editorial = request.POST['direccion']
-        if(request.POST['nombre'].strip(" ") != ''):
-            editorial.nombre_editorial = request.POST['nombre']
-            editorial.save()
-            return redirect('editoriales')
-        else:
-            data['toast'] = "Error"
-            data['mensaje'] = "Editorial no modificada, debe rellenar los campos obligatorios"
+        if request.method == 'POST':
+            if(request.POST['correo'].strip(" ") != ''):
+                editorial.correo_editorial = request.POST['correo']
+            if(request.POST['telefono'].strip(" ") != ''):
+                editorial.telefono_editorial = request.POST['telefono']
+            if(request.POST['direccion'].strip(" ") != ''):
+                editorial.direccion_editorial = request.POST['direccion']
+            if(request.POST['nombre'].strip(" ") != ''):
+                editorial.nombre_editorial = request.POST['nombre']
+                editorial.save()
+                return redirect('editoriales')
+            else:
+                data['toast'] = "Error"
+                data['mensaje'] = "Editorial no modificada, debe rellenar los campos obligatorios"
 
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def registroPersonas(request):
-    template = "personas/registro.html"
-    data = dict()
-    data['titulo'] = "Registro Personas"
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "personas/registro.html"
+        data = dict()
+        data['titulo'] = "Registro Personas"
 
-    if request.method == 'POST':
-        persona = Persona()
-        if(request.POST['nombre'].strip(" ") != ''):
-            persona.nombres = request.POST['nombre']
-        if(request.POST['rut'].strip(" ") != ''):
-            persona.rut = request.POST['rut']
-        if(request.POST['apellidos'].strip(" ") != ''):
-            persona.apellidos = request.POST['apellidos']
-        if(request.POST['direccion'].strip(" ") != ''):
-            persona.direccion = request.POST['direccion']
-        if(request.POST['correo'].strip(" ") != ''):
-            persona.correo = request.POST['correo']
-        if(request.POST['telefono'].strip(" ") != ''):
-            persona.telefono = request.POST['telefono']
-        if(persona.nombres != '' and persona.rut != ''):
-            persona.save()
-            data['toast'] = "Exito"
-            data['mensaje'] = "Persona registrada correctamente"
-        else:
-            data['toast'] = "Error"
-            data['mensaje'] = "Persona no registrada, debe rellenar los campos obligatorios"
+        if request.method == 'POST':
+            persona = Persona()
+            if(request.POST['nombre'].strip(" ") != ''):
+                persona.nombres = request.POST['nombre']
+            if(request.POST['rut'].strip(" ") != ''):
+                persona.rut = request.POST['rut']
+            if(request.POST['apellidos'].strip(" ") != ''):
+                persona.apellidos = request.POST['apellidos']
+            if(request.POST['direccion'].strip(" ") != ''):
+                persona.direccion = request.POST['direccion']
+            if(request.POST['correo'].strip(" ") != ''):
+                persona.correo = request.POST['correo']
+            if(request.POST['telefono'].strip(" ") != ''):
+                persona.telefono = request.POST['telefono']
+            if(persona.nombres != '' and persona.rut != ''):
+                persona.save()
+                data['toast'] = "Exito"
+                data['mensaje'] = "Persona registrada correctamente"
+            else:
+                data['toast'] = "Error"
+                data['mensaje'] = "Persona no registrada, debe rellenar los campos obligatorios"
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def listaPersonas(request):
-    template = "personas/lista.html"
-    
-    data = dict()
-    data['titulo'] = "Lista Personas"
-    data['personas'] = Persona.objects.all()
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "personas/lista.html"
+        
+        data = dict()
+        data['titulo'] = "Lista Personas"
+        data['personas'] = Persona.objects.all()
+
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def detallePersonas(request, id_persona):
-    template = "personas/detalle.html"
-    
-    data = dict()
-    data['titulo'] = "Detalle Personas"
-    data['persona'] = Persona.objects.get(id_persona=id_persona)
-    data['compras'] = Compra.objects.filter(id_persona=id_persona)
-    # print(data['persona'].publicacion_compra_set.all())
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "personas/detalle.html"
+        
+        data = dict()
+        data['titulo'] = "Detalle Personas"
+        data['persona'] = Persona.objects.get(id_persona=id_persona)
+        data['compras'] = Compra.objects.filter(id_persona=id_persona)
+
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
 @login_required(login_url='/login')
 def editarPersonas(request, id_persona):
-    template = "personas/editar.html"
-    
-    data = dict()
-    data['titulo'] = "Editar Persona"
-    persona = Persona.objects.get(id_persona=id_persona)
-    data['persona'] = persona
-    if request.method == 'POST':
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "personas/editar.html"
+        
+        data = dict()
+        data['titulo'] = "Editar Persona"
         persona = Persona.objects.get(id_persona=id_persona)
-        if(request.POST['nombre'].strip(" ") != ''):
-            persona.nombres = request.POST['nombre']
-        if(request.POST['rut'].strip(" ") != ''):
-            persona.rut = request.POST['rut']
-        if(request.POST['apellidos'].strip(" ") != ''):
-            persona.apellidos = request.POST['apellidos']
-        if(request.POST['direccion'].strip(" ") != ''):
-            persona.direccion = request.POST['direccion']
-        if(request.POST['correo'].strip(" ") != ''):
-            persona.correo = request.POST['correo']
-        if(request.POST['telefono'].strip(" ") != ''):
-            persona.telefono = request.POST['telefono']
-        if(persona.nombres != '' and persona.rut != ''):
-            persona.save()
-            data['toast'] = "Exito"
-            data['mensaje'] = "Persona registrada correctamente"
-        else:
-            data['toast'] = "Error"
-            data['mensaje'] = "Persona no registrada, debe rellenar los campos obligatorios"
-    # print(data['persona'].publicacion_compra_set.all())
+        data['persona'] = persona
+        if request.method == 'POST':
+            persona = Persona.objects.get(id_persona=id_persona)
+            if(request.POST['nombre'].strip(" ") != ''):
+                persona.nombres = request.POST['nombre']
+            if(request.POST['rut'].strip(" ") != ''):
+                persona.rut = request.POST['rut']
+            if(request.POST['apellidos'].strip(" ") != ''):
+                persona.apellidos = request.POST['apellidos']
+            if(request.POST['direccion'].strip(" ") != ''):
+                persona.direccion = request.POST['direccion']
+            if(request.POST['correo'].strip(" ") != ''):
+                persona.correo = request.POST['correo']
+            if(request.POST['telefono'].strip(" ") != ''):
+                persona.telefono = request.POST['telefono']
+            if(persona.nombres != '' and persona.rut != ''):
+                persona.save()
+                data['toast'] = "Exito"
+                data['mensaje'] = "Persona registrada correctamente"
+            else:
+                data['toast'] = "Error"
+                data['mensaje'] = "Persona no registrada, debe rellenar los campos obligatorios"
+
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
@@ -532,7 +696,17 @@ def loginPerfil(request):
     data = dict()
 
     data['titulo'] = "Inicio de sesion"
+
+    if(request.GET.get('next') is not None):
+        redirect_to = request.GET.get('next')
+    else:
+        redirect_to = '/productos'
+
+    # if(request.user):
+    #     return redirect('/productos')
     
+    data['redirect_to'] = redirect_to
+
     if(request.method == "POST"):
         nombre = request.POST['username']
         contraseña = request.POST['password']
@@ -540,7 +714,7 @@ def loginPerfil(request):
         if user is not None:
             # A backend authenticated the credentials
             login(request, user)
-            return redirect('productos')
+            return redirect(redirect_to)
         else:
             data['toast'] = "Error"
             data['mensaje'] = "Usuario o contraseña incorrectos"
@@ -557,6 +731,14 @@ def logoutPerfil(request):
     if(request.user.is_authenticated):
         logout(request)
     return redirect('index')
+
+def accesoDenegado(request):
+    template = "perfil/accesoDenegado.html"
+    data = dict()
+
+    data['titulo'] = "Acceso Denegado"
+    
+    return render(request, template, data)
 
 @login_required(login_url='/login')
 def perfiles(request):

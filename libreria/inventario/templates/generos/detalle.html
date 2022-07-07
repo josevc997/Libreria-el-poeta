@@ -12,6 +12,14 @@
                 <div class="col-8 col-md-4">
                     <input type="text" class="form-control-plaintext" readonly name="nombre" id="nombre" value="{{genero.nombre_genero}}">
                 </div>
+                <label for="estado" class="col-4 col-md-2 col-form-label text-end">Estado:</label>
+                <div class="col-8 col-md-4">
+                    {% if genero.is_active == False %}
+                        <span class="badge bg-danger">Inactivo</span>
+                    {% else %}
+                        <span class="badge bg-success">Activo</span>
+                    {% endif %}
+                </div>
             </div>
         </div>
         <div class="card-footer text-end">

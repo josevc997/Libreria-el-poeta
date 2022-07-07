@@ -10,8 +10,6 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <h3>Autor</h3>
-                <hr />
                 <label for="nombre" class="col-4 col-md-2 col-form-label text-end">Nombre:</label>
                 <div class="col-8 col-md-4">
                     <input type="text" readonly class="form-control-plaintext" id="nombre" value="{{autor.nombres_autor}}">
@@ -31,6 +29,14 @@
                 <label for="pseudonimo" class="col-4 col-md-2 col-form-label text-end">Pseudonimo:</label>
                 <div class="col-8 col-md-4">
                     <input type="text" readonly class="form-control-plaintext" id="pseudonimo" value="{{autor.pseudonimo_autor}}">
+                </div>
+                <label for="estado" class="col-4 col-md-2 col-form-label text-end">Estado:</label>
+                <div class="col-8 col-md-4">
+                    {% if autor.is_active == False %}
+                        <span class="badge bg-danger">Inactivo</span>
+                    {% else %}
+                        <span class="badge bg-success">Activo</span>
+                    {% endif %}
                 </div>
             </div>
         </div>
