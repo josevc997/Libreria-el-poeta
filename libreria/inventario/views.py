@@ -501,6 +501,19 @@ def editoriales(request):
     return render(request, template, data)
 
 @login_required(login_url='/login')
+def cambiarEstadoEditorial(request, id_editorial):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        editorial = Editorial.objects.get(id_editorial=id_editorial)
+        if(editorial.is_active == 0):
+            editorial.is_active = 1
+        elif(editorial.is_active == 1):
+            editorial.is_active = 0
+        editorial.save()
+    else:
+        return redirect('accesoDenegado')
+    return redirect('editoriales')
+
+@login_required(login_url='/login')
 def registroEditoriales(request):
     if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
         template = "editoriales/registro.html"
@@ -575,6 +588,10 @@ def editarEditorial(request, id_editorial):
                 editorial.telefono_editorial = request.POST['telefono']
             if(request.POST['direccion'].strip(" ") != ''):
                 editorial.direccion_editorial = request.POST['direccion']
+            if('activo' in request.POST):
+                editorial.is_active = 1
+            else:
+                editorial.is_active = 0
             if(request.POST['nombre'].strip(" ") != ''):
                 editorial.nombre_editorial = request.POST['nombre']
                 editorial.save()
