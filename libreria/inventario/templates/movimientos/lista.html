@@ -49,7 +49,7 @@
                                     <a href="{% url 'editarMovimiento' movimiento.id_movimiento %}">
                                         <button class="btn btn-warning">editar</button>
                                     </a>
-                                    <button class="btn btn-danger">borrar</button>
+                                    {% comment %} <button class="btn btn-danger">borrar</button> {% endcomment %}
                                 </td>
                             </tr>
                             {% endfor %}

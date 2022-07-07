@@ -611,6 +611,18 @@ def registroPersonas(request):
         template = "personas/registro.html"
         data = dict()
         data['titulo'] = "Registro Personas"
+        if(request.GET.get('next') is not None and request.GET.get('rut') is not None):
+            redirect_to = request.GET.get('next')
+            data['redirect_to'] = redirect_to
+        else:
+            redirect_to = '/personas'
+
+        if(request.GET.get('rut') is not None):
+            rut = request.GET.get('rut')
+            redirect_to=redirect_to+"?rut="+rut
+            data['rut'] = rut
+        
+        print(redirect_to)
 
         if request.method == 'POST':
             persona = Persona()
@@ -630,6 +642,7 @@ def registroPersonas(request):
                 persona.save()
                 data['toast'] = "Exito"
                 data['mensaje'] = "Persona registrada correctamente"
+                return redirect(redirect_to)
             else:
                 data['toast'] = "Error"
                 data['mensaje'] = "Persona no registrada, debe rellenar los campos obligatorios"
@@ -987,10 +1000,72 @@ def listaCompras(request):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
+def editarEstadoCompra(request, id_compra):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        compra = Compra.objects.get(id_compra = id_compra)
+        bodega = compra.id_bodega
+        if(compra.estado=="Pendiente" and len(compra.publicacion_compra_set.all()) > 0):
+            compra.estado = "Finalizada"
+            for publicacion in compra.publicacion_compra_set.all():
+                publicacionBodega = Publicacion_Bodega.objects.get(id_bodega=bodega, id_publicacion=publicacion.id_publicacion)
+                publicacionBodega.cantidad -= publicacion.cantidad
+                publicacionBodega.save()
+        compra.save()
+
+    else:
+        return redirect('accesoDenegado')
+
+    return redirect('detalleCompras', id_compra)
+
+@login_required(login_url='/login')
 def registroCompras(request):
-    template = "compras/registro.html"
-    data = dict()
-    data['titulo'] = "Registro Compras"
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "compras/registro.html"
+        data = dict()
+        data['titulo'] = "Registro Compras"
+
+        if(request.GET.get('rut') is not None):
+            rut = request.GET.get('rut')
+            data['rut'] = rut
+
+        if request.method == 'POST':
+            print(request.user.is_authenticated)
+            compra = Compra()
+            if(request.POST['rut_cliente'].strip(" ") != ''):
+                try:
+                    id_cliente = Persona.objects.get(rut=request.POST['rut_cliente'])
+                    compra.id_persona = id_cliente
+                except:
+                    return redirect('/personas/registro?next='+request.path+'&rut='+request.POST['rut_cliente'])
+            if(request.POST['metodo_pago'].strip(" ") != ''):
+                compra.id_bodega = request.user.id_bodega
+                compra.total = 0
+                compra.fecha_compra = datetime.now()
+                compra.estado = "Pendiente"
+                compra.metodo_pago = request.POST['metodo_pago']
+                # print(compra.metodo_pago)
+                compra.save()
+                return redirect('editarCompras', compra.id_compra)
+            if(request.POST['metodo_pago'].strip(" ") == ''):
+                data['toast'] = "Error"
+                data['mensaje'] = "Movimiento no registrada, debe rellenar los campos obligatorios"
+            # elif(movimiento.id_bodega_origen == movimiento.id_bodega_destino):
+            #     data['toast'] = "Error"
+            #     data['mensaje'] = "Movimiento no registrada, La bodega de origen debe ser distinta a la bodega de destino"
+            # elif(not request.user.is_authenticated):
+            #     data['toast'] = "Error"
+            #     data['mensaje'] = "Movimiento no registrada, Debe iniciar sesión para registrar movimiento"
+            # else:
+            #     movimiento.id = request.user
+            #     movimiento.estado = "Solicitando"
+            #     movimiento.fecha_solicitud = datetime.now()
+                # movimiento.save()
+                # return redirect('compras')
+
+    else:
+        return redirect('accesoDenegado')
+
     return render(request, template, data)
 
 def detalleCompras(request, id_compra):
@@ -1004,37 +1079,76 @@ def detalleCompras(request, id_compra):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def editarCompras(request, id_compra):
-    template = "compras/editar.html"
-    data = dict()
-    data['titulo'] = "Editar publicaciones a compras"
-    compra = Compra.objects.get(id_compra = id_compra)
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "compras/editar.html"
+        data = dict()
+        data['titulo'] = "Editar Compra"
+        compra = Compra.objects.get(id_compra = id_compra)
 
-    if request.method == 'POST':
-        print(request.POST['publicacion'])
-        if(request.POST['publicacion'].strip(" ") != ''):
-            publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
-            publicacionEnBodega = Publicacion_Bodega.objects.get(id_publicacion=int(request.POST['publicacion']), id_compra=compra.id_compra_origen.id_compra)
-        if(request.POST['cantidad'].strip(" ") != ''):
-            cantidad = int(request.POST['cantidad'])
-        if(request.POST['publicacion'].strip(" ") == '' or request.POST['cantidad'].strip(" ") == ''):
-            data['toast'] = "Error"
-            data['mensaje'] = "Publicacion no registrada, Debe rellenar todos los campos"
-        elif(publicacion in compra.publicaciones.all()):
-            data['toast'] = "Error"
-            data['mensaje'] = "Publicacion ya agregada al movimiento"
-        elif (cantidad > publicacionEnBodega.cantidad):
-            data['toast'] = "Error"
-            data['mensaje'] = "No puede agregar más publicaciones de las que se encuentran en stock"
-        else:
-            compra.publicaciones.add(publicacion, through_defaults = {"cantidad": cantidad})
-            publicacionEnBodega.cantidad -= cantidad
-            publicacionEnBodega.save()
+        if request.method == 'POST':
+            if(compra.estado == "Pendiente"):
+                if(request.POST['publicacion'].strip(" ") != ''):
+                    publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
+                    publicacionEnBodega = Publicacion_Bodega.objects.get(id_publicacion=int(request.POST['publicacion']), id_bodega=compra.id_bodega.id_bodega)
+                if(request.POST['cantidad'].strip(" ") != ''):
+                    cantidad = int(request.POST['cantidad'])
+                if(request.POST['publicacion'].strip(" ") == '' or request.POST['cantidad'].strip(" ") == ''):
+                    data['toast'] = "Error"
+                    data['mensaje'] = "Publicacion no registrada, Debe rellenar todos los campos"
+                elif(publicacion in compra.publicaciones.all()):
+                    data['toast'] = "Error"
+                    data['mensaje'] = "Publicacion ya agregada a la compra"
+                elif (cantidad > publicacionEnBodega.cantidad):
+                    data['toast'] = "Error"
+                    data['mensaje'] = "No puede agregar más publicaciones de las que se encuentran en stock"
+                else:
+                    compra.publicaciones.add(publicacion, through_defaults = {"cantidad": cantidad, "precio": publicacion.precio})
+                    compra.total = publicacion.precio * cantidad
+                    compra.save()
+                    # publicacionEnBodega.cantidad -= cantidad
+                    publicacionEnBodega.save()
 
-    data['compra'] = compra
-    data['publicaciones'] = Publicacion_Compra.objects.filter(id_compra=id_compra)
+        data['compra'] = compra
+        data['publicaciones'] = Publicacion_Bodega.objects.filter(id_bodega = request.user.id_bodega)
+
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
+
+# def editarCompras(request, id_compra):
+#     template = "compras/editar.html"
+#     data = dict()
+#     data['titulo'] = "Editar publicaciones a compras"
+#     compra = Compra.objects.get(id_compra = id_compra)
+
+#     if request.method == 'POST':
+#         print(request.POST['publicacion'])
+#         if(request.POST['publicacion'].strip(" ") != ''):
+#             publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
+#             publicacionEnBodega = Publicacion_Bodega.objects.get(id_publicacion=int(request.POST['publicacion']), id_compra=compra.id_compra_origen.id_compra)
+#         if(request.POST['cantidad'].strip(" ") != ''):
+#             cantidad = int(request.POST['cantidad'])
+#         if(request.POST['publicacion'].strip(" ") == '' or request.POST['cantidad'].strip(" ") == ''):
+#             data['toast'] = "Error"
+#             data['mensaje'] = "Publicacion no registrada, Debe rellenar todos los campos"
+#         elif(publicacion in compra.publicaciones.all()):
+#             data['toast'] = "Error"
+#             data['mensaje'] = "Publicacion ya agregada al movimiento"
+#         elif (cantidad > publicacionEnBodega.cantidad):
+#             data['toast'] = "Error"
+#             data['mensaje'] = "No puede agregar más publicaciones de las que se encuentran en stock"
+#         else:
+#             compra.publicaciones.add(publicacion, through_defaults = {"cantidad": cantidad})
+#             publicacionEnBodega.cantidad -= cantidad
+#             publicacionEnBodega.save()
+
+#     data['compra'] = compra
+#     data['publicaciones'] = Publicacion_Compra.objects.filter(id_compra=id_compra)
+
+#     return render(request, template, data)
 
 # Codigo Pablo Cea
 def registroProveedores(request):

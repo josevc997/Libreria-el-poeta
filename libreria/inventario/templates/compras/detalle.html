@@ -10,35 +10,39 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <label for="nombre" class="col-4 col-md-2 col-form-label text-end">Compra:</label>
+                <label for="id_compra" class="col-4 col-md-2 col-form-label text-end">Compra:</label>
                 <div class="col-8 col-md-4">
-                    <input type="text" readonly class="form-control-plaintext" id="compra" value="{{compra.id_compra}}">
+                    <input type="text" readonly class="form-control-plaintext" id="id_compra" value="{{compra.id_compra}}">
                 </div>
-                <label for="apellido" class="col-4 col-md-2 col-form-label text-end">Bodega:</label>
+                <label for="bodega" class="col-4 col-md-2 col-form-label text-end">Bodega:</label>
                 <div class="col-8 col-md-4">
                     <input type="text" readonly class="form-control-plaintext" id="bodega" value="{{compra.id_bodega}}">
                 </div>
-                <label for="rut" class="col-4 col-md-2 col-form-label text-end">Persona:</label>
+                <label for="persona" class="col-4 col-md-2 col-form-label text-end">Persona:</label>
                 <div class="col-8 col-md-4">
                     <input type="text" readonly class="form-control-plaintext" id="persona" value="{{compra.id_persona}}">
                 </div>
-                <label for="direccion" class="col-4 col-md-2 col-form-label text-end">Total:</label>
+                <label for="total" class="col-4 col-md-2 col-form-label text-end">Total:</label>
                 <div class="col-8 col-md-4">
                     <input type="text" readonly class="form-control-plaintext" id="total" value="{{compra.total}}">
                 </div>
-                <label for="correo" class="col-4 col-md-2 col-form-label text-end">Metodo Pago:</label>
+                <label for="metodo_pago" class="col-4 col-md-2 col-form-label text-end">Metodo Pago:</label>
                 <div class="col-8 col-md-4">
-                    <input type="text" readonly class="form-control-plaintext" id="metodopago" value="{{compra.metodo_pago}}">
+                    <input type="text" readonly class="form-control-plaintext" id="metodo_pago" value="{{compra.metodo_pago}}">
                 </div>
-                <label for="telefono" class="col-4 col-md-2 col-form-label text-end">Fecha compra:</label>
+                <label for="fecha_compra" class="col-4 col-md-2 col-form-label text-end">Fecha compra:</label>
                 <div class="col-8 col-md-4">
-                    <input type="text" readonly class="form-control-plaintext" id="fechacompra" value="{{compra.fecha_compra}}">
+                    <input type="text" readonly class="form-control-plaintext" id="fecha_compra" value="{{compra.fecha_compra}}">
+                </div>
+                <label for="estado" class="col-4 col-md-2 col-form-label text-end">Estado:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="estado" value="{{compra.estado}}">
                 </div>
                
     </div>
 </div>
 <div class="card-footer text-end">
-    <a href="{% url 'detalleCompras' compra.id_compra %}">
+    <a href="{% url 'editarCompras' compra.id_compra %}">
         <button class="btn btn-warning text">
             Editar
         </button>

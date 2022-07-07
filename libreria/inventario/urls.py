@@ -50,6 +50,9 @@ urlpatterns = [
     # URLS Bruno Pozo
     path('compras/registro',views.registroCompras,name='registroCompras'),
     path('compras',views.listaCompras, name='compras'),
+    path('compras/detalle/<int:id_compra>', views.detalleCompras, name='detalleCompras'),
+    path('compras/editar/<int:id_compra>', views.editarCompras, name='editarCompras'),
+    path('compras/editar/estado/<int:id_compra>', views.editarEstadoCompra, name='editarEstadoCompra'),
     path('bodegas', views.bodegas, name='bodegas'),
     path('bodegas/cambiarEstado/<int:id_bodega>', views.cambiarEstadoBodega, name='cambiarEstadoBodega'),
     path('bodegas/detalle/<int:id_bodega>', views.detalleBodegas, name='detalleBodegas'),
