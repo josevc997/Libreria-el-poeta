@@ -30,25 +30,18 @@
                 <div class="col-8 col-md-4">
                     <input type="text" readonly class="form-control-plaintext" id="correo" value="{{persona.correo}}">
                 </div>
+                <label for="estado" class="col-4 col-md-2 col-form-label text-end">Estado:</label>
+                <div class="col-8 col-md-4">
+                    {% if persona.is_active == False %}
+                        <span class="badge bg-danger">Inactivo</span>
+                    {% else %}
+                        <span class="badge bg-success">Activo</span>
+                    {% endif %}
+                </div>
                 <label for="telefono" class="col-4 col-md-2 col-form-label text-end">Telefono:</label>
                 <div class="col-8 col-md-4">
                     <input type="text" readonly class="form-control-plaintext" id="telefono" value="{{persona.telefono}}">
                 </div>
-                <!-- <div class="col-12 col-md-6">
-                    {{persona.nombres}}
-                </div>
-                <div class="col-12 col-md-6">
-                    {{persona.apellidos}}
-                </div>
-                <div class="col-12 col-md-6">
-                    {{persona.direccion}}
-                </div>
-                <div class="col-12 col-md-6">
-                    {{persona.correo}}
-                </div>
-                <div class="col-12 col-md-6">
-                    {{persona.telefono}}
-                </div> -->
             </div>
         </div>
         <div class="card-footer text-end">
@@ -107,74 +100,6 @@
                             </td>
                         </tr>
                         {% endfor %}
-                        <tr>
-                            <td>
-                                28-05-2022
-                            </td>
-                            <td>
-                                Santiago Centro
-                            </td>
-                            <td>
-                                Debito
-                            </td>
-                            <td>
-                                $20500
-                            </td>
-                            <td>
-                                <button class="btn btn-primary">ver</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                13-05-2022
-                            </td>
-                            <td>
-                                Santiago Centro
-                            </td>
-                            <td>
-                                Debito
-                            </td>
-                            <td>
-                                $20500
-                            </td>
-                            <td>
-                                <button class="btn btn-primary">ver</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                01-06-2022
-                            </td>
-                            <td>
-                                Santiago Centro
-                            </td>
-                            <td>
-                                Debito
-                            </td>
-                            <td>
-                                $20500
-                            </td>
-                            <td>
-                                <button class="btn btn-primary">ver</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                03-05-2022
-                            </td>
-                            <td>
-                                Santiago Centro
-                            </td>
-                            <td>
-                                Debito
-                            </td>
-                            <td>
-                                $20500
-                            </td>
-                            <td>
-                                <button class="btn btn-primary">ver</button>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
 

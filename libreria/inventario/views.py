@@ -653,6 +653,19 @@ def listaPersonas(request):
     return render(request, template, data)
 
 @login_required(login_url='/login')
+def cambiarEstadoPersona(request, id_persona):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        persona = Persona.objects.get(id_persona=id_persona)
+        if(persona.is_active == 0):
+            persona.is_active = 1
+        elif(persona.is_active == 1):
+            persona.is_active = 0
+        persona.save()
+    else:
+        return redirect('accesoDenegado')
+    return redirect('listaPersonas')
+
+@login_required(login_url='/login')
 def detallePersonas(request, id_persona):
     if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
         template = "personas/detalle.html"
@@ -690,10 +703,13 @@ def editarPersonas(request, id_persona):
                 persona.correo = request.POST['correo']
             if(request.POST['telefono'].strip(" ") != ''):
                 persona.telefono = request.POST['telefono']
+            if('activo' in request.POST):
+                persona.is_active = 1
+            else:
+                persona.is_active = 0
             if(persona.nombres != '' and persona.rut != ''):
                 persona.save()
-                data['toast'] = "Exito"
-                data['mensaje'] = "Persona registrada correctamente"
+                return redirect('listaPersonas')
             else:
                 data['toast'] = "Error"
                 data['mensaje'] = "Persona no registrada, debe rellenar los campos obligatorios"
