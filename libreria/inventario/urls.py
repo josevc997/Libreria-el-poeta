@@ -51,9 +51,9 @@ urlpatterns = [
     # path('compras/detalles',views.detalleCompras,)
     # URLS Pablo Cea
     path('proveedores/registro', views.registroProveedores, name='registroProveedores'),
-path('proveedores/historial', views.proveedores, name='proveedores'),
-path('proveedores/detalle/<int:id_proveedor>', views.detalleProveedores, name='detalleProveedor'),
-path('proveedores/editar/<int:id_proveedor>',views.proveedores, name='editarProveedor'),
-path('pedidos/detalle', views.pedidos, name='pedidos'),
-path('pedidos/registro', views.registroPedidos, name='registroPedidos'),
+    path('proveedores/historial', views.proveedores, name='proveedores'),
+    path('proveedores/detalle/<int:id_proveedor>', views.detalleProveedores, name='detalleProveedores'),
+    path('proveedores/editar/<int:id_proveedor>',views.editarProveedor, name='editarProveedor'),
+    path('pedidos/detalle', views.pedidos, name='pedidos'),
+    path('pedidos/registro', views.registroPedidos, name='registroPedidos'),
 ]

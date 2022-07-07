@@ -890,14 +890,13 @@ def editarProveedor(request, id_proveedor):
         comuna =    request.POST['comunaP']
         correo =    request.POST['correoP']
         telefono =  request.POST['telefonoP']
-        proveedor = Proveedor()
         proveedor.nombre_proveedor = nombre
         proveedor.direccion_proveedor = direccion
         proveedor.comuna_proveedor = comuna
         proveedor.correo_proveedor = correo
         proveedor.telefono_proveedor = telefono
         proveedor.save()
-        return redirect('proveedores', id_proveedor)
+        return redirect('detalleProveedores', id_proveedor)
 
     return render(request, template, data)
 

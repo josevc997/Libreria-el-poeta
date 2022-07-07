@@ -1,32 +1,32 @@
 {% extends 'layout.html' %}
 {% block contenido %}
 <div class= "container p-3">
-<h4>Nuevo Proveedor</h4>
+<h4>Editar Proveedor</h4>
 <br>
-<form action="{% url 'registroProveedores' %}" method = "POST">
+<form action="{% url 'editarProveedor' proveedor.id_proveedor %}" method = "POST">
     {% csrf_token %}
     <div class="mb-3">
         <label class="form-label">Nombre</label>
-        <input type="text" class="form-control" id="nombreP" name="nombreP">
+        <input type="text" class="form-control" id="nombreP" name="nombreP" value="{{proveedor.nombre_proveedor}}">
       </div>
     <div class="mb-3">
       <label class="form-label">Dirección</label>
-      <input type="text" class="form-control" id="direccionP" name="direccionP">
+      <input type="text" class="form-control" id="direccionP" name="direccionP" value="{{proveedor.direccion_proveedor}}">
     </div>
     <div class="mb-3">
       <label class="form-label">Comuna</label>
-      <input type="text" class="form-control" id="comunaP" name="comunaP">
+      <input type="text" class="form-control" id="comunaP" name="comunaP" value="{{proveedor.comuna_proveedor}}">
     </div>
     <div class="mb-3">
         <label class="form-label">Correo</label>
-        <input type="email" class="form-control" id="correoP" name="correoP">
+        <input type="email" class="form-control" id="correoP" name="correoP" value="{{proveedor.correo_proveedor}}">
     </div>
     <div class="mb-3">
         <label class="form-label">Teléfono</label>
-        <input type="text" class="form-control" id="telefonoP" name="telefonoP">
+        <input type="text" class="form-control" id="telefonoP" name="telefonoP" value="{{proveedor.telefono_proveedor}}">
     </div>
     <br>
-    <button type="submit" class="btn btn-primary">Registro</button>
+    <button type="submit" class="btn btn-primary">Editar</button>
   </form>
 </div>
 
