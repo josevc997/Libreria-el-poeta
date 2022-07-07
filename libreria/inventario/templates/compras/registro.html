@@ -10,12 +10,21 @@
                 <form action="{% url 'registroCompras' %}" method="POST">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="apellidos" class="form-label">Metodo Pago</label>
-                        <input type="text" class="form-control" name="metodo_pago" id="metodo_pago">
+                        <label for="rut_cliente" class="form-label">Rut Cliente</label>
+                        <input type="text" class="form-control" name="rut_cliente" id="rut_cliente" value="{{rut}}">
                     </div>
+                    {% comment %} <div class="mb-3">
+                        <label for="metodo_pago" class="form-label">Metodo de Compra</label>
+                        <input type="text" class="form-control" name="metodo_pago" id="metodo_pago">
+                    </div> {% endcomment %}
                     <div class="mb-3">
-                        <label for="rut" class="form-label">Fecha Compra</label>
-                        <input type="text" class="form-control" name="fecha_compra" id="fecha_compra">
+                        <label for="metodo_pago" class="form-label">Metodo de Pago:</label>
+                        <select name="metodo_pago" id="metodo_pago" class="form-select" aria-label="Select metodo_pago">
+                            <option value="Efectivo" selected>Efectivo</option>
+                            <option value="Transeferencia">Transeferencia</option>
+                            <option value="Debito">Debito</option>
+                            <option value="Credito">Credito</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary">Enviar</button>

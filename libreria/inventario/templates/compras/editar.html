@@ -30,23 +30,21 @@
                 <div class="col-8 col-md-4">
                     <input type="text" readonly class="form-control-plaintext" id="metodopago" value="{{compra.metodo_pago}}">
                 </div>
-                <label for="telefono" class="col-4 col-md-2 col-form-label text-end">Fecha compra:</label>
+                <label for="fecha_compra" class="col-4 col-md-2 col-form-label text-end">Fecha compra:</label>
                 <div class="col-8 col-md-4">
-                    <input type="text" readonly class="form-control-plaintext" id="fecha_compra" {% if compra.fecha_comprava %} value="{{compra.fecha_compra}}" {% else %} value="No Realizado" {% endif %} >
+                    <input type="text" readonly class="form-control-plaintext" id="fecha_compra" {% if compra.fecha_compra %} value="{{compra.fecha_compra}}" {% else %} value="No Realizado" {% endif %} >
+                </div>
+                <label for="estado" class="col-4 col-md-2 col-form-label text-end">Estado:</label>
+                <div class="col-8 col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id="fecha_compra" {% if compra.fecha_compra %} value="{{compra.estado}}" {% else %} value="No Realizado" {% endif %} >
                 </div>
                
     </div>
 </div>
-{% if compra.estado != 'En Proceso' %}
+{% if compra.estado == 'Pendiente' %}
         <div class="card-footer text-end">
             <button type="button" class="btn btn-warning text" data-bs-toggle="modal" data-bs-target="#CambiarEstadoModal">
-                Cambiar a {% if compra.estado == 'Elegir Publicacion' %}
-                Pendiente
-                {% elif compra.estado == 'Realizando Compra' %}
-                Pagando
-                {% elif compra.estado == 'Pagado' %}
-                Pagado
-                {% endif %}
+                Cambiar a Finalizado
             </button>
              <!-- Modal -->
              <div class="modal fade" id="CambiarEstadoModal" tabindex="-1" aria-labelledby="CambiarEstadoLabel" aria-hidden="true">
@@ -57,18 +55,11 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            Seguro que desea cambiar el estado de {{compra.estado}} a 
-                            {% if compra.estado == 'Elegir Publicacion' %}
-                            Pendiente
-                            {% elif compra.estado == 'Realizado Compra' %}
-                            Pagando
-                            {% elif compra.estado == 'Pagado' %}
-                            Pagado
-                            {% endif %}
+                            Seguro que desea cambiar el estado de {{compra.estado}} a Finalizado
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a href="{% url 'editarCompras' compra.id_compra %}">
+                            <a href="{% url 'editarEstadoCompra' compra.id_compra %}">
                                 <button type="button" class="btn btn-warning">
                                     Cambiar Estado
                                 </button>
@@ -78,10 +69,10 @@
                 </div>
             </div>
             <!-- Fin Modal -->
-            /div>
+        </div>
         {% endif %}
     </div>
-    {% if compra.estado == "Elegir Publicacion" %}
+    {% if compra.estado == "Pendiente" %}
     <div class="card mb-4">
         <div class="card-header text-center">
             publicaciones
@@ -94,7 +85,7 @@
                         <label for="publicacion" class="form-label">Publicacion:</label>
                         <select name="publicacion" id="publicacion" class="form-select" aria-label="Select publicacion">
                             {% for publicacion in publicaciones  %}
-                            <option value="{{publicacion.id_publicacion.id_publicacion}}" >{{publicacion.id_publicacion}} (Stock: {{publicacion.cantidad}})</option>
+                            <option value="{{publicacion.id_publicacion.id_publicacion}}" >{{publicacion.id_publicacion}} (Stock: {{publicacion.cantidad}}, Precio: {{publicacion.id_publicacion.precio}})</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -125,19 +116,17 @@
                             <th>Cantidad</th>
                             <th>Precio</th>
                             <th>Total</th>
-                            <th>Accion</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for publicacion in movimiento.publicacion_movimiento_set.all %}
+                        {% for publicacion in compra.publicacion_compra_set.all %}
                         <tr>
                             <td>{{publicacion.id_publicacion}}</td>
-                            <td>{{publicacion.id_publicacion.tipo_producto}}</td>
-                            <td>
-                                {{publicacion.id_publicacion.fecha_publicacion}}
-                            </td>
-                            <td>{{publicacion.id_publicacion.edicion}}</td>
                             <td>{{publicacion.cantidad}}</td>
+                            <td>
+                                {{publicacion.precio}}
+                            </td>
+                            <td>{{publicacion.calculo_total}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

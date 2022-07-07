@@ -611,6 +611,18 @@ def registroPersonas(request):
         template = "personas/registro.html"
         data = dict()
         data['titulo'] = "Registro Personas"
+        if(request.GET.get('next') is not None and request.GET.get('rut') is not None):
+            redirect_to = request.GET.get('next')
+            data['redirect_to'] = redirect_to
+        else:
+            redirect_to = '/personas'
+
+        if(request.GET.get('rut') is not None):
+            rut = request.GET.get('rut')
+            redirect_to=redirect_to+"?rut="+rut
+            data['rut'] = rut
+        
+        print(redirect_to)
 
         if request.method == 'POST':
             persona = Persona()
@@ -630,6 +642,7 @@ def registroPersonas(request):
                 persona.save()
                 data['toast'] = "Exito"
                 data['mensaje'] = "Persona registrada correctamente"
+                return redirect(redirect_to)
             else:
                 data['toast'] = "Error"
                 data['mensaje'] = "Persona no registrada, debe rellenar los campos obligatorios"
@@ -651,6 +664,19 @@ def listaPersonas(request):
         return redirect('accesoDenegado')
 
     return render(request, template, data)
+
+@login_required(login_url='/login')
+def cambiarEstadoPersona(request, id_persona):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        persona = Persona.objects.get(id_persona=id_persona)
+        if(persona.is_active == 0):
+            persona.is_active = 1
+        elif(persona.is_active == 1):
+            persona.is_active = 0
+        persona.save()
+    else:
+        return redirect('accesoDenegado')
+    return redirect('listaPersonas')
 
 @login_required(login_url='/login')
 def detallePersonas(request, id_persona):
@@ -690,10 +716,13 @@ def editarPersonas(request, id_persona):
                 persona.correo = request.POST['correo']
             if(request.POST['telefono'].strip(" ") != ''):
                 persona.telefono = request.POST['telefono']
+            if('activo' in request.POST):
+                persona.is_active = 1
+            else:
+                persona.is_active = 0
             if(persona.nombres != '' and persona.rut != ''):
                 persona.save()
-                data['toast'] = "Exito"
-                data['mensaje'] = "Persona registrada correctamente"
+                return redirect('listaPersonas')
             else:
                 data['toast'] = "Error"
                 data['mensaje'] = "Persona no registrada, debe rellenar los campos obligatorios"
@@ -886,6 +915,19 @@ def bodegas(request):
     data['bodegas'] = Bodega.objects.all()
     return render(request, template, data)
 
+@login_required(login_url='/login')
+def cambiarEstadoBodega(request, id_bodega):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        bodega = Bodega.objects.get(id_bodega=id_bodega)
+        if(bodega.is_active == 0):
+            bodega.is_active = 1
+        elif(bodega.is_active == 1):
+            bodega.is_active = 0
+        bodega.save()
+    else:
+        return redirect('accesoDenegado')
+    return redirect('bodegas')
+
 def detalleBodegas(request, id_bodega): 
     template = "bodegas/detalle.html"
     data = dict()
@@ -900,16 +942,21 @@ def registroBodegas(request):
     data['titulo'] = "Registro bodegas"
 
     if request.method == "POST":
-        nombre = request.POST['nombre']
-        direccion = request.POST['direccion']
-        comuna = request.POST['comuna']
-        telefono = request.POST['telefono']
         bodega = Bodega()
-        bodega.nombre_bodega = nombre
-        bodega.direccion = direccion
-        bodega.comuna = comuna
-        bodega.telefono_bodega = telefono
-        bodega.save()
+        if(request.POST['nombre'].strip(" ") != ''):
+            bodega.nombre_bodega = request.POST['nombre']
+        if(request.POST['direccion'].strip(" ") != ''):
+            bodega.direccion = request.POST['direccion']
+        if(request.POST['comuna'].strip(" ") != ''):
+            bodega.comuna = request.POST['comuna']
+        if(request.POST['telefono'].strip(" ") != ''):
+            bodega.telefono_bodega = request.POST['telefono']
+        if(request.POST['direccion'].strip(" ") != '' and request.POST['comuna'].strip(" ") != '' and request.POST['telefono'].strip(" ") != '' and request.POST['nombre'].strip(" ") != ''):
+            bodega.save()
+            return redirect('detalleBodegas', bodega.id_bodega)
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "Bodega no registrada, Debe rellenar los campos obligatorios"
 
     return render(request, template, data)
 
@@ -930,9 +977,17 @@ def editarBodegas(request, id_bodega):
             bodega.direccion = request.POST['direccion']
         if(request.POST['telefono'].strip(" ") != ''):
             bodega.telefono_bodega = request.POST['telefono']
-        print(bodega)
-        bodega.save()
-        return redirect('detalleBodegas', id_bodega)
+        if("activo" in request.POST):
+            bodega.is_active = 1
+        else:
+            bodega.is_active = 0
+        if(request.POST['direccion'].strip(" ") != '' and request.POST['comuna'].strip(" ") != '' and request.POST['telefono'].strip(" ") != '' and request.POST['nombre'].strip(" ") != ''):
+            bodega.save()
+            return redirect('detalleBodegas', id_bodega)
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "Bodega no actualizada, Debe rellenar los campos obligatorios"
+            
 
     return render(request, template, data)
 
@@ -945,10 +1000,72 @@ def listaCompras(request):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
+def editarEstadoCompra(request, id_compra):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        compra = Compra.objects.get(id_compra = id_compra)
+        bodega = compra.id_bodega
+        if(compra.estado=="Pendiente" and len(compra.publicacion_compra_set.all()) > 0):
+            compra.estado = "Finalizada"
+            for publicacion in compra.publicacion_compra_set.all():
+                publicacionBodega = Publicacion_Bodega.objects.get(id_bodega=bodega, id_publicacion=publicacion.id_publicacion)
+                publicacionBodega.cantidad -= publicacion.cantidad
+                publicacionBodega.save()
+        compra.save()
+
+    else:
+        return redirect('accesoDenegado')
+
+    return redirect('detalleCompras', id_compra)
+
+@login_required(login_url='/login')
 def registroCompras(request):
-    template = "compras/registro.html"
-    data = dict()
-    data['titulo'] = "Registro Compras"
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "compras/registro.html"
+        data = dict()
+        data['titulo'] = "Registro Compras"
+
+        if(request.GET.get('rut') is not None):
+            rut = request.GET.get('rut')
+            data['rut'] = rut
+
+        if request.method == 'POST':
+            print(request.user.is_authenticated)
+            compra = Compra()
+            if(request.POST['rut_cliente'].strip(" ") != ''):
+                try:
+                    id_cliente = Persona.objects.get(rut=request.POST['rut_cliente'])
+                    compra.id_persona = id_cliente
+                except:
+                    return redirect('/personas/registro?next='+request.path+'&rut='+request.POST['rut_cliente'])
+            if(request.POST['metodo_pago'].strip(" ") != ''):
+                compra.id_bodega = request.user.id_bodega
+                compra.total = 0
+                compra.fecha_compra = datetime.now()
+                compra.estado = "Pendiente"
+                compra.metodo_pago = request.POST['metodo_pago']
+                # print(compra.metodo_pago)
+                compra.save()
+                return redirect('editarCompras', compra.id_compra)
+            if(request.POST['metodo_pago'].strip(" ") == ''):
+                data['toast'] = "Error"
+                data['mensaje'] = "Movimiento no registrada, debe rellenar los campos obligatorios"
+            # elif(movimiento.id_bodega_origen == movimiento.id_bodega_destino):
+            #     data['toast'] = "Error"
+            #     data['mensaje'] = "Movimiento no registrada, La bodega de origen debe ser distinta a la bodega de destino"
+            # elif(not request.user.is_authenticated):
+            #     data['toast'] = "Error"
+            #     data['mensaje'] = "Movimiento no registrada, Debe iniciar sesión para registrar movimiento"
+            # else:
+            #     movimiento.id = request.user
+            #     movimiento.estado = "Solicitando"
+            #     movimiento.fecha_solicitud = datetime.now()
+                # movimiento.save()
+                # return redirect('compras')
+
+    else:
+        return redirect('accesoDenegado')
+
     return render(request, template, data)
 
 def detalleCompras(request, id_compra):
@@ -962,41 +1079,76 @@ def detalleCompras(request, id_compra):
 
     return render(request, template, data)
 
+@login_required(login_url='/login')
 def editarCompras(request, id_compra):
-    template = "compras/editar.html"
-    data = dict()
-    data['titulo'] = "Editar publicaciones a compras"
-    compra = Compra.objects.get(id_compra = id_compra)
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "compras/editar.html"
+        data = dict()
+        data['titulo'] = "Editar Compra"
+        compra = Compra.objects.get(id_compra = id_compra)
 
-    if request.method == 'POST':
-        print(request.POST['publicacion'])
-        if(request.POST['publicacion'].strip(" ") != ''):
-            publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
-            publicacionEnBodega = Publicacion_Bodega.objects.get(id_publicacion=int(request.POST['publicacion']), id_compra=compra.id_compra_origen.id_compra)
-        if(request.POST['cantidad'].strip(" ") != ''):
-            cantidad = int(request.POST['cantidad'])
-        if(request.POST['publicacion'].strip(" ") == '' or request.POST['cantidad'].strip(" ") == ''):
-            data['toast'] = "Error"
-            data['mensaje'] = "Publicacion no registrada, Debe rellenar todos los campos"
-        elif(publicacion in compra.publicaciones.all()):
-            data['toast'] = "Error"
-            data['mensaje'] = "Publicacion ya agregada al movimiento"
-        elif (cantidad > publicacionEnBodega.cantidad):
-            data['toast'] = "Error"
-            data['mensaje'] = "No puede agregar más publicaciones de las que se encuentran en stock"
-        else:
-            compra.publicaciones.add(publicacion, through_defaults = {"cantidad": cantidad})
-            publicacionEnBodega.cantidad -= cantidad
-            publicacionEnBodega.save()
+        if request.method == 'POST':
+            if(compra.estado == "Pendiente"):
+                if(request.POST['publicacion'].strip(" ") != ''):
+                    publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
+                    publicacionEnBodega = Publicacion_Bodega.objects.get(id_publicacion=int(request.POST['publicacion']), id_bodega=compra.id_bodega.id_bodega)
+                if(request.POST['cantidad'].strip(" ") != ''):
+                    cantidad = int(request.POST['cantidad'])
+                if(request.POST['publicacion'].strip(" ") == '' or request.POST['cantidad'].strip(" ") == ''):
+                    data['toast'] = "Error"
+                    data['mensaje'] = "Publicacion no registrada, Debe rellenar todos los campos"
+                elif(publicacion in compra.publicaciones.all()):
+                    data['toast'] = "Error"
+                    data['mensaje'] = "Publicacion ya agregada a la compra"
+                elif (cantidad > publicacionEnBodega.cantidad):
+                    data['toast'] = "Error"
+                    data['mensaje'] = "No puede agregar más publicaciones de las que se encuentran en stock"
+                else:
+                    compra.publicaciones.add(publicacion, through_defaults = {"cantidad": cantidad, "precio": publicacion.precio})
+                    compra.total = publicacion.precio * cantidad
+                    compra.save()
+                    # publicacionEnBodega.cantidad -= cantidad
+                    publicacionEnBodega.save()
 
-    data['compra'] = compra
-    data['publicaciones'] = Publicacion_Compra.objects.filter(id_compra=id_compra)
+        data['compra'] = compra
+        data['publicaciones'] = Publicacion_Bodega.objects.filter(id_bodega = request.user.id_bodega)
+
+    else:
+        return redirect('accesoDenegado')
 
     return render(request, template, data)
 
+# def editarCompras(request, id_compra):
+#     template = "compras/editar.html"
+#     data = dict()
+#     data['titulo'] = "Editar publicaciones a compras"
+#     compra = Compra.objects.get(id_compra = id_compra)
 
+#     if request.method == 'POST':
+#         print(request.POST['publicacion'])
+#         if(request.POST['publicacion'].strip(" ") != ''):
+#             publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
+#             publicacionEnBodega = Publicacion_Bodega.objects.get(id_publicacion=int(request.POST['publicacion']), id_compra=compra.id_compra_origen.id_compra)
+#         if(request.POST['cantidad'].strip(" ") != ''):
+#             cantidad = int(request.POST['cantidad'])
+#         if(request.POST['publicacion'].strip(" ") == '' or request.POST['cantidad'].strip(" ") == ''):
+#             data['toast'] = "Error"
+#             data['mensaje'] = "Publicacion no registrada, Debe rellenar todos los campos"
+#         elif(publicacion in compra.publicaciones.all()):
+#             data['toast'] = "Error"
+#             data['mensaje'] = "Publicacion ya agregada al movimiento"
+#         elif (cantidad > publicacionEnBodega.cantidad):
+#             data['toast'] = "Error"
+#             data['mensaje'] = "No puede agregar más publicaciones de las que se encuentran en stock"
+#         else:
+#             compra.publicaciones.add(publicacion, through_defaults = {"cantidad": cantidad})
+#             publicacionEnBodega.cantidad -= cantidad
+#             publicacionEnBodega.save()
 
+#     data['compra'] = compra
+#     data['publicaciones'] = Publicacion_Compra.objects.filter(id_compra=id_compra)
 
+#     return render(request, template, data)
 
 # Codigo Pablo Cea
 def registroProveedores(request):
@@ -1007,18 +1159,23 @@ def registroProveedores(request):
     data['titulo'] = "Registro Proveedores"
 
     if request.method == 'POST':
-        nombre = request.POST['nombreP']
-        direccion = request.POST['direccionP']
-        comuna =    request.POST['comunaP']
-        correo =    request.POST['correoP']
-        telefono =  request.POST['telefonoP']
         proveedor = Proveedor()
-        proveedor.nombre_proveedor = nombre
-        proveedor.direccion_proveedor = direccion
-        proveedor.comuna_proveedor = comuna
-        proveedor.correo_proveedor = correo
-        proveedor.telefono_proveedor = telefono
-        proveedor.save()
+        if(request.POST['nombreP'].strip(" ") != ''):
+            proveedor.nombre_proveedor = request.POST['nombreP']
+        if(request.POST['direccionP'].strip(" ") != ''):
+            proveedor.direccion_proveedor = request.POST['direccionP']
+        if(request.POST['comunaP'].strip(" ") != ''):
+            proveedor.comuna_proveedor = request.POST['comunaP']
+        if(request.POST['correoP'].strip(" ") != ''):
+            proveedor.correo_proveedor = request.POST['correoP']
+        if(request.POST['telefonoP'].strip(" ") != ''):
+            proveedor.telefono_proveedor = request.POST['telefonoP']
+        if(request.POST['nombreP'].strip(" ") != '' and request.POST['direccionP'].strip(" ") != '' and request.POST['comunaP'].strip(" ") != '' and request.POST['correoP'].strip(" ") != '' and request.POST['telefonoP'].strip(" ") != ''):
+            proveedor.save()
+            return redirect('detalleProveedores', proveedor.id_proveedor)
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "Proveedor no registrado, Debe rellenar los campos obligatorios"
     return render(request, template, data)
 
 def proveedores(request):
@@ -1030,6 +1187,19 @@ def proveedores(request):
     
     data['proveedores'] = Proveedor.objects.all()
     return render(request, template, data)
+
+@login_required(login_url='/login')
+def cambiarEstadoProveedor(request, id_proveedor):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        proveedor = Proveedor.objects.get(id_proveedor=id_proveedor)
+        if(proveedor.is_active == 0):
+            proveedor.is_active = 1
+        elif(proveedor.is_active == 1):
+            proveedor.is_active = 0
+        proveedor.save()
+    else:
+        return redirect('accesoDenegado')
+    return redirect('proveedores')
 
 def detalleProveedores(request,id_proveedor):
     template = "proveedores/detalle.html"
@@ -1084,18 +1254,26 @@ def editarProveedor(request, id_proveedor):
     data['proveedor'] = proveedor
 
     if request.method == 'POST':
-        nombre = request.POST['nombreP']
-        direccion = request.POST['direccionP']
-        comuna =    request.POST['comunaP']
-        correo =    request.POST['correoP']
-        telefono =  request.POST['telefonoP']
-        proveedor.nombre_proveedor = nombre
-        proveedor.direccion_proveedor = direccion
-        proveedor.comuna_proveedor = comuna
-        proveedor.correo_proveedor = correo
-        proveedor.telefono_proveedor = telefono
-        proveedor.save()
-        return redirect('detalleProveedores', id_proveedor)
+        if(request.POST['nombreP'].strip(" ") != ''):
+            proveedor.nombre_proveedor= request.POST['nombreP']
+        if(request.POST['nombreP'].strip(" ") != ''):
+            proveedor.direccion_proveedor= request.POST['direccionP']
+        if(request.POST['nombreP'].strip(" ") != ''):
+            proveedor.comuna_proveedor=    request.POST['comunaP']
+        if(request.POST['nombreP'].strip(" ") != ''):
+            proveedor.correo_proveedor=    request.POST['correoP']
+        if(request.POST['nombreP'].strip(" ") != ''):
+            proveedor.telefono_proveedor=  request.POST['telefonoP']
+        if("activo" in request.POST):
+            proveedor.is_active = 1
+        else:
+            proveedor.is_active = 0
+        if(request.POST['nombreP'].strip(" ") != '' and request.POST['direccionP'].strip(" ") != '' and request.POST['comunaP'].strip(" ") != '' and request.POST['correoP'].strip(" ") != '' and request.POST['telefonoP'].strip(" ") != ''):
+            proveedor.save()
+            return redirect('detalleProveedores', proveedor.id_proveedor)
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "Proveedor no registrado, Debe rellenar los campos obligatorios"
 
     return render(request, template, data)
 

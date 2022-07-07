@@ -10,26 +10,49 @@
             <form action="{% url 'registroBodegas' %}" method="POST"> 
                 {% csrf_token %}
                 <div class="col mb-3">
-                    <label for="nombre" class="form-label">Nombre</label>
-                    <input type="text" class="form-control" name="nombre" id="nombre">
+                    <label for="nombre" class="form-label">Nombre<span class="text-muted">(Campo Obligatorio)</span> </label>
+                    <input type="text" class="form-control" name="nombre" id="nombre" required>
                 </div>
                 <div class="col mb-3">
-                    <label for="direccion" class="form-label">Direccion</label>
-                    <input type="text" class="form-control" name="direccion" id="direccion">
+                    <label for="direccion" class="form-label">Direccion<span class="text-muted">(Campo Obligatorio)</span></label>
+                    <input type="text" class="form-control" name="direccion" id="direccion" required>
                 </div>
                 <div class="col mb-3">
-                    <label for="comuna" class="form-label">Comuna</label>
-                    <input type="text" class="form-control" name="comuna" id="comuna">
+                    <label for="comuna" class="form-label">Comuna<span class="text-muted">(Campo Obligatorio)</span></label>
+                    <input type="text" class="form-control" name="comuna" id="comuna" required>
                 </div>
                 <div class="col mb-3">
-                    <label for="telefono" class="form-label">Telefono</label>
-                    <input type="text" class="form-control" name="telefono" id="telefono">
+                    <label for="telefono" class="form-label">Telefono<span class="text-muted">(Campo Obligatorio)</span></label>
+                    <input type="text" class="form-control" name="telefono" id="telefono" required>
                 </div>
                 <div class="col mb-3">
-                  <button type="submit">Guardar</button>
+                  <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
                 </form>
         </div>
     </div>
 </div>
+{% if toast %}
+        <div class="toast-container text-bg-primary position-fixed bottom-0 start-0 p-3">
+            {% if toast == "Error" %}
+                <div id="liveToast" class="toast bg-danger text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% else %}
+                <div id="liveToast" class="toast bg-success text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% endif %}
+                <div class="toast-header">
+                    <i class="fa-solid fa-circle-exclamation m-1"></i>
+                    <strong class="me-auto">{{toast}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{mensaje}}
+                </div>
+            </div>
+        </div>
+        <script> 
+            const toastLiveExample = document.getElementById('liveToast')
+            const toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        </script>
+        {% endif %}
 {% endblock contenido %}

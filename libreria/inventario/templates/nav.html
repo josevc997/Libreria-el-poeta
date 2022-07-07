@@ -1,6 +1,10 @@
+{% load static %}
 <nav class="navbar navbar-expand bg-primary navbar-dark mb-5">
     <div class="container-fluid">
-        <div class="navbar-brand">Inventario</div>
+        <div class="navbar-brand">
+            <img src="{% static 'favicon.png' %}" alt="logo" width="35" height="35">
+            Inventario El Poeta
+        </div>
         <ul class="navbar-nav">
             {% if user.is_authenticated %}
             <li class="nav-item dropdown">

@@ -32,6 +32,14 @@
                 <div class="col-8 col-md-4">
                     <input type="text" readonly="" class="form-control-plaintext" id="telefono" value="{{proveedor.telefono_proveedor}}">
                 </div>
+                <label for="Estaod" class="col-4 col-md-2 col-form-label text-end">Estado:</label>
+                <div class="col-8 col-md-4">
+                    {% if proveedor.is_active == False %}
+                    <span class="badge bg-danger">Inactivo</span>
+                    {% else %}
+                        <span class="badge bg-success">Activo</span>
+                    {% endif %}</p>
+                </div>
             </div>
         </div>
         <div class="card-footer text-end">
