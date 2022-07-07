@@ -24,10 +24,7 @@
                         <td>
                         {% for i in producto.autor_publicacion_set.all %}
                             {{i.id_autor.pseudonimo_autor}}
-                        {% endfor %}
-                        <br>
-                        {% for i in producto.autor_publicacion_set.all %}
-                            {{i.id_autor.pseudonimo_autor}}
+                            <br>
                         {% endfor %}
                             {% comment %} {{producto.fecha_publicacion}} {% endcomment %}
                         </td>

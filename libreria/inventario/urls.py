@@ -32,7 +32,7 @@ urlpatterns = [
     path('personas/registro', views.registroPersonas, name='registroPersonas'),
     path('personas/detalle/<int:id_editorial>', views.detalleEditorial, name='detalleEditorial'),
     path('personas/editar/<int:id_editorial>', views.editarEditorial, name='editarEditorial'),
-    path('personas/lista', views.listaPersonas, name='listaPersonas'),
+    path('personas', views.listaPersonas, name='listaPersonas'),
     path('personas/detalle/<int:id_persona>', views.detallePersonas, name='detallePersonas'),
     path('seed', views.seed, name='seed'),
     path('personas/editar/<int:id_persona>', views.editarPersonas, name='editarPersonas'),
@@ -60,6 +60,6 @@ urlpatterns = [
     path('proveedores/historial', views.proveedores, name='proveedores'),
     path('proveedores/detalle/<int:id_proveedor>', views.detalleProveedores, name='detalleProveedores'),
     path('proveedores/editar/<int:id_proveedor>',views.editarProveedor, name='editarProveedor'),
-    path('pedidos/detalle', views.pedidos, name='pedidos'),
+    path('pedidos/detalle/<int:id_pedido>', views.pedidos, name='pedidos'),
     path('pedidos/registro', views.registroPedidos, name='registroPedidos'),
 ]

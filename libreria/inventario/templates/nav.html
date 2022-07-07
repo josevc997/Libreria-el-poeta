@@ -4,28 +4,11 @@
         <ul class="navbar-nav">
             {% if user.is_authenticated %}
             <li class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" id="AutoresDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
-                    <i class="fa-solid fa-user-pen"></i> 
-                    Autores
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="AutoresDropdown">
-                    <li>
-                        <a class="dropdown-item" href="{% url 'registroAutores' %}">
-                            Registro
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{% url 'autores' %}">
-                            Historial
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" id="ProductosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
-                    <i class="fa-solid fa-book"></i> Productos
+                    <i class="fa-solid fa-book"></i> Publicaciones
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="ProductosDropdown">
+                    <li><strong class="ms-2">Existencias</strong></li>
                     <li>
                         <a class="dropdown-item" href="{% url 'registroProductos' %}">
                             Registro
@@ -33,16 +16,13 @@
                     </li>
                     <li>
                         <a class="dropdown-item" href="{% url 'productos' %}">
-                            Historial
+                            Lista
                         </a>
                     </li>
-                </ul>
-            </li>
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" id="EditorialesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
-                    <i class="fa-solid fa-landmark"></i> Editoriales
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="EditorialesDropdown">
+                    <li><hr class="dropdown-divider"><strong class="ms-2">Autores</strong></li>
+                    <li><a class="dropdown-item" href="{% url 'registroAutores' %}">Registro</a></li>
+                    <li><a class="dropdown-item" href="{% url 'autores' %}">Lista</a></li>
+                    <li><hr class="dropdown-divider"><strong class="ms-2">Editorial</strong></li>
                     <li>
                         <a class="dropdown-item" href="{% url 'registroEditoriales' %}">
                             Registro
@@ -50,7 +30,18 @@
                     </li>
                     <li>
                         <a class="dropdown-item" href="{% url 'editoriales' %}">
-                            Historial
+                            Lista
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"><strong class="ms-2">Generos</strong></li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'registroGeneros' %}">
+                            Registro
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'generos' %}">
+                            Lista
                         </a>
                     </li>
                 </ul>
@@ -73,25 +64,8 @@
                 </ul>
             </li>
             <li class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" id="PerfilesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
-                    <i class="fa-solid fa-warehouse"></i> Perfiles
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="PerfilesDropdown">
-                    <li>
-                        <a class="dropdown-item" href="{% url 'preregistroPerfil' %}">
-                            Registro
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{% url 'perfiles' %}">
-                            Historial
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" id="ComprasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
-                    <i class="fa-solid fa-warehouse"></i> Compras
+                    <i class="fa-solid fa-shop"></i> Compras
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="ComprasDropdown">
                     <li>
@@ -106,6 +80,87 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="PedidosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
+                    <i class="fa-solid fa-clipboard-check"></i> Pedidos
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="PedidosDropdown">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'registroPedidos' %}">
+                            Registro
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            Historial
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="MovimientosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
+                    <i class="fa-solid fa-truck-ramp-box"></i> Movimientos
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="MovimientosDropdown">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'registroMovimientos' %}">
+                            Registro
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'movimientos' %}">
+                            Historial
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="ProveedoresDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
+                    <i class="fa-solid fa-truck"></i> Proveedores
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="ProveedoresDropdown">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'registroProveedores' %}">
+                            Registro
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'proveedores' %}">
+                            Historial
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="PerfilesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
+                    <i class="fa-solid fa-user"></i> Perfiles
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="PerfilesDropdown">
+                    <li><strong class="ms-2">Usuarios</strong></li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'preregistroPerfil' %}">
+                            Registro
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'perfiles' %}">
+                            Historial
+                        </a>
+                    </li>
+                    <li><strong class="ms-2">Clientes</strong></li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'registroPersonas' %}">
+                            Registro
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'listaPersonas' %}">
+                            Lista
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesion
