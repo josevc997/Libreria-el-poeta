@@ -20,7 +20,21 @@
                 <div class="col-12 col-md-6">
                     <p>Telefono: {{bodega.telefono_bodega}}</p>
                 </div>
+                <div class="col-12 col-md-6">
+                    <p>Estado: {% if bodega.is_active == False %}
+                        <span class="badge bg-danger">Inactivo</span>
+                    {% else %}
+                        <span class="badge bg-success">Activo</span>
+                    {% endif %}</p>
+                </div>
             </div>
+        </div>
+        <div class="card-footer text-end">
+            <a href="{% url 'editarBodegas' bodega.id_bodega%}">
+                <button class="btn btn-warning text">
+                    Editar
+                </button>
+            </a>
         </div>
     </div>
     <div class="card mb-3 shadow">
@@ -44,6 +58,9 @@
                         <th scope="col">
                             Cantidad
                         </th>
+                        <th scope="col">
+                            Accion
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,6 +71,11 @@
                             <td>{{producto.id_publicacion.fecha_publicacion}}</td>
                             <td>{{producto.id_publicacion.edicion}}</td>
                             <td>{{producto.cantidad}}</td>
+                            <td>
+                                <a href="{% url 'detallePublicacion' producto.id_publicacion.id_publicacion %}">
+                                    <button class="btn btn-primary">ver</button>
+                                </a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

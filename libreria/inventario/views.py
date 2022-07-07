@@ -902,6 +902,19 @@ def bodegas(request):
     data['bodegas'] = Bodega.objects.all()
     return render(request, template, data)
 
+@login_required(login_url='/login')
+def cambiarEstadoBodega(request, id_bodega):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        bodega = Bodega.objects.get(id_bodega=id_bodega)
+        if(bodega.is_active == 0):
+            bodega.is_active = 1
+        elif(bodega.is_active == 1):
+            bodega.is_active = 0
+        bodega.save()
+    else:
+        return redirect('accesoDenegado')
+    return redirect('bodegas')
+
 def detalleBodegas(request, id_bodega): 
     template = "bodegas/detalle.html"
     data = dict()
@@ -916,16 +929,21 @@ def registroBodegas(request):
     data['titulo'] = "Registro bodegas"
 
     if request.method == "POST":
-        nombre = request.POST['nombre']
-        direccion = request.POST['direccion']
-        comuna = request.POST['comuna']
-        telefono = request.POST['telefono']
         bodega = Bodega()
-        bodega.nombre_bodega = nombre
-        bodega.direccion = direccion
-        bodega.comuna = comuna
-        bodega.telefono_bodega = telefono
-        bodega.save()
+        if(request.POST['nombre'].strip(" ") != ''):
+            bodega.nombre_bodega = request.POST['nombre']
+        if(request.POST['direccion'].strip(" ") != ''):
+            bodega.direccion = request.POST['direccion']
+        if(request.POST['comuna'].strip(" ") != ''):
+            bodega.comuna = request.POST['comuna']
+        if(request.POST['telefono'].strip(" ") != ''):
+            bodega.telefono_bodega = request.POST['telefono']
+        if(request.POST['direccion'].strip(" ") != '' and request.POST['comuna'].strip(" ") != '' and request.POST['telefono'].strip(" ") != '' and request.POST['nombre'].strip(" ") != ''):
+            bodega.save()
+            return redirect('detalleBodegas', bodega.id_bodega)
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "Bodega no registrada, Debe rellenar los campos obligatorios"
 
     return render(request, template, data)
 
@@ -946,7 +964,10 @@ def editarBodegas(request, id_bodega):
             bodega.direccion = request.POST['direccion']
         if(request.POST['telefono'].strip(" ") != ''):
             bodega.telefono_bodega = request.POST['telefono']
-        print(bodega)
+        if("activo" in request.POST):
+            bodega.is_active = 1
+        else:
+            bodega.is_active = 0
         bodega.save()
         return redirect('detalleBodegas', id_bodega)
 
