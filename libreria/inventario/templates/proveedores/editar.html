@@ -1,33 +1,68 @@
 {% extends 'layout.html' %}
 {% block contenido %}
 <div class= "container p-3">
-<h4>Editar Proveedor</h4>
-<br>
-<form action="{% url 'editarProveedor' proveedor.id_proveedor %}" method = "POST">
-    {% csrf_token %}
-    <div class="mb-3">
-        <label class="form-label">Nombre</label>
-        <input type="text" class="form-control" id="nombreP" name="nombreP" value="{{proveedor.nombre_proveedor}}">
-      </div>
-    <div class="mb-3">
-      <label class="form-label">Dirección</label>
-      <input type="text" class="form-control" id="direccionP" name="direccionP" value="{{proveedor.direccion_proveedor}}">
+  <div class="card">
+    <div class="card-header">
+      {{titulo}}
     </div>
-    <div class="mb-3">
-      <label class="form-label">Comuna</label>
-      <input type="text" class="form-control" id="comunaP" name="comunaP" value="{{proveedor.comuna_proveedor}}">
+    <div class="card-body">
+      <form action="{% url 'editarProveedor' proveedor.id_proveedor %}" method = "POST">
+          {% csrf_token %}
+          <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombreP" name="nombreP" value="{{proveedor.nombre_proveedor}}">
+            </div>
+          <div class="mb-3">
+            <label class="form-label">Dirección</label>
+            <input type="text" class="form-control" id="direccionP" name="direccionP" value="{{proveedor.direccion_proveedor}}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Comuna</label>
+            <input type="text" class="form-control" id="comunaP" name="comunaP" value="{{proveedor.comuna_proveedor}}">
+          </div>
+          <div class="mb-3">
+              <label class="form-label">Correo</label>
+              <input type="email" class="form-control" id="correoP" name="correoP" value="{{proveedor.correo_proveedor}}">
+          </div>
+          <div class="mb-3">
+              <label class="form-label">Teléfono</label>
+              <input type="text" class="form-control" id="telefonoP" name="telefonoP" value="{{proveedor.telefono_proveedor}}">
+          </div>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="activo" name="activo" {% if proveedor.is_active %}checked{% endif %}>
+            <label class="form-check-label" for="activo">
+              Activo
+            </label>
+        </div>
+          <br>
+          <button type="submit" class="btn btn-primary">Editar</button>
+        </form>
+
     </div>
-    <div class="mb-3">
-        <label class="form-label">Correo</label>
-        <input type="email" class="form-control" id="correoP" name="correoP" value="{{proveedor.correo_proveedor}}">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Teléfono</label>
-        <input type="text" class="form-control" id="telefonoP" name="telefonoP" value="{{proveedor.telefono_proveedor}}">
-    </div>
-    <br>
-    <button type="submit" class="btn btn-primary">Editar</button>
-  </form>
+  </div>
 </div>
 
+{% if toast %}
+        <div class="toast-container text-bg-primary position-fixed bottom-0 start-0 p-3">
+            {% if toast == "Error" %}
+                <div id="liveToast" class="toast bg-danger text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% else %}
+                <div id="liveToast" class="toast bg-success text-light" role="alert" aria-live="assertive" aria-atomic="true">
+            {% endif %}
+                <div class="toast-header">
+                    <i class="fa-solid fa-circle-exclamation m-1"></i>
+                    <strong class="me-auto">{{toast}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{mensaje}}
+                </div>
+            </div>
+        </div>
+        <script> 
+            const toastLiveExample = document.getElementById('liveToast')
+            const toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        </script>
+        {% endif %}
 {% endblock contenido %}

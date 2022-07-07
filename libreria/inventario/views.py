@@ -968,8 +968,13 @@ def editarBodegas(request, id_bodega):
             bodega.is_active = 1
         else:
             bodega.is_active = 0
-        bodega.save()
-        return redirect('detalleBodegas', id_bodega)
+        if(request.POST['direccion'].strip(" ") != '' and request.POST['comuna'].strip(" ") != '' and request.POST['telefono'].strip(" ") != '' and request.POST['nombre'].strip(" ") != ''):
+            bodega.save()
+            return redirect('detalleBodegas', id_bodega)
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "Bodega no actualizada, Debe rellenar los campos obligatorios"
+            
 
     return render(request, template, data)
 
@@ -1031,10 +1036,6 @@ def editarCompras(request, id_compra):
 
     return render(request, template, data)
 
-
-
-
-
 # Codigo Pablo Cea
 def registroProveedores(request):
     template = "proveedores/registro.html"
@@ -1044,18 +1045,23 @@ def registroProveedores(request):
     data['titulo'] = "Registro Proveedores"
 
     if request.method == 'POST':
-        nombre = request.POST['nombreP']
-        direccion = request.POST['direccionP']
-        comuna =    request.POST['comunaP']
-        correo =    request.POST['correoP']
-        telefono =  request.POST['telefonoP']
         proveedor = Proveedor()
-        proveedor.nombre_proveedor = nombre
-        proveedor.direccion_proveedor = direccion
-        proveedor.comuna_proveedor = comuna
-        proveedor.correo_proveedor = correo
-        proveedor.telefono_proveedor = telefono
-        proveedor.save()
+        if(request.POST['nombreP'].strip(" ") != ''):
+            proveedor.nombre_proveedor = request.POST['nombreP']
+        if(request.POST['direccionP'].strip(" ") != ''):
+            proveedor.direccion_proveedor = request.POST['direccionP']
+        if(request.POST['comunaP'].strip(" ") != ''):
+            proveedor.comuna_proveedor = request.POST['comunaP']
+        if(request.POST['correoP'].strip(" ") != ''):
+            proveedor.correo_proveedor = request.POST['correoP']
+        if(request.POST['telefonoP'].strip(" ") != ''):
+            proveedor.telefono_proveedor = request.POST['telefonoP']
+        if(request.POST['nombreP'].strip(" ") != '' and request.POST['direccionP'].strip(" ") != '' and request.POST['comunaP'].strip(" ") != '' and request.POST['correoP'].strip(" ") != '' and request.POST['telefonoP'].strip(" ") != ''):
+            proveedor.save()
+            return redirect('detalleProveedores', proveedor.id_proveedor)
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "Proveedor no registrado, Debe rellenar los campos obligatorios"
     return render(request, template, data)
 
 def proveedores(request):
@@ -1067,6 +1073,19 @@ def proveedores(request):
     
     data['proveedores'] = Proveedor.objects.all()
     return render(request, template, data)
+
+@login_required(login_url='/login')
+def cambiarEstadoProveedor(request, id_proveedor):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        proveedor = Proveedor.objects.get(id_proveedor=id_proveedor)
+        if(proveedor.is_active == 0):
+            proveedor.is_active = 1
+        elif(proveedor.is_active == 1):
+            proveedor.is_active = 0
+        proveedor.save()
+    else:
+        return redirect('accesoDenegado')
+    return redirect('proveedores')
 
 def detalleProveedores(request,id_proveedor):
     template = "proveedores/detalle.html"
@@ -1121,18 +1140,26 @@ def editarProveedor(request, id_proveedor):
     data['proveedor'] = proveedor
 
     if request.method == 'POST':
-        nombre = request.POST['nombreP']
-        direccion = request.POST['direccionP']
-        comuna =    request.POST['comunaP']
-        correo =    request.POST['correoP']
-        telefono =  request.POST['telefonoP']
-        proveedor.nombre_proveedor = nombre
-        proveedor.direccion_proveedor = direccion
-        proveedor.comuna_proveedor = comuna
-        proveedor.correo_proveedor = correo
-        proveedor.telefono_proveedor = telefono
-        proveedor.save()
-        return redirect('detalleProveedores', id_proveedor)
+        if(request.POST['nombreP'].strip(" ") != ''):
+            proveedor.nombre_proveedor= request.POST['nombreP']
+        if(request.POST['nombreP'].strip(" ") != ''):
+            proveedor.direccion_proveedor= request.POST['direccionP']
+        if(request.POST['nombreP'].strip(" ") != ''):
+            proveedor.comuna_proveedor=    request.POST['comunaP']
+        if(request.POST['nombreP'].strip(" ") != ''):
+            proveedor.correo_proveedor=    request.POST['correoP']
+        if(request.POST['nombreP'].strip(" ") != ''):
+            proveedor.telefono_proveedor=  request.POST['telefonoP']
+        if("activo" in request.POST):
+            proveedor.is_active = 1
+        else:
+            proveedor.is_active = 0
+        if(request.POST['nombreP'].strip(" ") != '' and request.POST['direccionP'].strip(" ") != '' and request.POST['comunaP'].strip(" ") != '' and request.POST['correoP'].strip(" ") != '' and request.POST['telefonoP'].strip(" ") != ''):
+            proveedor.save()
+            return redirect('detalleProveedores', proveedor.id_proveedor)
+        else:
+            data['toast'] = "Error"
+            data['mensaje'] = "Proveedor no registrado, Debe rellenar los campos obligatorios"
 
     return render(request, template, data)
 

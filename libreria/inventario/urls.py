@@ -59,8 +59,9 @@ urlpatterns = [
     path('compras/editar/<int:id_compra>',views.editarCompras,name='editarCompras'),
     # path('compras/detalles',views.detalleCompras,)
     # URLS Pablo Cea
-    path('proveedores/registro', views.registroProveedores, name='registroProveedores'),
     path('proveedores/historial', views.proveedores, name='proveedores'),
+    path('proveedores/registro', views.registroProveedores, name='registroProveedores'),
+    path('proveedores/cambiarEstado/<int:id_proveedor>', views.cambiarEstadoProveedor, name='cambiarEstadoProveedor'),
     path('proveedores/detalle/<int:id_proveedor>', views.detalleProveedores, name='detalleProveedores'),
     path('proveedores/editar/<int:id_proveedor>',views.editarProveedor, name='editarProveedor'),
     path('pedidos/detalle/<int:id_pedido>', views.pedidos, name='pedidos'),
