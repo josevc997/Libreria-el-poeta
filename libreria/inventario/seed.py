@@ -52,6 +52,31 @@ def seedTables():
     autor.pseudonimo_autor = "J. R. R. Tolkien"
     autor.save()
 
+    autor1 = Autor()
+    autor1.nombres_autor = "Bruno Jesus"
+    autor1.apellidos_autor = "Pozo Donoso"
+    autor1.correo_autor = "bruno.pozo@gmail.com"
+    autor1.nacionalidad_autor = "España"
+    autor1.pseudonimo_autor = "B. P. R. Donoso"
+    autor1.save()
+
+    autor2 = Autor()
+    autor2.nombres_autor = "Jose Andres"
+    autor2.apellidos_autor = "Valencia Cerda"
+    autor2.correo_autor = "jose.valencia@gmail.com"
+    autor2.nacionalidad_autor = "Chile"
+    autor2.pseudonimo_autor = "J. A. V. Cerda"
+    autor2.save()
+
+    autor3 = Autor()
+    autor3.nombres_autor = "Pablo Esteban"
+    autor3.apellidos_autor = "Cea Carrasco"
+    autor3.correo_autor = "pablo.cea@gmail.com"
+    autor3.nacionalidad_autor = "Argentina"
+    autor3.pseudonimo_autor = "P. E. C. Carrasco"
+    autor3.save()
+
+    
     editorial = Editorial()
     editorial.nombre_editorial = "Minotauro"
     editorial.correo_editorial = "infominotauro@planeta.es"
@@ -81,6 +106,43 @@ def seedTables():
     genero.save()
     publicacion.generos.add(genero)
 
+    publicacion1 = Publicacion()
+    publicacion1.id_editorial = editorial
+    publicacion1.nombre = "El Precio por Tenerla"
+    publicacion1.resumen = "Natasha Rivas, es una mujer, joven, hermosa, decidida y una buena esposa. Se caso con un hombre de su misma clase social, de buena familia y según muchos el marido perfecto."
+    publicacion1.tipo_producto = "Libro"
+    publicacion1.edicion = "2022"
+    publicacion1.fecha_publicacion = "2022"
+    publicacion1.isbn = "8666321245"
+    publicacion1.numero_serie = "67801234223"
+    publicacion1.precio = 28210
+    publicacion1.save()
+    publicacion1.autores.add(autor)
+    publicacion1.generos.add(genero)
+    genero = Genero()
+    genero.nombre_genero = "Novela Romantica"
+    genero.save()
+    publicacion.generos.add(genero)
+
+    publicacion2 = Publicacion()
+    publicacion2.id_editorial = editorial
+    publicacion2.nombre = "El Bebé del Millonario"
+    publicacion2.resumen = "Fueron las últimas palabras que el magnate turco le escuchó decir a su mujer antes de que ella abordara un avión y lo dejara con el pequeño bebé de nueve meses en sus brazos."
+    publicacion2.tipo_producto = "Libro"
+    publicacion2.edicion = "2020"
+    publicacion2.fecha_publicacion = "2020"
+    publicacion2.isbn = "7654321890"
+    publicacion2.numero_serie = "82134076612"
+    publicacion2.precio = 30000
+    publicacion2.save()
+    publicacion2.autores.add(autor)
+    publicacion2.generos.add(genero)
+    genero = Genero()
+    genero.nombre_genero = "Humor"
+    genero.save()
+    publicacion.generos.add(genero)
+
+
 
     bodega = Bodega()
     bodega.nombre_bodega =  "Sede Central"
@@ -88,7 +150,23 @@ def seedTables():
     bodega.comuna = "Santiago Centro"
     bodega.telefono_bodega = "224723000"
     bodega.save()
-    bodega.publicaciones.add(publicacion, through_defaults={ 'cantidad': 10 })
+    bodega.publicaciones.add(publicacion, through_defaults={ 'cantidad': 100 })
+
+    bodega1 = Bodega()
+    bodega1.nombre_bodega =  "El Poeta"
+    bodega1.direccion = "Aurelio Diaz Meza"
+    bodega1.comuna = "Recoleta"
+    bodega1.telefono_bodega = "223004488"
+    bodega1.save()
+    bodega1.publicaciones.add(publicacion, through_defaults={ 'cantidad': 296 })
+
+    bodega2 = Bodega()
+    bodega2.nombre_bodega =  "Librerillo"
+    bodega2.direccion = "Av. Providencia 2296"
+    bodega2.comuna = "Providencia"
+    bodega2.telefono_bodega = "930880360"
+    bodega2.save()
+    bodega2.publicaciones.add(publicacion, through_defaults={ 'cantidad': 406 })
 
     persona = Persona()
     persona.nombres = "Armin"
