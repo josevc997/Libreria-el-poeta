@@ -13,6 +13,12 @@
                         <label for="nombre" class="form-label">Nombre <span class="text-muted">(Campo Obligatorio)<span></label>
                         <input type="text" class="form-control" name="nombre" id="nombre" value="{{genero.nombre_genero}}">
                     </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="activo" name="activo" {% if genero.is_active %}checked{% endif %}>
+                        <label class="form-check-label" for="activo">
+                          Activo
+                        </label>
+                    </div>
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary">Enviar</button>
                     </div>

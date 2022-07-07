@@ -64,6 +64,14 @@
                         <br/>
                     {% endfor %}
                 </div>
+                <div class="col-4 col-md-2 col-form-label text-end">Estado:</div>
+                <div class="col-8 col-md-4">
+                    {% if publicacion.is_active == False %}
+                        <span class="badge bg-danger">Inactivo</span>
+                    {% else %}
+                        <span class="badge bg-success">Activo</span>
+                    {% endif %}
+                </div>
             </div>
         </div>
         <div class="card-footer text-end">

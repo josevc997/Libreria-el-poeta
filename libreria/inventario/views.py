@@ -26,13 +26,16 @@ def autores(request):
 
 @login_required(login_url='/login')
 def cambiarEstadoAutor(request, id_autor):
-    autor = Autor.objects.get(id_autor=id_autor)
-    if(autor.is_active == 0):
-        autor.is_active = 1
-    elif(autor.is_active == 1):
-        autor.is_active = 0
-    print(autor.is_active)
-    autor.save()
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        autor = Autor.objects.get(id_autor=id_autor)
+        if(autor.is_active == 0):
+            autor.is_active = 1
+        elif(autor.is_active == 1):
+            autor.is_active = 0
+        print(autor.is_active)
+        autor.save()
+    else:
+        return redirect('accesoDenegado')
     return redirect('autores')
 
 @login_required(login_url='/login')
@@ -119,6 +122,19 @@ def productos(request):
     return render(request, template, data)
 
 @login_required(login_url='/login')
+def cambiarEstadoPublicacion(request, id_publicacion):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        publicacion = Publicacion.objects.get(id_publicacion=id_publicacion)
+        if(publicacion.is_active == 0):
+            publicacion.is_active = 1
+        elif(publicacion.is_active == 1):
+            publicacion.is_active = 0
+        publicacion.save()
+    else:
+        return redirect('accesoDenegado')
+    return redirect('productos')
+
+@login_required(login_url='/login')
 def detallePublicacion(request, id_publicacion):
     if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
         template = "productos/detalle.html"
@@ -153,6 +169,10 @@ def editarPublicacion(request, id_publicacion):
                 publicacion.resumen = request.POST['resumen']
             if(request.POST['precio'].strip(" ") != ''):
                 publicacion.precio = int(request.POST['precio'])
+            if('activo' in request.POST):
+                publicacion.is_active = 1
+            else:
+                publicacion.is_active = 0
             publicacion.save()
             return redirect('detallePublicacion', publicacion.id_publicacion)
 
@@ -215,6 +235,19 @@ def generos(request):
     return render(request, template, data)
 
 @login_required(login_url='/login')
+def cambiarEstadoGenero(request, id_genero):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        genero = Genero.objects.get(id_genero=id_genero)
+        if(genero.is_active == 0):
+            genero.is_active = 1
+        elif(genero.is_active == 1):
+            genero.is_active = 0
+        genero.save()
+    else:
+        return redirect('accesoDenegado')
+    return redirect('generos')
+
+@login_required(login_url='/login')
 def registroGeneros(request):
     if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
         template = "generos/registro.html"
@@ -261,6 +294,10 @@ def editarGenero(request, id_genero):
         data['genero'] = genero
 
         if request.method == 'POST':
+            if('activo' in request.POST):
+                genero.is_active = 1
+            else:
+                genero.is_active = 0
             if(request.POST['nombre'].strip(" ") != ''):
                 genero.nombre_genero = request.POST['nombre']
                 genero.save()
