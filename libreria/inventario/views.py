@@ -1182,7 +1182,7 @@ def proveedores(request):
     template = "proveedores/historial.html"
     data = dict()
 
-    data['titulo'] = "Registro Proveedores"
+    data['titulo'] = "Lista Proveedores"
 
     
     data['proveedores'] = Proveedor.objects.all()
@@ -1204,46 +1204,11 @@ def cambiarEstadoProveedor(request, id_proveedor):
 def detalleProveedores(request,id_proveedor):
     template = "proveedores/detalle.html"
     data = dict()
-    data['titulo'] = "Detalle autor"
+    data['titulo'] = "Detalle Proveedor"
     data['proveedor'] = Proveedor.objects.get(id_proveedor=id_proveedor)
 
     return render(request,template,data)
 
-def pedidos(request):
-    template = "pedidos/detalle.html"
-    data = dict()
-
-    data['titulo'] = "Pedidos"
-
-    
-    data['pedidos'] = Pedido.objects.all()
-    return render(request, template, data)
-    
-
-def registroPedidos(request):
-    template = "pedidos/registro.html"
-    data = dict()
-    data['titulo'] = "Registro Pedidos"
-    data['publicaciones'] = Publicacion.objects.all()
-
-    if request.method == 'POST':
-        print(request.user.is_authenticated)
-        pedido = Publicacion_Pedido()
-        if(request.POST['publicacion'].strip(" ") != ''):
-            pedido.publicaciones = Publicacion.objects.get(id_publicacion = int(request.POST['publicacion']))
-        if(request.POST['cantidad'].strip(" ") != ''):
-            pedido.cantidad = int(request.POST['bodega_destino'])
-        if(not request.user.is_authenticated):
-            data['toast'] = "Error"
-            data['mensaje'] = "pedido no registrada, Debe iniciar sesión para registrar pedido"
-        else:
-            pedido.id_publicacion = pedido.publicaciones
-            pedido.cantidad = pedido.cantidad
-
-            pedido.save()
-            return redirect('pedidos')
- 
-    return render(request, template, data)
 
 def editarProveedor(request, id_proveedor):
     template = "proveedores/editar.html"
@@ -1277,9 +1242,104 @@ def editarProveedor(request, id_proveedor):
 
     return render(request, template, data)
 
+def pedidos(request):
+    template = "pedidos/lista.html"
+    data = dict()
 
-   # if request.method == 'POST':
+    data['titulo'] = "Lista Pedidos"
 
+    
+    data['pedidos'] = Pedido.objects.all()
+    return render(request, template, data)
+    
 
-    #return render(request, template, data)
-# # #
+def registroPedidos(request):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "pedidos/registro.html"
+        data = dict()
+        data['titulo'] = "Registro Pedidos"
+        data['proveedores'] = Proveedor.objects.all()
+
+        if request.method == 'POST':
+            print(request.user.is_authenticated)
+            pedido = Pedido()
+            if(request.POST['id_proveedor'].strip(" ") != ''):
+                pedido.id_proveedor = Proveedor.objects.get(id_proveedor = int(request.POST['id_proveedor']))
+                pedido.id = request.user
+                pedido.id_bodega = request.user.id_bodega
+                pedido.fecha_pedido = datetime.now()
+                pedido.total_pedido = 0
+                pedido.estado = "Pendiente"
+                pedido.save()
+                return redirect('editarPedidos', pedido.id_pedido)
+    else:
+        return redirect('accesoDenegado')
+
+    return render(request, template, data)
+
+def detallePedidos(request, id_pedido):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "pedidos/detalle.html"
+        
+        data = dict()
+        data['titulo'] = "Detalle Pedidos"
+        data['pedido'] = Pedido.objects.get(id_pedido=id_pedido)
+    
+    else:
+        return redirect('accesoDenegado')
+
+    return render(request, template, data)
+
+def editarPedidos(request, id_pedido):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        template = "pedidos/editar.html"
+        data = dict()
+        data['titulo'] = "Editar Pedidos"
+        pedido = Pedido.objects.get(id_pedido = id_pedido)
+
+        if request.method == 'POST':
+            if(pedido.estado == "Pendiente"):
+                if(request.POST['publicacion'].strip(" ") != ''):
+                    publicacion = Publicacion.objects.get(id_publicacion=int(request.POST['publicacion']))
+                    publicacionEnBodega = Publicacion_Bodega.objects.get_or_create(id_publicacion=publicacion, id_bodega=pedido.id_bodega)
+                    publicacionEnBodega = publicacionEnBodega[0]
+                        
+                if(request.POST['cantidad'].strip(" ") != ''):
+                    cantidad = int(request.POST['cantidad'])
+                if(request.POST['publicacion'].strip(" ") == '' or request.POST['cantidad'].strip(" ") == ''):
+                    data['toast'] = "Error"
+                    data['mensaje'] = "Publicacion no registrada, Debe rellenar todos los campos"
+                elif(publicacion in pedido.publicaciones.all()):
+                    data['toast'] = "Error"
+                    data['mensaje'] = "Publicacion ya agregada al movimiento"
+                else:
+                    print(publicacionEnBodega)
+                    pedido.publicaciones.add(publicacion, through_defaults = {"cantidad": cantidad})
+                    publicacionEnBodega.cantidad += cantidad
+                    publicacionEnBodega.save()
+
+        data['pedido'] = pedido
+        data['publicaciones'] = Publicacion.objects.all()
+
+    else:
+        return redirect('accesoDenegado')
+
+    return render(request, template, data)
+
+@login_required(login_url='/login')
+def editarEstadoPedido(request, id_pedido):
+    if(request.user.tipo_usuario == "Administrador" or request.user.tipo_usuario == "Jefe de bodega"):
+        pedido = Pedido.objects.get(id_pedido = id_pedido)
+        bodega = pedido.id_bodega
+        if(pedido.estado=="Pendiente" and len(pedido.publicacion_pedido_set.all()) > 0):
+            pedido.estado = "Finalizado"
+            for publicacion in pedido.publicacion_pedido_set.all():
+                publicacionBodega = Publicacion_Bodega.objects.get(id_bodega=bodega, id_publicacion=publicacion.id_publicacion)
+                publicacionBodega.cantidad -= publicacion.cantidad
+                publicacionBodega.save()
+        pedido.save()
+
+    else:
+        return redirect('accesoDenegado')
+
+    return redirect('detallePedidos', id_pedido)

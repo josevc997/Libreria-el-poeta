@@ -67,6 +67,9 @@ urlpatterns = [
     path('proveedores/cambiarEstado/<int:id_proveedor>', views.cambiarEstadoProveedor, name='cambiarEstadoProveedor'),
     path('proveedores/detalle/<int:id_proveedor>', views.detalleProveedores, name='detalleProveedores'),
     path('proveedores/editar/<int:id_proveedor>',views.editarProveedor, name='editarProveedor'),
-    path('pedidos/detalle/<int:id_pedido>', views.pedidos, name='pedidos'),
+    path('pedidos/detalle/<int:id_pedido>', views.detallePedidos, name='detallePedidos'),
     path('pedidos/registro', views.registroPedidos, name='registroPedidos'),
+    path('pedidos',views.pedidos, name='pedidos'),
+    path('pedidos/editar/<int:id_pedido>', views.editarPedidos, name='editarPedidos'),
+    path('pedidos/editar/estado/<int:id_pedido>', views.editarEstadoPedido, name='editarEstadoPedido'),
 ]

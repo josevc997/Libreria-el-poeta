@@ -4,25 +4,17 @@
 <div class="container">
         <div class="card">
             <div class="card-header">
-                Registro Pedido
+                {{titulo}}
             </div>
             <div class="card-body">
                 <form action="{% url 'registroPedidos' %}" method="POST">
                     {% csrf_token %}
                     <div class="col-12 mb-3">
-                        <label for="publicacion" class="form-label">Publicación</label>
-                        <select name="publicacion" id="publicacion" class="form-select" aria-label="Select publicacion">
-                            {% for publicacion in publicaciones  %}
-                            <option value="{{publicacion.id_publicacion}}" >{{publicacion.nombre}}</option>
+                        <label for="id_proveedor" class="form-label">bodega de Origen:</label>
+                        <select name="id_proveedor" id="id_proveedor" class="form-select" aria-label="Select Proveedor">
+                            {% for proveedor in proveedores  %}
+                            <option value="{{proveedor.id_proveedor}}" >{{proveedor.nombre_proveedor}}</option>
                             {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <label for="cantidad" class="form-label">Cantidad:</label>
-                        <select name="cantidad" id="cantidad" class="form-select" aria-label="Select cantidad">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
                         </select>
                     </div>
                     <div class="mb-3">
