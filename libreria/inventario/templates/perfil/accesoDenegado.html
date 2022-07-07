@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        Acceso no permitido
+                    </div>
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>
+                                        Usted no posee los permisos necesarios para acceder a la página solicitada
+                                    </p>
+                                </div>
+                                <div class="col-12 text-end">
+                                    {% if request.user.tipo_usuario == 'Administrador'%}
+                                        <a href="{% url 'bodegas' %}">
+                                            <button class="btn btn-primary">
+                                                Volver
+                                            </button>
+                                        </a>
+                                    {% elif request.user.tipo_usuario == 'Bodeguero' %}
+                                        <a href="{% url 'detalleBodegas' request.user.id_bodega.id_bodega %}">
+                                            <button class="btn btn-primary">
+                                                Volver
+                                            </button>
+                                        </a>
+                                    {% elif request.user.tipo_usuario == 'Jefe de Bodega' %}
+                                        <a href="{% url 'productos' %}">
+                                            <button class="btn btn-primary">
+                                                Volver
+                                            </button>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock contenido %}

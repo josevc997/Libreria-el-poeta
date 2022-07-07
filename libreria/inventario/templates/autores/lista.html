@@ -11,6 +11,7 @@
                         <th>Nombre</th>
                         <th>Apellido</th>
                         <th>Correo</th>
+                        <th>Estado</th>
                         <th>Accion</th>
                     </tr>
                 </thead>
@@ -21,13 +22,57 @@
                         <td>{{autor.nacionalidad_autor}}</td>
                         <td>{{autor.correo_autor}}</td>
                         <td>
+                            {% if autor.is_active == False %}
+                                <span class="badge bg-danger">Inactivo</span>
+                            {% else %}
+                                <span class="badge bg-success">Activo</span>
+                            {% endif %}
+                        </td>
+                        <td>
                             <a href="{% url 'detalleAutor' autor.id_autor %}" >
                                 <button class="btn btn-primary">ver</button>
                             </a>
                             <a href="{% url 'editarAutor' autor.id_autor%}">
                                 <button class="btn btn-warning">editar</button>
                             </a>
-                            {% comment %} <button class="btn btn-danger">borrar</button> {% endcomment %}
+                            <button type="button" {% if autor.is_active == 0 %}class="btn btn-success"{% else %}class="btn btn-danger" {% endif %} data-bs-toggle="modal" data-bs-target="#exampleModal{{autor.id_autor}}">
+                                {% if autor.is_active == 0 %}
+                                Activar
+                                {% else %}
+                                Desactivar
+                                {% endif %}
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal{{autor.id_autor}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            seguro que desea {% if autor.is_active == 0 %}
+                                            Activar
+                                            {% else %}
+                                            Desactivar
+                                            {% endif %} a {{autor}}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <a href="{% url 'cambiarEstadoAutor' autor.id_autor%}">
+                                                <button type="button" {% if autor.is_active == 0 %}class="btn btn-success"{% else %}class="btn btn-danger" {% endif %}>
+                                                    {% if autor.is_active == 0 %}
+                                                    Activar
+                                                    {% else %}
+                                                    Desactivar
+                                                    {% endif %}
+                                                </button>
+                                            </a>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Fin Modal -->  
                         </td>
                     </tr>
                     {% endfor %}

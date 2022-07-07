@@ -70,6 +70,7 @@
                                 <select name="tipo" id="tipo" class="form-select" aria-label="Select tipo">
                                     <option value="Administrador" {% if 'Administrador' == perfil.tipo_usuario %} selected{% endif %}>Administrador</option>
                                     <option value="Bodeguero" {% if 'Bodeguero' == perfil.tipo %} selected{% endif %}>Bodeguero</option>
+                                    <option value="Jefe de bodega" {% if 'Jefe de bodega' == perfil.tipo %} selected{% endif %}>Jefe de bodega</option>
                                 </select>
                             </div>
                             <div class="col-12 mb-3">
